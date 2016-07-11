@@ -9,6 +9,11 @@
 	<!-- Covers: https://github.com/Otto42/theme-check/blob/master/checks/phpshort.php -->
 	<rule ref="Generic.PHP.DisallowShortOpenTag" />
 
+	<!-- Alternative PHP open tags not allowed. -->
+	<!-- NOTE: this sniff has been merged into PHPCS 2.7 and should be replaced by
+	     the upstream sniff once TRCS updates to WPCS 0.11.0/develop.
+	     Upstream name: Generic.PHP.DisallowAlternativePHPTags -->
+	<rule ref="WordPress.PHP.DisallowAlternativePHPTags"/>
 
 	<!-- Only UNIX line endings allowed. -->
 	<!-- Covers: https://github.com/Otto42/theme-check/blob/master/checks/lineendings.php -->
