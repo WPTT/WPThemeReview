@@ -91,6 +91,9 @@
 	<!-- Prohibit the use of the backtick operator. -->
 	<rule ref="Generic.PHP.BacktickOperator"/>
 
+	<!-- Discourage a number of functions for usage in a theme. -->
+	<rule ref="WordPress.PHP.DiscouragedFunctions"/>
+
 	<!-- Prohibit overwriting of WordPress global variables. -->
 	<rule ref="WordPress.Variables.GlobalVariables"/>
 
