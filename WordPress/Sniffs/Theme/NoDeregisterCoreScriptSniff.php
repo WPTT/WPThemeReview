@@ -6,7 +6,17 @@
  * @package  PHP_CodeSniffer
  * @author   Simon Prosser <pross@pross.org.uk>
  */
-class WordPress_Sniffs_Theme_NoDeregisterCoreScriptSniff extends WordPress_Sniffs_Functions_FunctionRestrictionsSniff {
+class WordPress_Sniffs_Theme_NoDeregisterCoreScriptSniff implements PHP_CodeSniffer_Sniff {
+
+	/**
+	 * Core scripts to sniff for.
+	 *
+	 * @var array
+	 */
+	private $core_scripts = array(
+		'jquery',
+	);
+
 	/**
 	 * Returns an array of tokens this test wants to listen for.
 	 *
@@ -14,13 +24,24 @@ class WordPress_Sniffs_Theme_NoDeregisterCoreScriptSniff extends WordPress_Sniff
 	 */
 	public function register() {
 		return array(
-				T_STRING,
-				T_CONSTANT_ENCAPSED_STRING,
-				T_DOUBLE_QUOTED_STRING,
-			   );
-
+			T_STRING,
+			T_CONSTANT_ENCAPSED_STRING,
+			T_DOUBLE_QUOTED_STRING,
+			T_OPEN_PARENTHESIS,
+			T_CLOSE_PARENTHESIS,
+		);
 	}//end register()
 
+	/**
+	 * Process a given string and remove quotes.
+	 *
+	 * @param string $string The text to be processed.
+	 *
+	 * @return string
+	 */
+	function trim_quotes( $string ) {
+		return trim( $string, '"\'' );
+	}
 
 	/**
 	 * Processes this test, when one of its tokens is encountered.
@@ -36,26 +57,25 @@ class WordPress_Sniffs_Theme_NoDeregisterCoreScriptSniff extends WordPress_Sniff
 		$tokens  = $phpcsFile->getTokens();
 		$token   = $tokens[ $stackPtr ];
 
-		$content = trim( $token['content'], '"\'' );
+		$content = $this->trim_quotes( $token['content'] );
 
-		$functions = array(
-			'wp_deregister_script',
-			'wp_register_script',
-		);
+		if ( 'wp_deregister_script' === $content ) {
 
-		$scripts = array(
-			'jquery',
-		);
+			/**
+			 * Find next closing parenthesis after the function
+			 */
+			$closing = $phpcsFile->findNext( T_CLOSE_PARENTHESIS, $stackPtr );
 
-		if ( in_array( $content, $functions, true ) ) {
+			/**
+			 * The script name will be right before the closing parenthesis
+			 */
+			$script = $phpcsFile->findPrevious( array( T_CONSTANT_ENCAPSED_STRING, T_DOUBLE_QUOTED_STRING ), $closing, $stackPtr );
 
-			$script = $phpcsFile->findNext( array( T_CONSTANT_ENCAPSED_STRING, T_DOUBLE_QUOTED_STRING ), $stackPtr );
+			$scriptname = $this->trim_quotes( $tokens[ $script ]['content'] );
 
-			$content = preg_replace( '/[^a-zA-Z0-9]+/', '', html_entity_decode( $tokens[ $script ]['content'], ENT_QUOTES ) );
+			if ( in_array( $scriptname, $this->core_scripts, true ) ) {
 
-			if ( in_array( $content, $scripts, true ) ) {
-
-				$phpcsFile->addError( sprintf( 'Registering or deregistering core script %s is prohibited.', $content ), $stackPtr, 'RemovalDetected' );
+				$phpcsFile->addError( 'Registering or deregistering core script %s is prohibited.', $stackPtr, 'RemovalDetected', $scriptname );
 			}
 		}
 	}//end process()
