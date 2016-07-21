@@ -28,7 +28,13 @@ class WordPress_Tests_Theme_NoTitleTagUnitTest extends AbstractSniffUnitTest {
 		return array(
 			7 => 1,
 			9 => 1,
-			13 => 0,  // Titles in svg are allowed.
+			19 => 1,
+			24 => 1,
+			26 => 1,
+			28 => 1,
+			30 => 1,
+			34 => 1,
+			37 => 1,
 		);
 
 	} // end getErrorList()

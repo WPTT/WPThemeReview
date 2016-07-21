@@ -10,13 +10,21 @@
 /**
  * WordPress_Sniffs_Theme_NoTitleTagSniff.
  *
- * Forbids the use of the title tag, unless it is in within an svg tag.
+ * Forbids the use of the <title> tag, unless it is within a <svg> tag.
  *
  * @category  PHP
  * @package   PHP_CodeSniffer
  * @author    carolinan
  */
 class WordPress_Sniffs_Theme_NoTitleTagSniff implements PHP_CodeSniffer_Sniff {
+
+	/**
+	 * Property to keep track of whether a <svg> open tag has been encountered.
+	 *
+	 * @var bool
+	 */
+	private $in_svg = false;
+
 	/**
 	 * Returns an array of tokens this test wants to listen for.
 	 *
@@ -39,16 +47,45 @@ class WordPress_Sniffs_Theme_NoTitleTagSniff implements PHP_CodeSniffer_Sniff {
 	 * @return void
 	 */
 	public function process( PHP_CodeSniffer_File $phpcsFile, $stackPtr ) {
-		$tokens = $phpcsFile->getTokens();
+		$tokens  = $phpcsFile->getTokens();
 		$content = $tokens[ $stackPtr ]['content'];
 
-		/**
-		 * The sniff is performed line by line.
-		 * This adds a warning if the title tag is used, -unless the title tag is on the same line as an svg element.
-		 */
-		if ( strpos( $content, '<title>' ) !== false && strpos( $content, '<svg') === false ) {
-			$phpcsFile->addWarning( "The title tag is only allowed within svg elements.", $stackPtr, 'NotAllowed' );
+		// No need to check an empty string.
+		if ( '' === trim( $content ) ) {
+			return;
 		}
+
+		// Are we in a <svg> tag ?
+		if ( true === $this->in_svg ) {
+			if ( false === strpos( $content, '</svg>' ) ) {
+				return;
+			} else {
+				// Make sure we check any content on this line after the closing svg tag.
+				$this->in_svg = false;
+				$content      = trim( substr( $content, ( strpos( $content, '</svg>' ) + 6 ) ) );
+			}
+		}
+
+		// We're not in svg, so check if it there's a <svg> open tag on this line.
+		if ( false !== strpos( $content, '<svg' ) ) {
+			if ( false === strpos( $content, '</svg>' ) ) {
+				// Skip the next lines until the closing svg tag, but do check any content
+				// on this line before the svg tag.
+				$this->in_svg = true;
+				$content      = trim( substr( $content, 0, ( strpos( $content, '<svg' ) ) ) );
+			} else {
+				// Ok, we have open and close svg tag on the same line with possibly content before and/or after.
+				$before  = trim( substr( $content, 0, ( strpos( $content, '<svg' ) ) ) );
+				$after   = trim( substr( $content, ( strpos( $content, '</svg>' ) + 6 ) ) );
+				$content = $before . $after;
+			}
+		}
+
+		// Now let's do the check for the <title> tag.
+		if ( false !== strpos( $content, '<title' ) ) {
+			$phpcsFile->addWarning( 'The title tag is only allowed within svg elements.', $stackPtr, 'NotAllowed' );
+		}
+
 	} // end process()
 
 } // end class
