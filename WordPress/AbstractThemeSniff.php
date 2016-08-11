@@ -18,22 +18,6 @@
  * @author    Ulrich Pogson <ulrich@pogson.ch>
  */
 abstract class WordPress_AbstractThemeSniff implements PHP_CodeSniffer_Sniff {
-	/**
-	 * Define the path for style.css file.
-	 *
-	 * @var false|string
-	 */
-	public static $style_css_path = false;
-	/**
-	 * Array holding the theme header info as found in the style.css file.
-	 *
-	 * This is a static variable so it's shared between all instances of this class for efficiency.
-	 *
-	 * Make sure to add really good documentation about the potential keys and value types.
-	 *
-	 * @var array
-	 */
-	private static $theme_data;
 
 	/**
 	 * Array holding the once through WordPress Theme file checks.
@@ -48,20 +32,6 @@ abstract class WordPress_AbstractThemeSniff implements PHP_CodeSniffer_Sniff {
 	 * @var array $theme_data contains data from style.css headers.
 	 */
 	public function __construct() {
-		// Only set the static once when the first child class is instantiated, no need to run this again as it'll be remembered.
-		// Set the static to false if the retrieval failed and test for false.
-		if ( empty( self::$theme_data ) || ! is_array( self::$theme_data ) || false === self::$theme_data ) {
-			$files = $this->get_files();
-			$style_css = $this->get_style_css_path( $files );
-			if ( ! $this->is_theme( $style_css ) !== false ) {
-				self::$theme_data = false;
-			}
-			$file_contents    = $this->get_file_contents( $style_css );
-			if ( is_array( $file_contents ) ) {
-				self::$theme_data = $this->process_data( $file_contents );
-			}
-		}
-
 		// do a once through pass and get the files.
 		if ( empty( self::$sniff_helper ) || ! is_array( self::$sniff_helper ) || false === self::$sniff_helper ) {
 			$files = $this->get_files();
@@ -78,44 +48,6 @@ abstract class WordPress_AbstractThemeSniff implements PHP_CodeSniffer_Sniff {
 	}
 
 	/**
-	 * Check if this is a theme by checking if it has a style.css file.
-	 *
-	 * @param string $style_css contains style directory.
-	 *
-	 * @return bool
-	 */
-	private function is_theme( $style_css = '' ) {
-		if ( false !== strpos( $style_css, '/style.css' ) ) {
-			return true;
-		}
-		return false;
-	}
-	/**
-	 * Get the style.css file from the list of files.
-	 *
-	 * @param array $files All of the files being sniffed.
-	 *
-	 * @return false|string
-	 */
-	private function get_style_css_path( $files = array() ) {
-		if ( self::$style_css_path ) {
-			return self::$style_css_path;
-		}
-		if ( count( $files ) === 1 ) {
-			$style_css = $files[0] . '/style.css';
-		} else {
-			foreach ( $files as $file ) {
-				if ( false !== strpos( $file, '/style.css' ) ) {
-					$style_css = $file;
-				}
-			}
-		}
-		if ( ! empty( $style_css ) && file_exists( $style_css ) ) {
-			return $style_css;
-		}
-		return false;
-	}
-	/**
 	 * Get the list of files that are being sniffed.
 	 *
 	 * @return array
@@ -126,101 +58,7 @@ abstract class WordPress_AbstractThemeSniff implements PHP_CodeSniffer_Sniff {
 		array_multisort( array_map( 'strlen', $command_line_values['files'] ), $command_line_values['files'] );
 		return $command_line_values['files'];
 	}
-	/**
-	 * Fetch the contents of the style.css file.
-	 *
-	 * @param string $file_path The file path to style.css..\phpcs --standard=WordPress-Theme c:\xampp\htdocs\Themes\aatest.
-	 *
-	 * @return false|array
-	 */
-	private function get_file_contents( $file_path = '' ) {
-		if ( ! file_exists( $file_path ) ) {
-			// ERROR file does not exist.
-			return false;
-		}
-		 // Read the theme file into an array.
-		return file( $file_path, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES );
-	}
-	/**
-	 * Processes the contents of the style.css.
-	 *
-	 * @param array $file_contents The content from the style.css.
-	 *
-	 * @return false|array
-	 */
-	public function process_data( $file_contents = array() ) {
-		// initialize $theme_data.
-		$theme_data = array(
-			'name'        => '',
-			'uri'         => '',
-			'author'      => '',
-			'author_uri'  => '',
-			'description' => '',
-			'version'     => '',
-			'license'     => '',
-			'license_uri' => '',
-			'tags'        => '',
-			'text_domain' => '',
-		);
-		foreach ( $file_contents as $style_line ) {
-			// get the data name.
-			$name = trim( strstr( $style_line, ':', true ) );
-			// get the data value.
-			$start = strpos( $style_line, ':' ) + 1;
-			$value = trim( substr( $style_line, $start ) );
-			switch ( $name ) {
-				case 'Theme Name':
-					$theme_data['name'] = $value;
-					break;
-				case 'Theme URI':
-					$theme_data['uri'] = $value;
-					break;
-				case 'Author':
-					$theme_data['author'] = $value;
-					break;
-				case 'Author URI':
-					$theme_data['author_uri'] = $value;
-					break;
-				case 'Description':
-					$theme_data['description'] = $value;
-					break;
-				case 'Version':
-					$theme_data['version'] = $value;
-					break;
-				case 'License':
-					$theme_data['license'] = $value;
-					break;
-				case 'License URI':
-					$theme_data['license_uri'] = $value;
-					break;
-				case 'Text Domain':
-					$theme_data['text_domain'] = $value;
-					break;
-				case 'Tags':
-					$tag_array = explode( ',' , $value );
-					foreach ( $tag_array as $tag ) {
-						$tags[] = trim( strtolower( $tag ) );
-					}
-					$theme_data['tags'] = $tags;
-					break;
-			}
-		}
-		return $theme_data;
-	}
-	/**
-	 * Fetch single theme data.
-	 *
-	 * @param string $key The content from the style.css.
-	 *
-	 * @return false|string|array
-	 */
-	protected function get_theme_data( $key ) {
-		if ( isset( self::$theme_data[ $key ] ) ) {
-			return self::$theme_data[ $key ];
-		} else {
-			return false;
-		}
-	}
+
 	// ================== below are functions for the once through
 	/**
 	 * Taken from themecheck
@@ -281,6 +119,18 @@ abstract class WordPress_AbstractThemeSniff implements PHP_CodeSniffer_Sniff {
 		// Initiate the Sniff_helper array.
 		global $sniff_helper;
 		$sniff_helper = array(
+			'theme_data' => array(
+				'name'        => '',
+				'uri'         => '',
+				'author'      => '',
+				'author_uri'  => '',
+				'description' => '',
+				'version'     => '',
+				'license'     => '',
+				'license_uri' => '',
+				'tags'        => '',
+				'text_domain' => '',
+			),
 			'theme_supports' => array(
 				'custom-header' => false,
 				'custom-background' => false,
@@ -310,7 +160,7 @@ abstract class WordPress_AbstractThemeSniff implements PHP_CodeSniffer_Sniff {
 			'sidebar_support' => array(
 				'register_sidebar_used' => false,
 				'dynamic_sidebar_used' => false,
-				'widget_init_used' => false,
+				'widgets_init_used' => false,
 			),
 			'basic_function_calls' => array(
 				'wp_footer' => false,
@@ -334,6 +184,7 @@ abstract class WordPress_AbstractThemeSniff implements PHP_CodeSniffer_Sniff {
 				'less_than_1200_wide' => false,
 				'less_than_900_high' => false,
 				'aspect_ratio_4_by_3' => false,
+				'details_not_found' => false,
 			),
 			'css_required' => array(
 				'sticky' => false,
@@ -371,7 +222,11 @@ abstract class WordPress_AbstractThemeSniff implements PHP_CodeSniffer_Sniff {
 				$this->get_doctype_check( $file_content );
 			}
 			if ( strpos( $themefile , '.css' ) !== false ) {
-				$file_content = file_get_contents( $themefile );
+				// css files loaded into line array.
+				$file_content = file( $themefile, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES );
+				if ( $themefile == trim( $themedir ,'\\' ) . '\style.css' ) {
+					$this->get_theme_data( $file_content );
+				}
 				$this->get_css_checks( $file_content );
 				$this->get_post_format_css_check( $file_content );
 			}
@@ -393,33 +248,33 @@ abstract class WordPress_AbstractThemeSniff implements PHP_CodeSniffer_Sniff {
 	 */
 	public function get_theme_supports( $file_content ) {
 		global $sniff_helper;
-		if ( strpos( $file_content, 'add_theme_support' , true ) !== false && strpos( $file_content, 'custom-header' , true ) !== false ) {
+		if ( false !== strpos( $file_content, 'add_theme_support' ) && false !== strpos( $file_content, 'custom-header' ) ) {
 			$sniff_helper['theme_supports']['custom-header'] = true;
 		}
-		if ( strpos( $file_content, 'add_theme_support' , true ) !== false && strpos( $file_content, 'custom-background' , true ) !== false ) {
+		if ( false !== strpos( $file_content, 'add_theme_support' ) && false !== strpos( $file_content, 'custom-background' ) ) {
 			$sniff_helper['theme_supports']['custom-background'] = true;
 		}
-		if ( strpos( $file_content, 'add_theme_support' , true ) !== false && strpos( $file_content, 'custom-logo' , true ) !== false ) {
+		if ( false !== strpos( $file_content, 'add_theme_support' ) && false !== strpos( $file_content, 'custom-logo' ) ) {
 			$sniff_helper['theme_supports']['custom-logo'] = true;
 		}
-		if ( strpos( $file_content, 'add_theme_support' , true ) !== false && strpos( $file_content, 'post-formats' , true ) !== false ) {
+		if ( false !== strpos( $file_content, 'add_theme_support' ) && false !== strpos( $file_content, 'post-formats' ) ) {
 			$sniff_helper['theme_supports']['post-formats'] = true;
 		}
-		if ( strpos( $file_content, 'add_theme_support' , true ) !== false && strpos( $file_content, 'post-thumbnails' , true ) !== false ) {
+		if ( false !== strpos( $file_content, 'add_theme_support' ) && false !== strpos( $file_content, 'post-thumbnails' ) ) {
 			$sniff_helper['theme_supports']['featured-images'] = true;
 			$sniff_helper['theme_supports']['featured-image-header'] = true;
 		}
-		if ( strpos( $file_content, 'register_nav_menu' , true ) !== false ) {
+		if ( false !== strpos( $file_content, 'register_nav_menu' ) ) {
 			$sniff_helper['theme_supports']['custom-menu'] = true;
 		}
-		if ( strpos( $file_content, 'wp_nav_menu' , true ) !== false ) {
+		if ( false !== strpos( $file_content, 'wp_nav_menu' ) ) {
 			$sniff_helper['theme_supports']['custom-menu'] = true;
 		}
 	}
 
 	/**
 	 * This functions checks for comment-reply useage.
-	 * Checks include enqueue of comment-reply script and useage of the term comment-reply term.
+	 * Checks include enqueue of comment-reply script and useage of the comment-reply term.
 	 *
 	 * @param string $file_content contains content of file in a single string.
 	 */
@@ -442,19 +297,19 @@ abstract class WordPress_AbstractThemeSniff implements PHP_CodeSniffer_Sniff {
 	 */
 	public function get_comments_pagination_check( $file_content ) {
 		global $sniff_helper;
-		if ( strpos( $file_content, 'paginate_comments_links' , true ) !== false ) {
+		if ( false !== strpos( $file_content, 'paginate_comments_links' ) ) {
 			$sniff_helper['comments_pagination'] = true;
 		}
-		if ( strpos( $file_content, 'the_comments_navigation' , true ) !== false ) {
+		if ( false !== strpos( $file_content, 'the_comments_navigation' ) ) {
 			$sniff_helper['comments_pagination'] = true;
 		}
-		if ( strpos( $file_content, 'the_comments_pagination' , true ) !== false ) {
+		if ( false !== strpos( $file_content, 'the_comments_pagination' ) ) {
 			$sniff_helper['comments_pagination'] = true;
 		}
-		if ( strpos( $file_content, 'next_comments_link' , true ) !== false ) {
+		if ( false !== strpos( $file_content, 'next_comments_link' ) ) {
 			$sniff_helper['comments_pagination'] = true;
 		}
-		if ( strpos( $file_content, 'previous_comments_link' , true ) !== false ) {
+		if ( false !== strpos( $file_content, 'previous_comments_link' ) ) {
 			$sniff_helper['comments_pagination'] = true;
 		}
 	}
@@ -467,10 +322,10 @@ abstract class WordPress_AbstractThemeSniff implements PHP_CodeSniffer_Sniff {
 	 */
 	public function get_content_width_check( $file_content ) {
 		global $sniff_helper;
-		if ( strpos( $file_content, '$content_width' , true ) !== false ) {
+		if ( false !== strpos( $file_content, '$content_width' ) ) {
 			$sniff_helper['content_width'] = true;
 		}
-		if ( strpos( $file_content , '$GLOBALS' . "['content_width']" , true ) !== false ) {
+		if ( false !== strpos( $file_content , '$GLOBALS' . "['content_width']" ) ) {
 			$sniff_helper['content_width'] = true;
 		}
 	}
@@ -483,7 +338,7 @@ abstract class WordPress_AbstractThemeSniff implements PHP_CodeSniffer_Sniff {
 	 */
 	public function get_editor_style_check( $file_content ) {
 		global $sniff_helper;
-		if ( strpos( $file_content, 'add_editor_style' , true ) !== false ) {
+		if ( false !== strpos( $file_content, 'add_editor_style' ) ) {
 			$sniff_helper['add_editor_style'] = true;
 		}
 	}
@@ -496,10 +351,10 @@ abstract class WordPress_AbstractThemeSniff implements PHP_CodeSniffer_Sniff {
 	 */
 	public function get_avatar_checks( $file_content ) {
 		global $sniff_helper;
-		if ( strpos( $file_content, 'get_avatar' , true ) !== false ) {
+		if ( false !== strpos( $file_content, 'get_avatar' ) ) {
 			$sniff_helper['avatar_check'] = true;
 		}
-		if ( strpos( $file_content, 'wp_list_comments' , true ) !== false ) {
+		if ( false !== strpos( $file_content, 'wp_list_comments' ) ) {
 			$sniff_helper['avatar_check'] = true;
 		}
 	}
@@ -512,10 +367,10 @@ abstract class WordPress_AbstractThemeSniff implements PHP_CodeSniffer_Sniff {
 	 */
 	public function get_custom_menu_check( $file_content ) {
 		global $sniff_helper;
-		if ( strpos( $file_content, 'wp_nav_menu' , true ) !== false ) {
+		if ( false !== strpos( $file_content, 'wp_nav_menu' ) ) {
 			$sniff_helper['custom_menu_support'] = true;
 		}
-		if ( strpos( $file_content, 'registar_nav_menu' , true ) !== false ) {
+		if ( false !== strpos( $file_content, 'registar_nav_menu' ) ) {
 			$sniff_helper['custom_menu_support'] = true;
 		}
 	}
@@ -532,19 +387,22 @@ abstract class WordPress_AbstractThemeSniff implements PHP_CodeSniffer_Sniff {
 	 */
 	public function get_post_pagination_check( $file_content ) {
 		global $sniff_helper;
-		if ( strpos( $file_content, 'posts_nav_link' , true ) !== false ) {
+		if ( false !== strpos( $file_content, 'posts_nav_link' ) ) {
 			$sniff_helper['post_pagination'] = true;
 		}
-		if ( strpos( $file_content, 'paginate_links' , true ) !== false ) {
+		if ( false !== strpos( $file_content, 'paginate_links' ) ) {
 			$sniff_helper['post_pagination'] = true;
 		}
-		if ( strpos( $file_content, ' the_posts_navigation' , true ) !== false ) {
+		if ( false !== strpos( $file_content, 'the_posts_navigation' ) ) {
 			$sniff_helper['post_pagination'] = true;
 		}
-		if ( strpos( $file_content, 'next_posts_link' , true ) !== false ) {
+		if ( false !== strpos( $file_content, 'the_posts_pagination' ) ) {
 			$sniff_helper['post_pagination'] = true;
 		}
-		if ( strpos( $file_content, 'previous_posts_link' , true ) !== false ) {
+		if ( false !== strpos( $file_content, 'next_posts_link' ) ) {
+			$sniff_helper['post_pagination'] = true;
+		}
+		if ( false !== strpos( $file_content, 'previous_posts_link' ) ) {
 			$sniff_helper['post_pagination'] = true;
 		}
 	}
@@ -559,10 +417,10 @@ abstract class WordPress_AbstractThemeSniff implements PHP_CodeSniffer_Sniff {
 	 */
 	public function get_post_format_check( $file_content ) {
 		global $sniff_helper;
-		if ( strpos( $file_content, 'get_post_format' , true ) !== false ) {
+		if ( false !== strpos( $file_content, 'get_post_format' ) ) {
 			$sniff_helper['post_format_support'] = true;
 		}
-		if ( strpos( $file_content, 'has_format' , true ) !== false ) {
+		if ( false !== strpos( $file_content, 'has_post_format' ) ) {
 			$sniff_helper['post_format_support'] = true;
 		}
 	}
@@ -578,13 +436,13 @@ abstract class WordPress_AbstractThemeSniff implements PHP_CodeSniffer_Sniff {
 	 */
 	public function get_post_thumbnail_check( $file_content ) {
 		global $sniff_helper;
-		if ( strpos( $file_content, 'the_post_thumbnail' , true ) !== false ) {
+		if ( false !== strpos( $file_content, 'the_post_thumbnail' ) ) {
 			$sniff_helper['post_thumbnail_support'] = true;
 		}
-		if ( strpos( $file_content, 'get_the_post_thumbnail' , true ) !== false ) {
+		if ( false !== strpos( $file_content, 'get_the_post_thumbnail' ) ) {
 			$sniff_helper['post_thumbnail_support'] = true;
 		}
-		if ( strpos( $file_content, 'get_post_thumbnail_id' , true ) !== false ) {
+		if ( false !== strpos( $file_content, 'get_post_thumbnail_id' ) ) {
 			$sniff_helper['post_thumbnail_support'] = true;
 		}
 	}
@@ -600,13 +458,13 @@ abstract class WordPress_AbstractThemeSniff implements PHP_CodeSniffer_Sniff {
 	 */
 	public function get_post_tags_check( $file_content ) {
 		global $sniff_helper;
-		if ( strpos( $file_content, 'the_tags' , true ) !== false ) {
+		if ( false !== strpos( $file_content, 'the_tags' ) ) {
 			$sniff_helper['post_tags_support'] = true;
 		}
-		if ( strpos( $file_content, 'get_the_tag_list' , true ) !== false ) {
+		if ( false !== strpos( $file_content, 'get_the_tag_list' ) ) {
 			$sniff_helper['post_tags_support'] = true;
 		}
-		if ( strpos( $file_content, 'get_the_term_list' , true ) !== false ) {
+		if ( false !== strpos( $file_content, 'get_the_term_list' ) ) {
 			$sniff_helper['post_tags_support'] = true;
 		}
 	}
@@ -622,7 +480,7 @@ abstract class WordPress_AbstractThemeSniff implements PHP_CodeSniffer_Sniff {
 		if ( ! preg_match( '#add_theme_support\s?\(\s?[\'|"]title-tag#', $file_content ) ) {
 			$sniff_helper['title_tag']['theme_support'] = true;
 		}
-		if ( strpos( $file_content, 'wp_title' , true ) !== false ) {
+		if ( false !== strpos( $file_content, 'wp_title' ) ) {
 			$sniff_helper['title_tag']['wp_title'] = true;
 		}
 	}
@@ -636,14 +494,14 @@ abstract class WordPress_AbstractThemeSniff implements PHP_CodeSniffer_Sniff {
 	 */
 	public function get_sidebar_checks( $file_content ) {
 		global $sniff_helper;
-		if ( strpos( $file_content, 'register_sidebar' , true ) !== false ) {
+		if ( false !== strpos( $file_content, 'register_sidebar' ) ) {
 			$sniff_helper['sidebar_support']['register_sidebar_used'] = true;
 		}
-		if ( strpos( $file_content, 'dynamic_sidebar' , true ) !== false ) {
+		if ( false !== strpos( $file_content, 'dynamic_sidebar' ) ) {
 			$sniff_helper['sidebar_support']['dynamic_sidebar_used'] = true;
 		}
-		if ( preg_match( '/add_action\s*\(\s*("|\')widgets_init("|\')\s*,/', $file_content ) !== false  ) {
-			$sniff_helper['sidebar_support']['widget_init_used'] = true;
+		if ( false != preg_match( '/add_action\s*\(\s*("|\')widgets_init("|\')\s*,/', $file_content ) ) {
+			$sniff_helper['sidebar_support']['widgets_init_used'] = true;
 		}
 	}
 
@@ -655,37 +513,37 @@ abstract class WordPress_AbstractThemeSniff implements PHP_CodeSniffer_Sniff {
 	 */
 	public function get_basic_function_checks( $file_content ) {
 		global $sniff_helper;
-		if ( strpos( $file_content, 'wp_footer' , true ) !== false ) {
+		if ( false !== strpos( $file_content, 'wp_footer' ) ) {
 			$sniff_helper['basic_function_calls']['wp_footer'] = true;
 		}
-		if ( strpos( $file_content, 'wp_head' , true ) !== false ) {
+		if ( false !== strpos( $file_content, 'wp_head' ) ) {
 			$sniff_helper['basic_function_calls']['wp_head'] = true;
 		}
-		if ( strpos( $file_content, 'language_attributes' , true ) !== false ) {
+		if ( false !== strpos( $file_content, 'language_attributes' ) ) {
 			$sniff_helper['basic_function_calls']['language_attributes'] = true;
 		}
-		if ( strpos( $file_content, 'charset' , true ) !== false ) {
+		if ( false !== strpos( $file_content, 'charset' ) ) {
 			$sniff_helper['basic_function_calls']['charset'] = true;
 		}
-		if ( strpos( $file_content, 'add_theme_support' , true ) !== false && strpos( $file_content, 'automatic-feed-links' , true ) !== false ) {
+		if ( false !== strpos( $file_content, 'add_theme_support' ) && false !== strpos( $file_content, 'automatic-feed-links' ) ) {
 			$sniff_helper['basic_function_calls']['automatic_feed_links'] = true;
 		}
-		if ( strpos( $file_content, 'comments_template' , true ) !== false ) {
+		if ( false !== strpos( $file_content, 'comments_template' ) ) {
 			$sniff_helper['basic_function_calls']['comments_template'] = true;
 		}
-		if ( strpos( $file_content, 'wp_list_comments' , true ) !== false ) {
+		if ( false !== strpos( $file_content, 'wp_list_comments' ) ) {
 			$sniff_helper['basic_function_calls']['wp_list_comments'] = true;
 		}
-		if ( strpos( $file_content, 'comment_form' , true ) !== false ) {
+		if ( false !== strpos( $file_content, 'comment_form' ) ) {
 			$sniff_helper['basic_function_calls']['comment_form'] = true;
 		}
-		if ( strpos( $file_content, 'body_class' , true ) !== false ) {
+		if ( false !== strpos( $file_content, 'body_class' ) ) {
 			$sniff_helper['basic_function_calls']['body_class'] = true;
 		}
-		if ( strpos( $file_content, 'wp_link_pages' , true ) !== false ) {
+		if ( false !== strpos( $file_content, 'wp_link_pages' ) ) {
 			$sniff_helper['basic_function_calls']['wp_link_pages'] = true;
 		}
-		if ( strpos( $file_content, 'post_class' , true ) !== false ) {
+		if ( false !== strpos( $file_content, 'post_class' ) ) {
 			$sniff_helper['basic_function_calls']['post_class'] = true;
 		}
 	}
@@ -698,7 +556,7 @@ abstract class WordPress_AbstractThemeSniff implements PHP_CodeSniffer_Sniff {
 	 */
 	public function get_doctype_check( $file_content ) {
 		global $sniff_helper;
-		if ( strpos( $file_content, 'DOCTYPE' , true ) !== false ) {
+		if ( false !== strpos( $file_content, 'DOCTYPE' ) ) {
 			$sniff_helper['doctype'] = true;
 		}
 	}
@@ -729,7 +587,7 @@ abstract class WordPress_AbstractThemeSniff implements PHP_CodeSniffer_Sniff {
 	public function get_readme_file_check( $themedir ) {
 		global $sniff_helper;
 		if ( file_exists( $themedir . '/readme.txt' ) || file_exists( $themedir . '/readme.md' ) ) {
-			$sniff_helper['reademe_file_used'] = true;
+			$sniff_helper['readme_file_used'] = true;
 		}
 	}
 
@@ -741,63 +599,140 @@ abstract class WordPress_AbstractThemeSniff implements PHP_CodeSniffer_Sniff {
 	 */
 	public function get_screenshot_checks( $themedir ) {
 		global $sniff_helper;
-		if ( file_exists( $themedir . '/screenshot.jpg' ) ) {
+		if ( file_exists( $themedir . '\screenshot.jpg' ) ) {
 			$sniff_helper['screenshot']['found'] = true;
-			$imagefilename = $themedir . '/screenshot.jpg';
+			$imagefilename = $themedir . '\screenshot.jpg';
+			echo $imagefilename;
 		}
-		if ( file_exists( $themedir . '/screenshot.png' ) ) {
+		if ( file_exists( $themedir . '\screenshot.png' ) ) {
 			$sniff_helper['screenshot']['found'] = true;
-			$imagefilename = $themedir . '/screenshot.png';
+			$imagefilename = $themedir . '\screenshot.png';
 		}
 		if ( false !== $sniff_helper['screenshot']['found'] ) {
 			$image = getimagesize( $imagefilename );
-			if ( $image[0] <= 1200 ) {
+			if ( is_array($image) ) {
+				if ( $image[0] <= 1200 ) {
+					$sniff_helper['screenshot']['less_than_1200_wide'] = true;
+				}
+				if ( $image[1] <= 900 ) {
+					$sniff_helper['screenshot']['less_than_900_high'] = true;
+				}
+
+				if ( 0.76 > $image[1] / $image[0] &&  0.74 < $image[1] / $image[0] ) {
+					$sniff_helper['screenshot']['aspect_ratio_4_by_3'] = true;
+				}
+			} else {
 				$sniff_helper['screenshot']['less_than_1200_wide'] = true;
-			}
-			if ( $image[1] <= 900 ) {
 				$sniff_helper['screenshot']['less_than_900_high'] = true;
-			}
-			if ( 0.75 === $image[1] / $image[0] ) {
 				$sniff_helper['screenshot']['aspect_ratio_4_by_3'] = true;
+				$sniff_helper['screenshot']['details_not_found'] = true;
 			}
 		}
 	}
 
 	// ------------------ CSS File prep functions ------------------------
 	/**
-	 * This function will go through the css files and identify required css.
-	 * If found set associated cech to true.
+	 * Processes the contents of the style.css.
 	 *
-	 * @param string $file_content contains content of file in a single string.
+	 * @param array $file_content contains content of file by line.
+	 *
+	 * @return false|array
+	 */
+	public function get_theme_data( $file_content ) {
+		global $sniff_helper;
+		$theme_data = array(
+			'name'        => '',
+			'uri'         => '',
+			'author'      => '',
+			'author_uri'  => '',
+			'description' => '',
+			'version'     => '',
+			'license'     => '',
+			'license_uri' => '',
+			'tags'        => '',
+			'text_domain' => '',
+		);
+		foreach ( $file_content as $style_line ) {
+			// get the data name.
+			$name = trim( strstr( $style_line, ':', true ) );
+			// get the data value.
+			$start = strpos( $style_line, ':' ) + 1;
+			$value = trim( substr( $style_line, $start ) );
+			switch ( $name ) {
+				case 'Theme Name':
+					$sniff_helper['theme_data']['name'] = $value;
+					break;
+				case 'Theme URI':
+					$sniff_helper['theme_data']['uri'] = $value;
+					break;
+				case 'Author':
+					$sniff_helper['theme_data']['author'] = $value;
+					break;
+				case 'Author URI':
+					$sniff_helper['theme_data']['author_uri'] = $value;
+					break;
+				case 'Description':
+					$sniff_helper['theme_data']['description'] = $value;
+					break;
+				case 'Version':
+					$sniff_helper['theme_data']['version'] = $value;
+					break;
+				case 'License':
+					$sniff_helper['theme_data']['license'] = $value;
+					break;
+				case 'License URI':
+					$sniff_helper['theme_data']['license_uri'] = $value;
+					break;
+				case 'Text Domain':
+					$sniff_helper['theme_data']['text_domain'] = $value;
+					break;
+				case 'Tags':
+					$tag_array = explode( ',' , $value );
+					foreach ( $tag_array as $tag ) {
+						$tags[] = trim( strtolower( $tag ) );
+					}
+					$sniff_helper['theme_data']['tags'] = $tags;
+					break;
+			}
+		}
+		return;
+	}
+	/**
+	 * This function will go through the css files and identify required css.
+	 * If found set associated check to true.
+	 *
+	 * @param array $file_content contains content of file in a line array.
 	 */
 	public function get_css_checks( $file_content ) {
 		global $sniff_helper;
-		if ( strpos( $file_content, '.sticky' , true ) !== false ) {
-			$sniff_helper['css_required']['sticky'] = true;
-		}
-		if ( strpos( $file_content, '.bypostauthor' , true ) !== false ) {
-			$sniff_helper['css_required']['bypostauthor'] = true;
-		}
-		if ( strpos( $file_content, '.alignleft' , true ) !== false ) {
-			$sniff_helper['css_required']['alignleft'] = true;
-		}
-		if ( strpos( $file_content, '.alignright' , true ) !== false ) {
-			$sniff_helper['css_required']['alignright'] = true;
-		}
-		if ( strpos( $file_content, '.aligncenter' , true ) !== false ) {
-			$sniff_helper['css_required']['aligncenter'] = true;
-		}
-		if ( strpos( $file_content, '.wp-caption' , true ) !== false ) {
-			$sniff_helper['css_required']['wp-caption'] = true;
-		}
-		if ( strpos( $file_content, '.wp-caption-text' , true ) !== false ) {
-			$sniff_helper['css_required']['wp-caption-text'] = true;
-		}
-		if ( strpos( $file_content, '.gallery-caption' , true ) !== false ) {
-			$sniff_helper['css_required']['gallery-caption'] = true;
-		}
-		if ( strpos( $file_content, '.screen-reader-text' , true ) !== false ) {
-			$sniff_helper['css_required']['screen-reader-text'] = true;
+		foreach ( $file_content as $line ) {
+			if ( false !== strpos( $line, '.sticky' ) ) {
+				$sniff_helper['css_required']['sticky'] = true;
+			}
+			if ( false !== strpos( $line, '.bypostauthor' ) ) {
+				$sniff_helper['css_required']['bypostauthor'] = true;
+			}
+			if ( false !== strpos( $line, '.alignleft' ) ) {
+				$sniff_helper['css_required']['alignleft'] = true;
+			}
+			if ( false !== strpos( $line, '.alignright' ) ) {
+				$sniff_helper['css_required']['alignright'] = true;
+			}
+			if ( false !== strpos( $line, '.aligncenter' ) ) {
+				$sniff_helper['css_required']['aligncenter'] = true;
+			}
+			if ( false !== strpos( $line, '.wp-caption' ) ) {
+				$sniff_helper['css_required']['wp-caption'] = true;
+			}
+			if ( false !== strpos( $line, '.wp-caption-text' ) ) {
+				$sniff_helper['css_required']['wp-caption-text'] = true;
+			}
+			if ( false !== strpos( $line, '.gallery-caption' ) ) {
+				$sniff_helper['css_required']['gallery-caption'] = true;
+			}
+			if ( false !== strpos( $line, '.screen-reader-text' ) ) {
+				$sniff_helper['css_required']['screen-reader-text'] = true;
+			}
 		}
 	}
 
@@ -806,14 +741,16 @@ abstract class WordPress_AbstractThemeSniff implements PHP_CodeSniffer_Sniff {
 	 * theme has a add_theme_support( 'post-format' ) call. This should become an
 	 * error if the theme is tagged with post-formats.
 	 * Note this is in conjunction with get_post_format_check() above.
-	 * If found set associated cech to true.
+	 * If found set associated check to true.
 	 *
-	 * @param string $file_content contains content of file in a single string.
+	 * @param array $file_content contains content of file in a line array.
 	 */
 	public function get_post_format_css_check( $file_content ) {
 		global $sniff_helper;
-		if ( false !== strpos( $file_content, '.format' , true ) ) {
-			$sniff_helper['post_format_support'] = true;
+		foreach ( $file_content as $line ) {
+			if ( false !== strpos( $line, '.format' ) ) {
+				$sniff_helper['post_format_support'] = true;
+			}
 		}
 	}
 
@@ -984,7 +921,7 @@ abstract class WordPress_AbstractThemeSniff implements PHP_CodeSniffer_Sniff {
 		 * ERROR : Check that the register_sidebar() function is called with an
 		 * add_action( 'widget_init', ... ) call.
 		 */
-		if ( false === $sniff_helper['sidebar_support']['widget_init_used'] ) {
+		if ( true === $sniff_helper['sidebar_support']['register_sidebar_used'] && false === $sniff_helper['sidebar_support']['widgets_init_used'] ) {
 			echo '  ERROR  | Sidebars need to be registered in a custom function hooked ' . PHP_EOL;
 			echo '         | to the widgets_init action' . PHP_EOL;
 		}
@@ -1085,6 +1022,7 @@ abstract class WordPress_AbstractThemeSniff implements PHP_CodeSniffer_Sniff {
 		 */
 		if ( false === $sniff_helper['readme_file_used'] ) {
 			echo ' WARNING | Either a readme.txt or a readme.md is recommended.' . PHP_EOL;
+			echo '         | This file should be in the theme root directory.' . PHP_EOL;
 		}
 
 		/**
@@ -1114,5 +1052,17 @@ abstract class WordPress_AbstractThemeSniff implements PHP_CodeSniffer_Sniff {
 		if ( false === $sniff_helper['screenshot']['aspect_ratio_4_by_3'] &&  true === $sniff_helper['screenshot']['found'] ) {
 			echo '  ERROR  | Screenshot aspect ratio must be 4:3.' . PHP_EOL;
 		}
+
+		/**
+		 * WARNING : unable to obtain image details.
+		 */
+		if ( false !== $sniff_helper['screenshot']['details_not_found'] &&  true === $sniff_helper['screenshot']['found'] ) {
+			echo ' WARNING | Image details were not found.' . PHP_EOL;
+			echo '         | Please check to ensure max dimensions of 1200 x 900 px.' . PHP_EOL;
+			echo '         | Aspect ratio must be 4:3.' . PHP_EOL;
+		}
+
+		// Closing line.
+		echo '----------------------------------------------------------------------' . PHP_EOL;
 	}
 }
