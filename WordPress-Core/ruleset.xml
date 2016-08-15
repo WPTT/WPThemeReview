@@ -2,6 +2,9 @@
 <ruleset name="WordPress Core">
 	<description>Non-controversial generally-agreed upon WordPress Coding Standards</description>
 
+	<!-- Check for PHP Parse errors -->
+	<rule ref="Generic.PHP.Syntax"/>
+
 	<!-- http://make.wordpress.org/core/handbook/coding-standards/php/#brace-style -->
 	<rule ref="Generic.ControlStructures.InlineControlStructure" />
 	<rule ref="Squiz.ControlStructures.ControlSignature" />
@@ -14,6 +17,7 @@
 
 	<!-- http://make.wordpress.org/core/handbook/coding-standards/php/#remove-trailing-spaces -->
 	<rule ref="Squiz.WhiteSpace.SuperfluousWhitespace"/>
+	<rule ref="PSR2.Files.ClosingTag"/>
 
 	<!-- http://make.wordpress.org/core/handbook/coding-standards/php/#no-shorthand-php-tags -->
 	<rule ref="Generic.PHP.DisallowShortOpenTag"/>
