@@ -19,7 +19,7 @@
  * @package  PHP_CodeSniffer
  * @author   khacoder
  */
-class WordPress_Sniffs_Theme_NoHardCodedUrlsSniff implements PHP_CodeSniffer_Sniff {
+class WordPress_Sniffs_Theme_NoHardCodedUrlsSniff extends WordPress_AbstractThemeSniff {
 	/**
 	 * A list of tokenizers this sniff supports.
 	 *
@@ -57,6 +57,13 @@ class WordPress_Sniffs_Theme_NoHardCodedUrlsSniff implements PHP_CodeSniffer_Sni
 		$tokens = $phpcsFile->getTokens();
 		$token  = $tokens[ $stackPtr ];
 
+		// get tags list from style.css
+		global $sniff_helper;
+
+		$author_uri = $sniff_helper['theme_data']['author_uri'];
+
+		$theme_uri = $sniff_helper['theme_data']['uri'];
+
 		/** If the token contains this string, exclude it.
 		 * ToDo - How can we account for an allowed footer link?
 		 * If we require the footer link to be an Author URI or Theme URI it's possible.
@@ -67,16 +74,22 @@ class WordPress_Sniffs_Theme_NoHardCodedUrlsSniff implements PHP_CodeSniffer_Sni
 				'wordpress.com',
 				'schema.org',
 				'fonts.googleapis',
+				'cdn',// added to prevent duplication CDN sniff catches this.
 		);
 		// regex borrowed from themecheck (borrowed from TAC), modified for url only.
 		if ( preg_match_all( '#(?:(?:http|https|ftp):)?//([[:alnum:]\-\.])+(\\.)([[:alnum:]]){2,4}([[:blank:][:alnum:]\/\+\=\%\&\_\\\.\~\?\-]*)#' , $token['content'], $matches, PREG_SET_ORDER ) ) {
-			// allowed strings.
 			foreach ( $matches as $match ) {
 				$add_warning_flag = true;
 				foreach ( $allowed_strings as $string ) {
 					if ( strpos( $match[0], $string ) ) {
 						$add_warning_flag = false;
 					}
+				}
+				if ( $match[0] === $author_uri ) {
+					$add_warning_flag = false;
+				}
+				if ( $match[0] === $theme_uri ) {
+					$add_warning_flag = false;
 				}
 				if ( true === $add_warning_flag ) {
 					$phpcsFile->addWarning( 'Hardcoded URL found. Is this url acceptable? ' . $match[0], $stackPtr, 'HardCodedUrlFound' );

@@ -50,5 +50,3 @@ class WordPress_Tests_Theme_NoHardCodedUrlsUnitTest extends AbstractSniffUnitTes
 		);
 	}//end getWarningList()
 }//end class
-
-?>
