@@ -14,7 +14,7 @@
  * @category  PHP
  * @package   PHP_CodeSniffer
  * @author    Juliette Reinders Folmer <wpplugins_nospam@adviesenzo.nl>
- * @author    Kevin Haig
+ * @author    khacoder
  * @author    Ulrich Pogson <ulrich@pogson.ch>
  */
 abstract class WordPress_AbstractThemeSniff implements PHP_CodeSniffer_Sniff {
@@ -28,14 +28,14 @@ abstract class WordPress_AbstractThemeSniff implements PHP_CodeSniffer_Sniff {
 
 	/**
 	 * Initial setup.
-	 *
-	 * @var array $theme_data contains data from style.css headers.
 	 */
 	public function __construct() {
 		// do a once through pass and get the files.
 		if ( empty( self::$sniff_helper ) || ! is_array( self::$sniff_helper ) || false === self::$sniff_helper ) {
 			$files = $this->get_files();
-			$themedir = $files[0];
+			if ( isset( $files[0] ) ) {
+				$themedir = $files[0];
+			}
 			// Only run this if checking a directory.
 			$themedir_parts = pathinfo( $themedir );
 			if ( isset( $themedir_parts['extension'] ) ) {
@@ -43,7 +43,6 @@ abstract class WordPress_AbstractThemeSniff implements PHP_CodeSniffer_Sniff {
 			}
 			$themefiles = $this->listdir( $themedir );
 			self::$sniff_helper = $this->once_through( $themedir , $themefiles );
-			// var_dump( self::$sniff_helper );.
 		}
 	}
 
@@ -61,9 +60,10 @@ abstract class WordPress_AbstractThemeSniff implements PHP_CodeSniffer_Sniff {
 
 	// ================== below are functions for the once through
 	/**
-	 * Taken from themecheck
+	 * Returns full URI of files in search directory.
 	 *
 	 * @param string $dir containing directory uri.
+	 * @return array
 	 */
 	protected function listdir( $dir ) {
 		$files = array();
@@ -77,7 +77,6 @@ abstract class WordPress_AbstractThemeSniff implements PHP_CodeSniffer_Sniff {
 	}
 
 	/**
-	 * Taken from themecheck.
 	 * Strip comments from a PHP file in a way that will not change the underlying structure of the file.
 	 *
 	 * @param string $code contains the file contents as a string.
@@ -197,10 +196,14 @@ abstract class WordPress_AbstractThemeSniff implements PHP_CodeSniffer_Sniff {
 				'gallery-caption' => false,
 				'screen-reader-text' => false,
 			),
+			'textdomains' => array(),
+			'themeslug' => '',
+			'files_not_allowed' => array(),
 		);
 		$this->get_minimum_file_check( $themedir );
 		$this->get_readme_file_check( $themedir );
 		$this->get_screenshot_checks( $themedir );
+		$this->blacklist_file_check( $themefiles );
 		foreach ( $themefiles as $themefile ) {
 			if ( strpos( $themefile , '.php' ) !== false ) {
 				$file_content = file_get_contents( $themefile );
@@ -220,18 +223,20 @@ abstract class WordPress_AbstractThemeSniff implements PHP_CodeSniffer_Sniff {
 				$this->get_sidebar_checks( $file_content );
 				$this->get_basic_function_checks( $file_content );
 				$this->get_doctype_check( $file_content );
+				$this->get_textdomains( $file_content );
 			}
 			if ( strpos( $themefile , '.css' ) !== false ) {
 				// css files loaded into line array.
 				$file_content = file( $themefile, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES );
-				if ( $themefile == trim( $themedir ,'\\' ) . '\style.css' ) {
-					$this->get_theme_data( $file_content );
+				if ( trim( $themedir , '\\' ) . '\style.css' === $themefile ) {
+					$this->retrieve_theme_data( $file_content );
 				}
 				$this->get_css_checks( $file_content );
 				$this->get_post_format_css_check( $file_content );
 			}
 		}
 		// Display errors and warnings.
+		$this->get_themeslug();
 		$this->display_errors_and_warnings( $themedir );
 		return $sniff_helper;
 	}
@@ -280,7 +285,6 @@ abstract class WordPress_AbstractThemeSniff implements PHP_CodeSniffer_Sniff {
 	 */
 	public function get_comment_reply_checks( $file_content ) {
 		global $sniff_helper;
-		// from themecheck.
 		if ( preg_match( '/wp_enqueue_script\(\s?("|\')comment-reply("|\')/i', $file_content ) ) {
 			$sniff_helper['comment_reply']['enqueued'] = true;
 			$sniff_helper['comment_reply']['comment_reply_term'] = true;
@@ -370,7 +374,10 @@ abstract class WordPress_AbstractThemeSniff implements PHP_CodeSniffer_Sniff {
 		if ( false !== strpos( $file_content, 'wp_nav_menu' ) ) {
 			$sniff_helper['custom_menu_support'] = true;
 		}
-		if ( false !== strpos( $file_content, 'registar_nav_menu' ) ) {
+		if ( false !== strpos( $file_content, 'register_nav_menu' ) ) {
+			$sniff_helper['custom_menu_support'] = true;
+		}
+		if ( false !== strpos( $file_content, 'register_nav_menus' ) ) {
 			$sniff_helper['custom_menu_support'] = true;
 		}
 	}
@@ -500,6 +507,7 @@ abstract class WordPress_AbstractThemeSniff implements PHP_CodeSniffer_Sniff {
 		if ( false !== strpos( $file_content, 'dynamic_sidebar' ) ) {
 			$sniff_helper['sidebar_support']['dynamic_sidebar_used'] = true;
 		}
+		// Don't use strict, for some reason you get false positives if strict is used.
 		if ( false != preg_match( '/add_action\s*\(\s*("|\')widgets_init("|\')\s*,/', $file_content ) ) {
 			$sniff_helper['sidebar_support']['widgets_init_used'] = true;
 		}
@@ -556,7 +564,7 @@ abstract class WordPress_AbstractThemeSniff implements PHP_CodeSniffer_Sniff {
 	 */
 	public function get_doctype_check( $file_content ) {
 		global $sniff_helper;
-		if ( false !== strpos( $file_content, 'DOCTYPE' ) ) {
+		if ( false !== stripos( $file_content, 'DOCTYPE' ) ) {
 			$sniff_helper['doctype'] = true;
 		}
 	}
@@ -592,8 +600,49 @@ abstract class WordPress_AbstractThemeSniff implements PHP_CodeSniffer_Sniff {
 	}
 
 	/**
-	 * Check if readme.txt or readme.md exists.
-	 * If used then set a flag to true, to be used later.
+	 * Check for blacklisted files.
+	 * If found place in $sniff_helper array for later use
+	 *
+	 * @param array $themefiles contains the uri of files for the theme.
+	 */
+	public function blacklist_file_check( $themefiles ) {
+		global $sniff_helper;
+		$blacklist = array(
+				'thumbs.db'				=> 'Windows thumbnail store',
+				'desktop.ini'			=> 'windows system file',
+				'project.properties'	=> 'NetBeans Project File',
+				'project.xml'			=> 'NetBeans Project File',
+				'.kpf'					=> 'Komodo Project File',
+				'php.ini'				=> 'PHP server settings file',
+				'dwsync.xml'			=> 'Dreamweaver project file',
+				'error_log'				=> 'PHP error log',
+				'web.config'			=> 'Server settings file',
+				'.sql'					=> 'SQL dump file',
+				'__MACOSX'				=> 'OSX system file',
+				'.lubith'				=> 'Lubith theme generator file',
+				'.zip'					=> 'compressed file',
+
+			);
+		foreach ( $themefiles as $themefile ) {
+			foreach ( $blacklist as $key => $reason ) {
+				if ( false !== strpos( $themefile, $key ) ) {
+					$sniff_helper['files_not_allowed'][] = $key . ' - ' . $reason;
+				}
+			}
+			if ( false !== strpos( $themefile, '\.' ) ) {
+				if ( '\.' !== substr( $themefile, -2 ) && '\..' !== substr( $themefile, -3 ) ) {
+					$sniff_helper['files_not_allowed'][] = 'hidden file or folder:';
+					$sniff_helper['files_not_allowed'][] = $themefile;
+				}
+			}
+		}
+	}
+
+	/**
+	 * Check if screenshot file exists.
+	 * Check screenhot max width 1200px.
+	 * Check screenshot max height 900px.
+	 * Check screenshot ratio 4:3.
 	 *
 	 * @param string $themedir contains the theme directory uri.
 	 */
@@ -602,7 +651,6 @@ abstract class WordPress_AbstractThemeSniff implements PHP_CodeSniffer_Sniff {
 		if ( file_exists( $themedir . '\screenshot.jpg' ) ) {
 			$sniff_helper['screenshot']['found'] = true;
 			$imagefilename = $themedir . '\screenshot.jpg';
-			echo $imagefilename;
 		}
 		if ( file_exists( $themedir . '\screenshot.png' ) ) {
 			$sniff_helper['screenshot']['found'] = true;
@@ -610,7 +658,7 @@ abstract class WordPress_AbstractThemeSniff implements PHP_CodeSniffer_Sniff {
 		}
 		if ( false !== $sniff_helper['screenshot']['found'] ) {
 			$image = getimagesize( $imagefilename );
-			if ( is_array($image) ) {
+			if ( is_array( $image ) ) {
 				if ( $image[0] <= 1200 ) {
 					$sniff_helper['screenshot']['less_than_1200_wide'] = true;
 				}
@@ -630,7 +678,186 @@ abstract class WordPress_AbstractThemeSniff implements PHP_CodeSniffer_Sniff {
 		}
 	}
 
-	// ------------------ CSS File prep functions ------------------------
+	/**
+	 * This function will go through the files and identify all the functions
+	 * that contain a textdomain. Once that is done the textdomains will be extracted
+	 * and then put in an array for later use.
+	 *
+	 * @param string $file_content contains content of file in a single string.
+	 */
+	public function get_textdomains( $file_content ) {
+		global $sniff_helper;
+		$checks = array(
+			// find translate().
+			'translate(' => '/translate\(\s*[^,]*,\s*[^\)]*\s*\)/',
+			// find __().
+			'__(' => '/__\(\s*[^,]*,\s*[^\)]*\s*\)/',
+			// find _e().
+			'_e(' => '/_e\(\s*[^,]*,\s*[^\)]*\s*\)/',
+			// find _n().
+			'_n(' => '/_n\(\s*[^,]*,\s*[^,]*,\s*[^,]*,[^\)]*\)/',
+			// find _x().
+			'_x(' => '/_x\(\s*[^,]*,\s*[^,]*,[^\)]*\)/',
+			// find _ex().
+			'_ex(' => '/_ex\(\s*[^,]*,\s*[^,]*,[^\)]*\)/',
+			// find _nx().
+			'_nx(' => '/_nx\(\s*[^,]*,\s*[^,]*,\s*[^,]*,\s*[^,]*,\s*[^\)]*\)/',
+			// find esc_attr__().
+			'esc_attr__(' => '/esc_attr__\(\s*[^,]*,\s*[^\)]*\s*\)/',
+			// find esc_attr_e().
+			'esc_attr_e(' => '/esc_attr_e\(\s*[^,]*,\s*[^\)]*\s*\)/',
+			// find esc_attr_x().
+			'esc_attr_x(' => '/esc_attr_x\(\s*[^,]*,\s*[^,]*,[^\)]*\)/',
+			// find esc_html__().
+			'esc_html__(' => '/esc_html__\(\s*[^,]*,\s*[^\)]*\s*\)/',
+			// find esc_html_e().
+			'esc_html_e(' => '/esc_html_e\(\s*[^,]*,\s*[^\)]*\s*\)/',
+			// find esc_html_x().
+			'esc_html_x(' => '/esc_html_x\(\s*[^,]*,\s*[^,]*,[^\)]*\)/',
+			// find _n_noop().
+			'_n_noop(' => '/_n_noop\(\s*[^,]*,\s*[^,]*,[^\)]*\)/',
+			// find _nx_noop().
+			'_nx_noop(' => '/_nx_noop\(\s*[^,]*,\s*[^,]*,\s*[^,]*,[^\)]*\)/',
+			// find translate_nooped_plural().
+			'translate_nooped_plural(' => '/translate_nooped_plural\(\s*[^,]*,\s*[^,]*,[^\)]*\)/',
+			// find load_theme_textdomain().
+			'load_theme_textdomain(' => '/load_theme_textdomain\(\s*[^,]*,\s*[^;]*/',
+			// find load_textdomain().
+			'load_textdomain(' => '/load_textdomain\(\s*[^,\)]*,\s*[^;]*/',
+		);
+		foreach ( $checks as $key => $check ) {
+			if ( preg_match_all( $check, $file_content, $matches, PREG_SET_ORDER ) ) {
+				foreach ( $matches as $match ) {
+					$match[0] = str_replace( array( " ", "\r", "\n" ), '', $match[0] );
+					$contents = trim( $match[0], $key );
+					$contents = trim( $contents, ')' );
+
+					if ( 'load_theme_textdomain(' !== $key && 'load_textdomain(' !== $key ) {
+						$contents = str_replace( ',', '', $contents );
+						if ( false !== strpos( $contents, '""""' ) || false !== strpos( $contents, "'''" ) ) {
+							$contents = str_replace( '"""', '"","', $contents );
+							$contents = str_replace( "'''", "'','", $contents );
+						} else {
+							$contents = str_replace( '""', '","', $contents );
+							$contents = str_replace( "''", "','", $contents );
+						}
+					}
+					$pieces = explode( ',', $contents );
+					if ( 'translate(' === $key || '__(' === $key || '_e(' === $key || 'esc_attr__(' === $key || 'esc_attr_e(' === $key || 'esc_html__(' === $key || 'esc_html_e(' === $key ) {
+						if ( isset( $pieces[1] ) && ! in_array( trim( $pieces[1], '\'\"' ), $sniff_helper['textdomains'], true ) ) {
+							$sniff_helper['textdomains'][] = trim( $pieces[1], '\'\"' );
+						}
+					} elseif ( 'load_theme_textdomain(' === $key || 'load_textdomain(' === $key ) {
+						if ( false === strpos( $pieces[0], 'tgmpa' ) ) {// fix for tgmpa.
+							if ( isset( $pieces[0] ) && ! in_array( trim( $pieces[0], '\'\"' ), $sniff_helper['textdomains'], true ) ) {
+								$sniff_helper['textdomains'][] = trim( $pieces[0], '\'\"' );
+							}
+						}
+					} elseif ( '_x(' === $key || '_ex(' === $key || 'esc_attr_x(' === $key || 'esc_html_x(' === $key || '_n_noop(' === $key || 'translate_nooped_plural(' === $key ) {
+						if ( isset( $pieces[2] ) && ! in_array( trim( $pieces[2], '\'\"' ), $sniff_helper['textdomains'], true ) ) {
+							$sniff_helper['textdomains'][] = trim( $pieces[2], '\'\"' );
+						}
+					} elseif ( '_n(' === $key || '_nx_noop(' === $key ) {
+						if ( isset( $pieces[3] ) && ! in_array( trim( $pieces[3], '\'\"' ), $sniff_helper['textdomains'], true ) ) {
+							$sniff_helper['textdomains'][] = trim( $pieces[3], '\'\"' );
+						}
+					} elseif ( '_nx(' === $key ) {
+						if ( isset( $pieces[4] ) && ! in_array( trim( $pieces[4], '\'\"' ), $sniff_helper['textdomains'], true ) ) {
+							$sniff_helper['textdomains'][] = trim( $pieces[4], '\'\"' );
+						}
+					}
+				}
+			}
+		}
+	}
+
+	/**
+	 * Sanitizes a title, replacing whitespace and a few other characters with dashes.
+	 *
+	 * Limits the output to alphanumeric characters, underscore (_) and dash (-).
+	 * Whitespace becomes a dash.
+	 *
+	 * Modified from sanitize_title_with_dashes() located in WordPress core:
+	 * includes/formatting.php
+	 *
+	 * @return void
+	 */
+	public function get_themeslug() {
+		global $sniff_helper;
+		$title = $sniff_helper['theme_data']['name'];
+
+		// Preserve escaped octets.
+		$title = preg_replace( '|%([a-fA-F0-9][a-fA-F0-9])|', '---$1---', $title );
+		// Remove percent signs that are not part of an octet.
+		$title = str_replace( '%', '', $title );
+		// Restore octets.
+		$title = preg_replace( '|---([a-fA-F0-9][a-fA-F0-9])---|', '%$1', $title );
+
+		if ( mb_check_encoding( $title, 'UTF-8' ) ) {
+			if ( function_exists( 'mb_strtolower' ) ) {
+				$title = mb_strtolower( $title,'UTF-8' );
+			}
+			// Leave commented out please $title = utf8_uri_encode($title, 200);.
+		}
+
+		$title = strtolower( $title );
+
+		// Convert nbsp, ndash and mdash to hyphens.
+		$title = str_replace( array( '%c2%a0', '%e2%80%93', '%e2%80%94' ),'-', $title );
+		// Convert nbsp, ndash and mdash HTML entities to hyphens.
+		$title = str_replace( array( '&nbsp;', '&#160;', '&ndash;', '&#8211;', '&mdash;', '&#8212;' ), '-', $title );
+
+		// Strip these characters entirely.
+		$title = str_replace( array(
+			// iexcl and iquest.
+			'%c2%a1',
+			'%c2%bf',
+			// angle quotes.
+			'%c2%ab',
+			'%c2%bb',
+			'%e2%80%b9',
+			'%e2%80%ba',
+			// curly quotes.
+			'%e2%80%98',
+			'%e2%80%99',
+			'%e2%80%9c',
+			'%e2%80%9d',
+			'%e2%80%9a',
+			'%e2%80%9b',
+			'%e2%80%9e',
+			'%e2%80%9f',
+			// copy, reg, deg, hellip and trade.
+			'%c2%a9',
+			'%c2%ae',
+			'%c2%b0',
+			'%e2%80%a6',
+			'%e2%84%a2',
+			// acute accents.
+			'%c2%b4',
+			'%cb%8a',
+			'%cc%81',
+			'%cd%81',
+			// grave accent, macron, caron.
+			'%cc%80',
+			'%cc%84',
+			'%cc%8c',
+		), '', $title );
+
+		// Convert times to x.
+		$title = str_replace( '%c3%97', 'x', $title );
+
+		$title = preg_replace( '/&.+?;/', '', $title ); // kill entities.
+		$title = str_replace( '.', '-', $title );
+
+		$title = preg_replace( '/[^%a-z0-9 _-]/', '', $title );
+		$title = preg_replace( '/\s+/', '-', $title );
+		$title = preg_replace( '|-+|', '-', $title );
+		$title = trim( $title, '-' );
+
+		$sniff_helper['themeslug'] = $title;
+	}
+
+	// ------------------ CSS File prep functions ------------------------.
 	/**
 	 * Processes the contents of the style.css.
 	 *
@@ -638,7 +865,7 @@ abstract class WordPress_AbstractThemeSniff implements PHP_CodeSniffer_Sniff {
 	 *
 	 * @return false|array
 	 */
-	public function get_theme_data( $file_content ) {
+	public function retrieve_theme_data( $file_content ) {
 		global $sniff_helper;
 		$theme_data = array(
 			'name'        => '',
@@ -763,7 +990,7 @@ abstract class WordPress_AbstractThemeSniff implements PHP_CodeSniffer_Sniff {
 	public function display_errors_and_warnings( $themedir ) {
 		global $sniff_helper;
 		echo PHP_EOL;
-		echo 'ThemeCheck Results: ' . $themedir . PHP_EOL;
+		echo 'Auto Theme Check Results: ' . $themedir . PHP_EOL;
 		echo '----------------------------------------------------------------------' . PHP_EOL;
 		echo 'Errors and warnings not related to file checks.' . PHP_EOL;
 		echo '----------------------------------------------------------------------' . PHP_EOL;
@@ -1060,6 +1287,63 @@ abstract class WordPress_AbstractThemeSniff implements PHP_CodeSniffer_Sniff {
 			echo ' WARNING | Image details were not found.' . PHP_EOL;
 			echo '         | Please check to ensure max dimensions of 1200 x 900 px.' . PHP_EOL;
 			echo '         | Aspect ratio must be 4:3.' . PHP_EOL;
+		}
+
+		/**
+		 * ERROR/WARNING : Check on the number of unique text domains encountered.
+		 * If one => ok, if two => warning, if three => error.
+		 */
+		$textdomain_count = count( $sniff_helper['textdomains'] );
+		if ( 2 === $textdomain_count ) {
+			echo ' WARNING | Found 2 text domains :' . PHP_EOL;
+			echo '         | ' . $sniff_helper['textdomains'][0] . PHP_EOL;
+			echo '         | ' . $sniff_helper['textdomains'][1] . PHP_EOL;
+			echo '         | You can have 2 text domains if you are using a framework.' . PHP_EOL;
+			echo '         | If you are not using a framework remove one text domain.' . PHP_EOL;
+			echo '         | Also note that your main text domain must be your WordPress' . PHP_EOL;
+			echo '         | approved themeslug.' . PHP_EOL;
+		} elseif ( $textdomain_count > 2 ) {
+			echo '  ERROR  | Found ' . $textdomain_count . ' text domains :' . PHP_EOL;
+			foreach ( $sniff_helper['textdomains'] as $textdomain ) {
+				echo '         | ' . $textdomain . PHP_EOL;
+			}
+			echo '         | Only one text domain is allowed unless you are using a framework.' . PHP_EOL;
+			echo '         | You can have 2 text domains if you are using a framework.' . PHP_EOL;
+			echo '         | Also note that your main text domain must be your WordPress' . PHP_EOL;
+			echo '         | approved themeslug.' . PHP_EOL;
+		} elseif ( 0 === $textdomain_count ) {
+			echo ' WARNING | No text domain found.' . PHP_EOL;
+			echo '         | Note that all text strings must be translated.' . PHP_EOL;
+		}
+
+		/**
+		 * ERROR | Verify that the text-domain used is the same as the theme slug.
+		 */
+		// core names their themes differently.
+		$textdomain_exceptions = array( 'twentyten', 'twentyeleven', 'twentytwelve', 'twentythirteen', 'twentyfourteen', 'twentyfifteen', 'twentysixteen',  'twentyseventeen', 'twentyeighteen', 'twentynineteen', 'twentytwenty' );
+
+		$textdomain = $sniff_helper['theme_data']['text_domain'];
+		if ( false !== strpos( $textdomain, '_' ) ) {
+			echo '  ERROR  | textdomain in style.css contains an underscore.' . PHP_EOL;
+			echo '         | Please replace the underscore with a hyphen.' . PHP_EOL;
+		}
+		$themeslug = $sniff_helper['themeslug'];
+		if ( '' !== $textdomain && str_replace( '_', '-', $themeslug ) !== $textdomain ) {
+			if ( ! in_array( str_replace( '-', '', $themeslug ), $textdomain_exceptions, true ) ) {
+				echo '  ERROR  | Main textdomain and themeslug must be the same.' . PHP_EOL;
+				echo '         | textdomain found in style.css is ' . $textdomain . PHP_EOL;
+				echo '         | WordPress approved themeslug is ' . $themeslug . PHP_EOL;
+			}
+		}
+
+		/**
+		 * ERROR | Files not allowed to be bundled with the theme.
+		 */
+		if ( ! empty( $sniff_helper['files_not_allowed'] ) ) {
+			echo '  ERROR  | The following file(s) are not allowed.' . PHP_EOL;
+			foreach ( $sniff_helper['files_not_allowed'] as $file ) {
+				echo '         | ' . $file . PHP_EOL;
+			}
 		}
 
 		// Closing line.
