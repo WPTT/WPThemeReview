@@ -9,6 +9,7 @@
 	<!-- Covers: https://github.com/Otto42/theme-check/blob/master/checks/phpshort.php -->
 	<rule ref="Generic.PHP.DisallowShortOpenTag" />
 
+
 	<!-- Only UNIX line endings allowed. -->
 	<!-- Covers: https://github.com/Otto42/theme-check/blob/master/checks/lineendings.php -->
 	<rule ref="Generic.Files.LineEndings">
@@ -28,5 +29,10 @@
 
 	<!-- No hard coding of scripts and styles. Everything should be enqueued. -->
 	<rule ref="WordPress.WP.EnqueuedResources" />
+
+
+	<!-- Prevent path disclosure when using add_theme_page(). -->
+	<rule ref="WordPress.VIP.PluginMenuSlug"/>
+
 
 </ruleset>
