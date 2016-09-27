@@ -1,38 +1,27 @@
 <?php
 /**
- * WordPress_Sniffs_NamingConventions_ValidVariableNameSniff.
+ * WordPress Coding Standard.
  *
- * Based on Squiz_Sniffs_NamingConventions_ValidVariableNameSniff:
- * @link https://github.com/squizlabs/PHP_CodeSniffer/blob/ed257ca0e56ad86cd2a4d6fa38ce0b95141c824f/CodeSniffer/Standards/Squiz/Sniffs/NamingConventions/ValidVariableNameSniff.php
- *
- * @category  PHP
- * @package   PHP_CodeSniffer
- * @author    Greg Sherwood <gsherwood@squiz.net>
- * @author    Marc McIntyre <mmcintyre@squiz.net>
- * @author    Weston Ruter
- * @copyright 2006-2014 Squiz Pty Ltd (ABN 77 084 670 600)
- * @license   https://github.com/squizlabs/PHP_CodeSniffer/blob/master/licence.txt BSD Licence
- * @link      http://pear.php.net/package/PHP_CodeSniffer
+ * @package WPCS\WordPressCodingStandards
+ * @link    https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards
+ * @license https://opensource.org/licenses/MIT MIT
  */
 
-if ( class_exists( 'PHP_CodeSniffer_Standards_AbstractVariableSniff', true ) === false ) {
+if ( ! class_exists( 'PHP_CodeSniffer_Standards_AbstractVariableSniff', true ) ) {
 	throw new PHP_CodeSniffer_Exception( 'Class PHP_CodeSniffer_Standards_AbstractVariableSniff not found' );
 }
 
 /**
- * WordPress_Sniffs_NamingConventions_ValidVariableNameSniff.
- *
  * Checks the naming of variables and member variables.
  *
- * @category  PHP
- * @package   PHP_CodeSniffer
- * @author    Greg Sherwood <gsherwood@squiz.net>
- * @author    Marc McIntyre <mmcintyre@squiz.net>
- * @author    Weston Ruter
- * @copyright 2006-2014 Squiz Pty Ltd (ABN 77 084 670 600)
- * @license   https://github.com/squizlabs/PHP_CodeSniffer/blob/master/licence.txt BSD Licence
- * @version   Release: @package_version@
- * @link      http://pear.php.net/package/PHP_CodeSniffer
+ * @link    https://make.wordpress.org/core/handbook/best-practices/coding-standards/php/#naming-conventions
+ *
+ * @package WPCS\WordPressCodingStandards
+ *
+ * @since   0.9.0
+ *
+ * Last synced with base class July 2014 at commit ed257ca0e56ad86cd2a4d6fa38ce0b95141c824f.
+ * @link    https://github.com/squizlabs/PHP_CodeSniffer/blob/master/CodeSniffer/Standards/Squiz/Sniffs/NamingConventions/ValidVariableNameSniff.php
  */
 class WordPress_Sniffs_NamingConventions_ValidVariableNameSniff extends PHP_CodeSniffer_Standards_AbstractVariableSniff {
 
@@ -86,7 +75,7 @@ class WordPress_Sniffs_NamingConventions_ValidVariableNameSniff extends PHP_Code
 	 *
 	 * @var bool
 	 */
-	public static $addedCustomVariables = false;
+	protected $addedCustomVariables = false;
 
 	/**
 	 * Processes this test, when one of its tokens is encountered.
@@ -99,12 +88,8 @@ class WordPress_Sniffs_NamingConventions_ValidVariableNameSniff extends PHP_Code
 	 */
 	protected function processVariable( PHP_CodeSniffer_File $phpcs_file, $stack_ptr ) {
 
-		// Merge any custom variables with the defaults, if we haven't already.
-		if ( ! self::$addedCustomVariables ) {
-			$this->whitelisted_mixed_case_member_var_names = array_merge( $this->whitelisted_mixed_case_member_var_names, $this->customVariablesWhitelist );
-
-			self::$addedCustomVariables = true;
-		}
+		// Merge any custom variables with the defaults.
+		$this->mergeWhiteList();
 
 		$tokens   = $phpcs_file->getTokens();
 		$var_name = ltrim( $tokens[ $stack_ptr ]['content'], '$' );
@@ -184,6 +169,9 @@ class WordPress_Sniffs_NamingConventions_ValidVariableNameSniff extends PHP_Code
 	 */
 	protected function processMemberVar( PHP_CodeSniffer_File $phpcs_file, $stack_ptr ) {
 
+		// Merge any custom variables with the defaults.
+		$this->mergeWhiteList();
+
 		$tokens = $phpcs_file->getTokens();
 
 		$var_name     = ltrim( $tokens[ $stack_ptr ]['content'], '$' );
@@ -214,6 +202,7 @@ class WordPress_Sniffs_NamingConventions_ValidVariableNameSniff extends PHP_Code
 	 * @return void
 	 */
 	protected function processVariableInString( PHP_CodeSniffer_File $phpcs_file, $stack_ptr ) {
+
 		$tokens = $phpcs_file->getTokens();
 
 		if ( preg_match_all( '|[^\\\]\${?([a-zA-Z_\x7f-\xff][a-zA-Z0-9_\x7f-\xff]*)|', $tokens[ $stack_ptr ]['content'], $matches ) > 0 ) {
@@ -241,6 +230,19 @@ class WordPress_Sniffs_NamingConventions_ValidVariableNameSniff extends PHP_Code
 	 */
 	static function isSnakeCase( $var_name ) {
 		return (bool) preg_match( '/^[a-z0-9_]+$/', $var_name );
-	} // end isSnakeCase()
+	}
 
-} // end class
+	/**
+	 * Merge a custom whitelist provided via a custom ruleset with the predefined whitelist,
+	 * if we haven't already.
+	 *
+	 * @return void
+	 */
+	protected function mergeWhiteList() {
+		if ( false === $this->addedCustomVariables && ! empty( $this->customVariablesWhitelist ) ) {
+			$this->whitelisted_mixed_case_member_var_names = array_merge( $this->whitelisted_mixed_case_member_var_names, $this->customVariablesWhitelist );
+			$this->addedCustomVariables = true;
+		}
+	}
+
+} // End class.

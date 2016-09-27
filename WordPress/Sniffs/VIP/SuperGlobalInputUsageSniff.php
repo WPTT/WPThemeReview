@@ -2,19 +2,20 @@
 /**
  * WordPress Coding Standard.
  *
- * @category PHP
- * @package  PHP_CodeSniffer
- * @link     https://make.wordpress.org/core/handbook/best-practices/coding-standards/
+ * @package WPCS\WordPressCodingStandards
+ * @link    https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards
+ * @license https://opensource.org/licenses/MIT MIT
  */
 
 /**
- * Flag any usage of super global input var ( _GET / _POST / etc. )
+ * Flag any usage of super global input var ( _GET / _POST / etc. ).
  *
- * @link     https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards/issues/79
+ * @link    https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards/issues/79
  *
- * @category PHP
- * @package  PHP_CodeSniffer
- * @author   Shady Sharaf <shady@x-team.com>
+ * @package WPCS\WordPressCodingStandards
+ *
+ * @since   0.3.0
+ * @since   0.4.0 This class now extends WordPress_Sniff.
  */
 class WordPress_Sniffs_VIP_SuperGlobalInputUsageSniff extends WordPress_Sniff {
 
@@ -28,7 +29,7 @@ class WordPress_Sniffs_VIP_SuperGlobalInputUsageSniff extends WordPress_Sniff {
 			T_VARIABLE,
 		);
 
-	} // end register()
+	}
 
 	/**
 	 * Processes this test, when one of its tokens is encountered.
@@ -41,14 +42,13 @@ class WordPress_Sniffs_VIP_SuperGlobalInputUsageSniff extends WordPress_Sniff {
 	 */
 	public function process( PHP_CodeSniffer_File $phpcsFile, $stackPtr ) {
 		$this->init( $phpcsFile );
-		$tokens = $phpcsFile->getTokens();
 
 		// Check for global input variable.
-		if ( ! in_array( $tokens[ $stackPtr ]['content'], WordPress_Sniff::$input_superglobals, true ) ) {
+		if ( ! in_array( $this->tokens[ $stackPtr ]['content'], self::$input_superglobals, true ) ) {
 			return;
 		}
 
-		$varName = $tokens[ $stackPtr ]['content'];
+		$varName = $this->tokens[ $stackPtr ]['content'];
 
 		// If we're overriding a superglobal with an assignment, no need to test.
 		if ( $this->is_assignment( $stackPtr ) ) {
@@ -57,9 +57,9 @@ class WordPress_Sniffs_VIP_SuperGlobalInputUsageSniff extends WordPress_Sniff {
 
 		// Check for whitelisting comment.
 		if ( ! $this->has_whitelist_comment( 'input var', $stackPtr ) ) {
-			$phpcsFile->addWarning( 'Detected access of super global var %s, probably need manual inspection.', $stackPtr, 'AccessDetected', array( $varName ) );
+			$phpcsFile->addWarning( 'Detected access of super global var %s, probably needs manual inspection.', $stackPtr, 'AccessDetected', array( $varName ) );
 		}
 
-	} // end process()
+	}
 
-} // end class
+} // End class.

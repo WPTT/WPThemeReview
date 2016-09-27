@@ -2,9 +2,9 @@
 /**
  * WordPress Coding Standard.
  *
- * @category PHP
- * @package  PHP_CodeSniffer
- * @link     https://make.wordpress.org/core/handbook/best-practices/coding-standards/
+ * @package WPCS\WordPressCodingStandards
+ * @link    https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards
+ * @license https://opensource.org/licenses/MIT MIT
  */
 
 /**
@@ -12,8 +12,11 @@
  *
  * Makes sure that variables aren't directly interpolated into SQL statements.
  *
- * @package WordPress-Coding-Standards
- * @since 0.8.0
+ * @link    https://make.wordpress.org/core/handbook/best-practices/coding-standards/php/#formatting-sql-statements
+ *
+ * @package WPCS\WordPressCodingStandards
+ *
+ * @since   0.8.0
  */
 class WordPress_Sniffs_WP_PreparedSQLSniff extends WordPress_Sniff {
 
@@ -91,24 +94,22 @@ class WordPress_Sniffs_WP_PreparedSQLSniff extends WordPress_Sniff {
 	/**
 	 * Processes this test, when one of its tokens is encountered.
 	 *
-	 * @since 0.8.0
-	 *
 	 * @param PHP_CodeSniffer_File $phpcsFile The file being scanned.
 	 * @param int                  $stackPtr  The position of the current token
 	 *                                        in the stack passed in $tokens.
+	 *
+	 * @since 0.8.0
 	 *
 	 * @return int|void
 	 */
 	public function process( PHP_CodeSniffer_File $phpcsFile, $stackPtr ) {
 
-		$tokens = $phpcsFile->getTokens();
+		$this->init( $phpcsFile );
 
 		// Check for $wpdb variable.
-		if ( '$wpdb' !== $tokens[ $stackPtr ]['content'] ) {
+		if ( '$wpdb' !== $this->tokens[ $stackPtr ]['content'] ) {
 			return;
 		}
-
-		$this->init( $phpcsFile );
 
 		if ( ! $this->is_wpdb_method_call( $stackPtr ) ) {
 			return;
@@ -120,14 +121,14 @@ class WordPress_Sniffs_WP_PreparedSQLSniff extends WordPress_Sniff {
 
 		for ( $this->i; $this->i < $this->end; $this->i++ ) {
 
-			if ( isset( $this->ignored_tokens[ $tokens[ $this->i ]['code'] ] ) ) {
+			if ( isset( $this->ignored_tokens[ $this->tokens[ $this->i ]['code'] ] ) ) {
 				continue;
 			}
 
-			if ( T_DOUBLE_QUOTED_STRING === $tokens[ $this->i ]['code'] ) {
+			if ( T_DOUBLE_QUOTED_STRING === $this->tokens[ $this->i ]['code'] ) {
 
 				$bad_variables = array_filter(
-					$this->get_interpolated_variables( $tokens[ $this->i ]['content'] ),
+					$this->get_interpolated_variables( $this->tokens[ $this->i ]['content'] ),
 					create_function( '$symbol', 'return ! in_array( $symbol, array( "wpdb" ), true );' ) // Replace this with closure once 5.3 is minimum requirement.
 				);
 
@@ -138,25 +139,25 @@ class WordPress_Sniffs_WP_PreparedSQLSniff extends WordPress_Sniff {
 						'NotPrepared',
 						array(
 							$bad_variable,
-							$tokens[ $this->i ]['content'],
+							$this->tokens[ $this->i ]['content'],
 						)
 					);
 				}
 				continue;
 			}
 
-			if ( T_VARIABLE === $tokens[ $this->i ]['code'] ) {
-				if ( '$wpdb' === $tokens[ $this->i ]['content'] ) {
+			if ( T_VARIABLE === $this->tokens[ $this->i ]['code'] ) {
+				if ( '$wpdb' === $this->tokens[ $this->i ]['content'] ) {
 					$this->is_wpdb_method_call( $this->i );
 					continue;
 				}
 			}
 
-			if ( T_STRING === $tokens[ $this->i ]['code'] ) {
+			if ( T_STRING === $this->tokens[ $this->i ]['code'] ) {
 
 				if (
-					isset( self::$SQLEscapingFunctions[ $tokens[ $this->i ]['content'] ] )
-					|| isset( self::$SQLAutoEscapedFunctions[ $tokens[ $this->i ]['content'] ] )
+					isset( self::$SQLEscapingFunctions[ $this->tokens[ $this->i ]['content'] ] )
+					|| isset( self::$SQLAutoEscapedFunctions[ $this->tokens[ $this->i ]['content'] ] )
 				) {
 
 					// Find the opening parenthesis.
@@ -171,7 +172,7 @@ class WordPress_Sniffs_WP_PreparedSQLSniff extends WordPress_Sniff {
 						$this->i = $this->tokens[ $opening_paren ]['parenthesis_closer'];
 						continue;
 					}
-				} elseif ( isset( self::$formattingFunctions[ $tokens[ $this->i ]['content'] ] ) ) {
+				} elseif ( isset( self::$formattingFunctions[ $this->tokens[ $this->i ]['content'] ] ) ) {
 					continue;
 				}
 			}
@@ -180,7 +181,7 @@ class WordPress_Sniffs_WP_PreparedSQLSniff extends WordPress_Sniff {
 				'Use placeholders and $wpdb->prepare(); found %s',
 				$this->i,
 				'NotPrepared',
-				array( $tokens[ $this->i ]['content'] )
+				array( $this->tokens[ $this->i ]['content'] )
 			);
 		}
 
@@ -242,4 +243,4 @@ class WordPress_Sniffs_WP_PreparedSQLSniff extends WordPress_Sniff {
 		return true;
 	} // is_wpdb_method_call()
 
-} // end class.
+} // End class.

@@ -1,37 +1,51 @@
 <?php
 /**
- * Enforces WordPress function name format, based upon Squiz code.
+ * WordPress Coding Standard.
  *
- * @category PHP
- * @package  PHP_CodeSniffer
- * @author   John Godley <john@urbangiraffe.com>
+ * @package WPCS\WordPressCodingStandards
+ * @link    https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards
+ * @license https://opensource.org/licenses/MIT MIT
  */
 
+if ( ! class_exists( 'PEAR_Sniffs_NamingConventions_ValidFunctionNameSniff', true ) ) {
+	throw new PHP_CodeSniffer_Exception( 'Class PEAR_Sniffs_NamingConventions_ValidFunctionNameSniff not found' );
+}
+
 /**
- * Enforces WordPress function name format.
+ * Enforces WordPress function name and method name format, based upon Squiz code.
  *
- * @category PHP
- * @package  PHP_CodeSniffer
- * @author   John Godley <john@urbangiraffe.com>
+ * @link    https://make.wordpress.org/core/handbook/coding-standards/php/#naming-conventions
+ *
+ * @package WPCS\WordPressCodingStandards
+ *
+ * @since   0.1.0
+ *
+ * Last synced with parent class July 2016 up to commit 4fea2e651109e41066a81e22e004d851fb1287f6.
+ * @link    https://github.com/squizlabs/PHP_CodeSniffer/blob/master/CodeSniffer/Standards/PEAR/Sniffs/NamingConventions/ValidFunctionNameSniff.php
  */
 class WordPress_Sniffs_NamingConventions_ValidFunctionNameSniff extends PEAR_Sniffs_NamingConventions_ValidFunctionNameSniff {
 
-	private $_magicMethods = array(
-		'construct',
-		'destruct',
-		'call',
-		'callStatic',
-		'get',
-		'set',
-		'isset',
-		'unset',
-		'sleep',
-		'wakeup',
-		'toString',
-		'set_state',
-		'clone',
-		'invoke',
-		'debugInfo',
+	/**
+	 * Additional double underscore prefixed methods specific to certain PHP native extensions.
+	 *
+	 * Currently only handles the SoapClient Extension.
+	 *
+	 * @link http://php.net/manual/en/class.soapclient.php
+	 *
+	 * @var array <string method name> => <string class name>
+	 */
+	private $methodsDoubleUnderscore = array(
+		'doRequest'              => 'SoapClient',
+		'getFunctions'           => 'SoapClient',
+		'getLastRequest'         => 'SoapClient',
+		'getLastRequestHeaders'  => 'SoapClient',
+		'getLastResponse'        => 'SoapClient',
+		'getLastResponseHeaders' => 'SoapClient',
+		'getTypes'               => 'SoapClient',
+		'setCookie'              => 'SoapClient',
+		'setLocation'            => 'SoapClient',
+		'setSoapHeaders'         => 'SoapClient',
+		'soapCall'               => 'SoapClient',
 	);
 
 	/**
@@ -46,13 +60,41 @@ class WordPress_Sniffs_NamingConventions_ValidFunctionNameSniff extends PEAR_Sni
 	protected function processTokenOutsideScope( PHP_CodeSniffer_File $phpcsFile, $stackPtr ) {
 		$functionName = $phpcsFile->getDeclarationName( $stackPtr );
 
+		if ( ! isset( $functionName ) ) {
+			// Ignore closures.
+			return;
+		}
+
+		if ( '' === ltrim( $functionName, '_' ) ) {
+			// Ignore special functions.
+			return;
+		}
+
+		// Is this a magic function ? I.e., it is prefixed with "__" ?
+		// Outside class scope this basically just means __autoload().
+		if ( 0 === strpos( $functionName, '__' ) ) {
+			$magicPart = strtolower( substr( $functionName, 2 ) );
+			if ( ! isset( $this->magicFunctions[ $magicPart ] ) ) {
+				$error     = 'Function name "%s" is invalid; only PHP magic methods should be prefixed with a double underscore';
+				$errorData = array( $functionName );
+				$phpcsFile->addError( $error, $stackPtr, 'FunctionDoubleUnderscore', $errorData );
+			}
+
+			return;
+		}
+
 		if ( strtolower( $functionName ) !== $functionName ) {
 			$suggested = preg_replace( '/([A-Z])/', '_$1', $functionName );
 			$suggested = strtolower( $suggested );
 			$suggested = str_replace( '__', '_', $suggested );
+			$suggested = trim( $suggested, '_' );
 
-			$error = "Function name \"$functionName\" is in camel caps format, try '{$suggested}'";
-			$phpcsFile->addError( $error, $stackPtr, 'FunctionNameInvalid' );
+			$error     = 'Function name "%s" is not in snake case format, try "%s"';
+			$errorData = array(
+				$functionName,
+				$suggested,
+			);
+			$phpcsFile->addError( $error, $stackPtr, 'FunctionNameInvalid', $errorData );
 		}
 
 	} // end processTokenOutsideScope()
@@ -68,17 +110,17 @@ class WordPress_Sniffs_NamingConventions_ValidFunctionNameSniff extends PEAR_Sni
 	 * @return void
 	 */
 	protected function processTokenWithinScope( PHP_CodeSniffer_File $phpcsFile, $stackPtr, $currScope ) {
-		$className	= $phpcsFile->getDeclarationName( $currScope );
 		$methodName = $phpcsFile->getDeclarationName( $stackPtr );
 
-		// Is this a magic method. IE. is prefixed with "__".
-		if ( 0 === strpos( $methodName, '__' ) ) {
-			$magicPart = substr( $methodName, 2 );
-			if ( false === in_array( $magicPart, $this->_magicMethods, true ) ) {
-				 $error = "Method name \"$className::$methodName\" is invalid; only PHP magic methods should be prefixed with a double underscore";
-				 $phpcsFile->addError( $error, $stackPtr, 'MethodDoubleUnderscore' );
-			}
+		if ( ! isset( $methodName ) ) {
+			// Ignore closures.
+			return;
+		}
 
+		$className	= $phpcsFile->getDeclarationName( $currScope );
+
+		// Ignore special functions.
+		if ( '' === ltrim( $methodName, '_' ) ) {
 			return;
 		}
 
@@ -92,46 +134,50 @@ class WordPress_Sniffs_NamingConventions_ValidFunctionNameSniff extends PEAR_Sni
 			return;
 		}
 
-		// If this is a child class, it may have to use camelCase.
-		if ( $phpcsFile->findExtendedClassName( $currScope ) || $this->findImplementedInterfaceName( $currScope, $phpcsFile ) ) {
+		$extended  = $phpcsFile->findExtendedClassName( $currScope );
+		$interface = $this->findImplementedInterfaceName( $currScope, $phpcsFile );
+
+		// If this is a child class or interface implementation, it may have to use camelCase or double underscores.
+		if ( $extended || $interface ) {
 			return;
 		}
 
-		$methodProps	= $phpcsFile->getMethodProperties( $stackPtr );
-		$scope			= $methodProps['scope'];
-		$scopeSpecified = $methodProps['scope_specified'];
+		// Is this a magic method ? I.e. is it prefixed with "__" ?
+		if ( 0 === strpos( $methodName, '__' ) ) {
+			$magicPart = strtolower( substr( $methodName, 2 ) );
+			if ( ! isset( $this->magicMethods[ $magicPart ] ) && ! isset( $this->methodsDoubleUnderscore[ $magicPart ] ) ) {
+				 $error     = 'Method name "%s" is invalid; only PHP magic methods should be prefixed with a double underscore';
+				 $errorData = array( $className . '::' . $methodName );
+				 $phpcsFile->addError( $error, $stackPtr, 'MethodDoubleUnderscore', $errorData );
+			}
 
-		if ( 'private' === $methodProps['scope'] ) {
-			$isPublic = false;
-		} else {
-			$isPublic = true;
+			return;
 		}
 
-		// If the scope was specified on the method, then the method must be
-		// camel caps and an underscore should be checked for. If it wasn't
-		// specified, treat it like a public method and remove the underscore
-		// prefix if there is one because we can't determine if it is private or
-		// public.
-		$testMethodName = $methodName;
-		if ( false === $scopeSpecified && '_' === $methodName{0} ) {
-			$testMethodName = substr( $methodName, 1 );
-		}
-
-		if ( strtolower( $testMethodName ) !== $testMethodName ) {
+		// Check for all lowercase.
+		if ( strtolower( $methodName ) !== $methodName ) {
 			$suggested = preg_replace( '/([A-Z])/', '_$1', $methodName );
 			$suggested = strtolower( $suggested );
 			$suggested = str_replace( '__', '_', $suggested );
+			$suggested = trim( $suggested, '_' );
 
-			$error = "Function name \"$methodName\" is in camel caps format, try '{$suggested}'";
-			$phpcsFile->addError( $error, $stackPtr, 'FunctionNameInvalid' );
+			$error     = 'Method name "%s" in class %s is not in snake case format, try "%s"';
+			$errorData = array(
+				$methodName,
+				$className,
+				$suggested,
+			);
+			$phpcsFile->addError( $error, $stackPtr, 'MethodNameInvalid', $errorData );
 		}
 
 	} // end processTokenWithinScope()
 
 	/**
-	 * Returns the name of the class that the specified class implements.
+	 * Returns the name of the interface that the specified class implements.
 	 *
-	 * Returns FALSE on error or if there is no implemented class name.
+	 * Returns FALSE on error or if there is no implemented interface name.
+	 *
+	 * @since 0.5.0
 	 *
 	 * @param int                  $stackPtr  The stack position of the class.
 	 * @param PHP_CodeSniffer_File $phpcsFile The stack position of the class.
@@ -174,4 +220,4 @@ class WordPress_Sniffs_NamingConventions_ValidFunctionNameSniff extends PEAR_Sni
 		return $name;
 	} // end findExtendedClassName()
 
-} // end class
+} // End class.

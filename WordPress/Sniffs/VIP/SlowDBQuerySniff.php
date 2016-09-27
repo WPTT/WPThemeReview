@@ -2,19 +2,21 @@
 /**
  * WordPress Coding Standard.
  *
- * @category PHP
- * @package  PHP_CodeSniffer
- * @link     https://make.wordpress.org/core/handbook/best-practices/coding-standards/
+ * @package WPCS\WordPressCodingStandards
+ * @link    https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards
+ * @license https://opensource.org/licenses/MIT MIT
  */
 
 /**
- * Flag slow queries.
+ * Flag potentially slow queries.
  *
- * @category PHP
- * @package  PHP_CodeSniffer
- * @author   Shady Sharaf <shady@x-team.com>
+ * @link    https://vip.wordpress.com/documentation/vip/code-review-what-we-look-for/#uncached-pageload
+ *
+ * @package WPCS\WordPressCodingStandards
+ *
+ * @since   0.3.0
  */
-class WordPress_Sniffs_VIP_SlowDBQuerySniff extends WordPress_Sniffs_Arrays_ArrayAssignmentRestrictionsSniff {
+class WordPress_Sniffs_VIP_SlowDBQuerySniff extends WordPress_AbstractArrayAssignmentRestrictionsSniff {
 
 	/**
 	 * Groups of variables to restrict.
@@ -50,6 +52,8 @@ class WordPress_Sniffs_VIP_SlowDBQuerySniff extends WordPress_Sniffs_Arrays_Arra
 	/**
 	 * Processes this test, when one of its tokens is encountered.
 	 *
+	 * @since 0.10.0
+	 *
 	 * @param PHP_CodeSniffer_File $phpcsFile The file being scanned.
 	 * @param int                  $stackPtr  The position of the current token
 	 *                                        in the stack passed in $tokens.
@@ -65,6 +69,21 @@ class WordPress_Sniffs_VIP_SlowDBQuerySniff extends WordPress_Sniffs_Arrays_Arra
 		}
 
 		parent::process( $phpcsFile, $stackPtr );
-	} // end process()
+	}
 
-} // end class
+	/**
+	 * Callback to process each confirmed key, to check value.
+	 * This must be extended to add the logic to check assignment value.
+	 *
+	 * @param  string $key   Array index / key.
+	 * @param  mixed  $val   Assigned value.
+	 * @param  int    $line  Token line.
+	 * @param  array  $group Group definition.
+	 * @return mixed         FALSE if no match, TRUE if matches, STRING if matches
+	 *                       with custom error message passed to ->process().
+	 */
+	public function callback( $key, $val, $line, $group ) {
+		return true;
+	}
+
+} // End class.

@@ -1,24 +1,24 @@
 <?php
 /**
- * WordPress_Sniffs_PHP_DiscouragedFunctionsSniff.
+ * WordPress Coding Standard.
  *
- * @category PHP
- * @package  PHP_CodeSniffer
- * @author   John Godley <john@urbangiraffe.com>
+ * @package WPCS\WordPressCodingStandards
+ * @link    https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards
+ * @license https://opensource.org/licenses/MIT MIT
  */
 
-if ( false === class_exists( 'Generic_Sniffs_PHP_ForbiddenFunctionsSniff', true ) ) {
+if ( ! class_exists( 'Generic_Sniffs_PHP_ForbiddenFunctionsSniff', true ) ) {
 	throw new PHP_CodeSniffer_Exception( 'Class Generic_Sniffs_PHP_ForbiddenFunctionsSniff not found' );
 }
 
 /**
- * WordPress_Sniffs_PHP_DiscouragedFunctionsSniff.
+ * Discourages the use of various functions and suggests (WordPress) alternatives.
  *
- * Discourages the use of debug functions and suggests deprecated WordPress alternatives
+ * @package WPCS\WordPressCodingStandards
  *
- * @category PHP
- * @package  PHP_CodeSniffer
- * @author   John Godley <john@urbangiraffe.com>
+ * @since   0.1.0
+ * @since   0.10.0 The checks for the POSIX functions have been replaced by the stand-alone
+ *                 sniff WordPress_Sniffs_PHP_POSIXFunctionsSniff.
  */
 class WordPress_Sniffs_PHP_DiscouragedFunctionsSniff extends Generic_Sniffs_PHP_ForbiddenFunctionsSniff {
 
@@ -31,13 +31,6 @@ class WordPress_Sniffs_PHP_DiscouragedFunctionsSniff extends Generic_Sniffs_PHP_
 	 * @var array(string => string|null)
 	 */
 	public $forbiddenFunctions = array(
-		// Deprecated.
-		'ereg_replace'             => 'preg_replace',
-		'ereg'                     => null,
-		'eregi_replace'            => 'preg_replace',
-		'split'                    => null,
-		'spliti'                   => null,
-
 		// Development.
 		'print_r'                  => null,
 		'debug_print_backtrace'    => null,
@@ -75,4 +68,24 @@ class WordPress_Sniffs_PHP_DiscouragedFunctionsSniff extends Generic_Sniffs_PHP_
 	 */
 	public $error = false;
 
-} // end class
+	/**
+	 * Returns an array of tokens this test wants to listen for.
+	 *
+	 * {@internal Temporarily overrule the parent register() method until bugfix has
+	 * been merged into PHPCS upstream and WPCS minimum PHPCS version has caught up.
+	 * {@link https://github.com/squizlabs/PHP_CodeSniffer/pull/1076} }}
+	 *
+	 * @return array
+	 */
+	public function register() {
+		$register = parent::register();
+
+		if ( true !== $this->patternMatch ) {
+			$this->forbiddenFunctionNames = array_map( 'strtolower', $this->forbiddenFunctionNames );
+			$this->forbiddenFunctions     = array_combine( $this->forbiddenFunctionNames, $this->forbiddenFunctions );
+		}
+
+		return $register;
+	}
+
+} // End class.
