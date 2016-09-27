@@ -51,8 +51,8 @@ class WordPress_Sniffs_Theme_AuthorThemeUriCheckSniff extends WordPress_Abstract
 		$tokens = $phpcsFile->getTokens();
 		$token  = $tokens[ $stackPtr ];
 
-		// get tags list from style.css.
-		global $sniff_helper;
+		// Get sniff helper data.
+		$sniff_helper = $this->get_sniff_helper();
 
 		$author_uri = $sniff_helper['theme_data']['author_uri'];
 		$author_uri = trim( $author_uri , '/\\' );
@@ -67,7 +67,7 @@ class WordPress_Sniffs_Theme_AuthorThemeUriCheckSniff extends WordPress_Abstract
 		$fileName = basename( $phpcsFile->getFileName() );
 
 		if ( 'style.css' === $fileName ) {
-			if ( strpos( $token['content'] , 'Tags' ) !== false ) {
+			if ( strpos( $token['content'] , 'Author URI' ) !== false ) {
 				if ( $author_uri === $theme_uri ) {
 					$phpcsFile->addError( 'Author URI can not be the same as Theme URI' , $stackPtr, 'AccessibilityTagReviewReqd' );
 				}
