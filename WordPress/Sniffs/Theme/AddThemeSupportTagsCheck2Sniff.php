@@ -52,7 +52,7 @@ class WordPress_Sniffs_Theme_AddThemeSupportTagsCheck2Sniff extends WordPress_Ab
 	 */
 	public function process( PHP_CodeSniffer_File $phpcsFile, $stackPtr ) {
 		// get tags list from style.css.
-		global $sniff_helper;
+		$sniff_helper = $this->get_sniff_helper();
 		$themetags = array();
 		$themetags = $sniff_helper['theme_data']['tags'];
 		if ( ! is_array( $themetags ) ) {
