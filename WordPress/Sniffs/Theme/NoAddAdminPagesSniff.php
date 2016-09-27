@@ -2,9 +2,9 @@
 /**
  * WordPress Coding Standard.
  *
- * @category PHP
- * @package  PHP_CodeSniffer
- * @link     https://make.wordpress.org/core/handbook/best-practices/coding-standards/
+ * @package WPCS\WordPressCodingStandards
+ * @link    https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards
+ * @license https://opensource.org/licenses/MIT MIT
  */
 
 /**
@@ -12,14 +12,16 @@
  *
  * Forbids the use of add_..._page() functions within Themes with the exception of `add_theme_page()`.
  *
- * @category  PHP
- * @package   PHP_CodeSniffer
- * @author    Juliette Reinders Folmer <wpplugins_nospam@adviesenzo.nl>
+ * @link    https://make.wordpress.org/themes/handbook/review/required/theme-check-plugin/#admin-menu
+ *
+ * @package WPCS\WordPressCodingStandards
+ *
+ * @since   0.xx.0
  */
 class WordPress_Sniffs_Theme_NoAddAdminPagesSniff extends WordPress_Sniffs_Functions_FunctionRestrictionsSniff {
 
 	/**
-	 * Groups of functions to restrict
+	 * Groups of functions to restrict.
 	 *
 	 * Example: groups => array(
 	 * 	'lambda' => array(
@@ -59,6 +61,6 @@ class WordPress_Sniffs_Theme_NoAddAdminPagesSniff extends WordPress_Sniffs_Funct
 				),
 			),
 		);
-	} // end getGroups()
+	}
 
-} // end class
+} // End class.
