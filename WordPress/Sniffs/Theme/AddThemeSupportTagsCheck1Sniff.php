@@ -55,12 +55,14 @@ class WordPress_Sniffs_Theme_AddThemeSupportTagsCheck1Sniff extends WordPress_Ab
 	 */
 	public function process( PHP_CodeSniffer_File $phpcsFile, $stackPtr ) {
 		// get tags list from style.css.
-		global $sniff_helper;
+		$sniff_helper = $this->get_sniff_helper();
 		$themetags = array();
 		$themetags = $sniff_helper['theme_data']['tags'];
 		if ( ! is_array( $themetags ) ) {
 			return;
 		}
+		
+		$threaded_comment_support = $sniff_helper['comment_reply']['enqueued'];
 
 		$tokens = $phpcsFile->getTokens();
 		$token  = $tokens[ $stackPtr ];
@@ -80,6 +82,14 @@ class WordPress_Sniffs_Theme_AddThemeSupportTagsCheck1Sniff extends WordPress_Ab
 		} elseif ( 'wp_nav_menu' === $token['content'] || 'register_nav_menu' === $token['content'] ) {
 			if ( ! in_array( 'custom-menu' , $themetags , true ) ) {
 				$phpcsFile->addError( 'When wp_nav_menu() or register_nav_menu() are used custom-menu must be added to your tags list in style.css' , $stackPtr, 'TagAddThemeSupport' );
+			}
+		} elseif ( 'comment-reply' === trim( $token['content'], '\'\"' ) ) {
+			if ( ! in_array( 'threaded-comments' , $themetags , true ) ) {
+				$phpcsFile->addError( 'Theme support for comment-reply found, threaded-comments must be added to your tags list in style.css' , $stackPtr, 'TagAddThemeSupport' );
+			}
+		} elseif ('add_editor_style' === $token['content'] ) {
+			if ( ! in_array( 'editor-style' , $themetags , true ) ) {
+				$phpcsFile->addError( 'Found add_editor_style(), editor-style must be added to your tags list in style.css' , $stackPtr, 'TagAddThemeSupport' );
 			}
 		}
 	}//end process()
