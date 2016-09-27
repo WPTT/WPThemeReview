@@ -2,19 +2,19 @@
 /**
  * WordPress Coding Standard.
  *
- * @category PHP
- * @package  PHP_CodeSniffer
- * @link     https://make.wordpress.org/core/handbook/best-practices/coding-standards/
+ * @package WPCS\WordPressCodingStandards
+ * @link    https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards
+ * @license https://opensource.org/licenses/MIT MIT
  */
 
 /**
  * Forbids usage of deprecated WP CONSTANTS and recommends alternatives.
  *
- * @link     https://make.wordpress.org/themes/handbook/review/required/#core-functionality-and-features
+ * @link    https://make.wordpress.org/themes/handbook/review/required/#core-functionality-and-features
  *
- * @category PHP
- * @package  PHP_CodeSniffer
- * @author   Juliette Reinders Folmer <wpplugins_nospam@adviesenzo.nl>
+ * @package WPCS\WordPressCodingStandards
+ *
+ * @since   0.xx.0
  */
 class WordPress_Sniffs_Theme_DeprecatedWPConstantsSniff implements PHP_CodeSniffer_Sniff {
 
@@ -82,6 +82,6 @@ class WordPress_Sniffs_Theme_DeprecatedWPConstantsSniff implements PHP_CodeSniff
 		$data  = array( $tokens[ $stackPtr ]['content'], $this->deprecated_constants[ $tokens[ $stackPtr ]['content'] ] );
 		$phpcsFile->addError( $error, $stackPtr, 'Found', $data );
 
-	} // end process()
+	}
 
-} // end class
+} // End class.
