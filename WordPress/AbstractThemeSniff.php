@@ -945,7 +945,6 @@ abstract class WordPress_AbstractThemeSniff implements PHP_CodeSniffer_Sniff {
 			}
 		}
 		if ( preg_match_all( '#\$(\S)*\s*=\s*get_post_meta#' , $file_content, $matches3, PREG_SET_ORDER ) ) {
-			echo 'wtf';
 			foreach ( $matches3 as $match3 ) {
 				$var = str_replace( '=', '', $match3[0] );
 				$var = str_replace( 'get_post_meta','', $var );
