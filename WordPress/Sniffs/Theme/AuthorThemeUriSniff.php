@@ -8,15 +8,16 @@
  */
 
 /**
- * WordPress_Sniffs_Theme_AuthorThemeUriCheckSniff.
+ * WordPress_Sniffs_Theme_AuthorThemeUriSniff.
  *
  * ERROR : Check in style.css for the Author URI and Theme URI and verify that these are not the same.
+ * WARNING : Issue a warning id Author URI or Theme URI are not present.
  *
  * @category  PHP
  * @package   PHP_CodeSniffer
  * @author    khacoder
  */
-class WordPress_Sniffs_Theme_AuthorThemeUriCheckSniff extends WordPress_AbstractThemeSniff {
+class WordPress_Sniffs_Theme_AuthorThemeUriSniff extends WordPress_AbstractThemeSniff {
 
 	/**
 	 * A list of tokenizers this sniff supports.
@@ -60,19 +61,23 @@ class WordPress_Sniffs_Theme_AuthorThemeUriCheckSniff extends WordPress_Abstract
 		$theme_uri = $sniff_helper['theme_data']['uri'];
 		$theme_uri = trim( $theme_uri , '/\\' );
 
-		if ( '' === $author_uri || '' === $theme_uri ) {
-			return count( $tokens ) + 1;
-		}
-
 		$fileName = basename( $phpcsFile->getFileName() );
 
 		if ( 'style.css' === $fileName ) {
-			if ( strpos( $token['content'] , 'Author URI' ) !== false ) {
-				if ( $author_uri === $theme_uri ) {
-					$phpcsFile->addError( 'Author URI can not be the same as Theme URI' , $stackPtr, 'AccessibilityTagReviewReqd' );
+			if ( '' !== $author_uri || '' !== $theme_uri ) {
+					if ( $author_uri === $theme_uri ) {
+					$phpcsFile->addError( 'Author URI can not be the same as Theme URI' , 0, 'AccessibilityTagReviewReqd' );
 				}
-				return count( $tokens ) + 1;
 			}
+			
+			if ( '' === $sniff_helper['theme_data']['uri'] ) {
+				$phpcsFile->addWarning( 'Theme URI in style.css is not required but is recommended.' , 0, 'RecommendedStyleHeader' );
+				$theme_uri_missing_warning = true;
+			}
+			if ( '' === $sniff_helper['theme_data']['author_uri'] ) {
+				$phpcsFile->addWarning( 'Author URI in style.css is not required but is recommended.' , 0, 'RecommendedStyleHeader' );
+			}
+			return count( $tokens ) + 1;
 		}
 	}//end process()
 }
