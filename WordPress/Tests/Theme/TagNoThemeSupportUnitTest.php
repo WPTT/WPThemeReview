@@ -8,7 +8,7 @@
  */
 
 /**
- * WordPress_Tests_Theme_AddThemeSupportTagsCheck2UnitTest
+ * WordPress_Tests_Theme_TagNoThemeSupportUnitTest
  *
  * Verify that an add_theme_support() call is made for any feature the
  * theme has been tagged with from the following list: custom-background,
@@ -22,7 +22,7 @@
  * @package  PHP_CodeSniffer
  * @author   khacoder
  */
-class WordPress_Tests_Theme_AddThemeSupportTagsCheck2UnitTest extends AbstractSniffUnitTest {
+class WordPress_Tests_Theme_TagNoThemeSupportUnitTest extends AbstractSniffUnitTest {
 
 	/**
 	 * Returns the lines where errors should occur.
