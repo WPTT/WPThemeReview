@@ -8,7 +8,7 @@
  */
 
 /**
- * WordPress_Sniffs_Theme_AccessibilityTagCheckSniff.
+ * WordPress_Sniffs_Theme_AccessibilityTagSniff.
  *
  * Check if the accessibility tag is used in the style.css file header tag list and add a warning that an accessibility review is needed.
  *
@@ -16,7 +16,7 @@
  * @package   PHP_CodeSniffer
  * @author    khacoder
  */
-class WordPress_Sniffs_Theme_AccessibilityTagCheckSniff extends WordPress_AbstractThemeSniff {
+class WordPress_Sniffs_Theme_AccessibilityTagSniff extends WordPress_AbstractThemeSniff {
 
 	/**
 	 * A list of tokenizers this sniff supports.

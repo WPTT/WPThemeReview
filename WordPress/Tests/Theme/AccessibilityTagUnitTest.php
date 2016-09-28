@@ -8,7 +8,7 @@
  */
 
 /**
- * WordPress_Tests_Theme_AccessibilityTagCheckUnitTest
+ * WordPress_Tests_Theme_AccessibilityTagUnitTest
  *
  * Check if the accessibility tag is used in the style.css file header tag list
  * and add a warning that an accessibility review is needed.
@@ -17,7 +17,7 @@
  * @package  PHP_CodeSniffer
  * @author   khacoder
  */
-class WordPress_Tests_Theme_AccessibilityTagCheckUnitTest extends AbstractSniffUnitTest {
+class WordPress_Tests_Theme_AccessibilityTagUnitTest extends AbstractSniffUnitTest {
 
 	/**
 	 * Returns the lines where errors should occur.
