@@ -1,6 +1,6 @@
 <?php
 	/**
-	 * Error check file for AddThemeSupportTagsCheck1Sniff
+	 * Error check file for AddThemeSupportTagsSniff
 	 * Note that this teat file will not work without an accompanying style.css file.
 	 * This test also requires the WordPress_AbstractThemeSniff class
 	 * Test procedure :

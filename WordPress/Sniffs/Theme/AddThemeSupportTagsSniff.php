@@ -8,7 +8,7 @@
  */
 
 /**
- * WordPress_Sniffs_Theme_AddThemeSupportTagsCheckSniff.
+ * WordPress_Sniffs_Theme_AddThemeSupportTagsSniff.
  *
  * Verify that an add_theme_support() call is made for any feature the
  * theme has been tagged with from the following list: custom-background,
@@ -19,7 +19,7 @@
  * @package   PHP_CodeSniffer
  * @author    khacoder
  */
-class WordPress_Sniffs_Theme_AddThemeSupportTagsCheck1Sniff extends WordPress_AbstractThemeSniff {
+class WordPress_Sniffs_Theme_AddThemeSupportTagsSniff extends WordPress_AbstractThemeSniff {
 
 	/**
 	 * A list of tokenizers this sniff supports.
