@@ -66,8 +66,8 @@ class WordPress_Sniffs_Theme_NoTitleTagSniff implements PHP_CodeSniffer_Sniff {
 			}
 		}
 
-		// We're not in svg, so check if it there's a <svg> open tag on this line.
-		if ( false !== strpos( $content, '<svg' ) ) {
+		// We're not in svg, so check if it there's a <svg> open tag on this line.  PHP 5.2 create a seperate token for `<s` we need to check that the first two letters in the next token is vg.
+		if ( false !== strpos( $content, '<svg' ) || ( '<s' === trim( $content ) && 'vg' === substr( $tokens[ ( $stackPtr + 1 ) ]['content'], 0, 2 ) ) ) {
 			if ( false === strpos( $content, '</svg>' ) ) {
 				// Skip the next lines until the closing svg tag, but do check any content
 				// on this line before the svg tag.

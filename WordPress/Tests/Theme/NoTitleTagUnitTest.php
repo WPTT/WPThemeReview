@@ -32,7 +32,8 @@ class WordPress_Tests_Theme_NoTitleTagUnitTest extends AbstractSniffUnitTest {
 			24 => 1,
 			26 => 1,
 			28 => 1,
-			30 => 1,
+			// PHP 5.2 has an issue tokenizing `<s` so splits the string into two.
+			30 => version_compare( PHP_VERSION, '5.3.0', '>=' ) ? 1 : 2,
 			34 => 1,
 			37 => 1,
 		);

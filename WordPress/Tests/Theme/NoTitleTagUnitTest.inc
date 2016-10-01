@@ -18,7 +18,7 @@ echo '<title>'; // Bad.
 
 Some content before the svg tag <title>my title</title> and some more content <svg width="500" height="300" xmlns="http://www.w3.org/2000/svg"> <!-- Bad. -->
 	<g>
-		<title>SVG Title Demo example</title>
+		<title>SVG Title Demo example</title> <!-- Ok. -->
 		<rect x="10" y="10" width="200" height="50" style="fill:none; stroke:blue; stroke-width:1px"/>
 	</g>
 </svg> Some content after the svg tag <title>my title</title> and some more content <!-- Bad. -->
