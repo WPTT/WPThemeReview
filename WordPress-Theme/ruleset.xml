@@ -39,5 +39,8 @@
 	<!-- Prevent path disclosure when using add_theme_page(). -->
 	<rule ref="WordPress.VIP.PluginMenuSlug"/>
 
+	<!-- Do not silence error notices. e.g. Error Control Operator @.. -->
+	<rule ref="Generic.PHP.NoSilencedErrors" />
+
 
 </ruleset>
