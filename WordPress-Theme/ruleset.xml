@@ -37,4 +37,14 @@
 	<rule ref="Generic.PHP.NoSilencedErrors" />
 
 
+	<!-- Validate and/or sanitize untrusted data before entering into the database. -->
+	<rule ref="WordPress.VIP.ValidatedSanitizedInput">
+		<type>warning</type>
+	</rule>
+
+	<!-- All untrusted data should be escaped before output. -->
+	<rule ref="WordPress.XSS.EscapeOutput">
+		<type>warning</type>
+	</rule>
+
 </ruleset>
