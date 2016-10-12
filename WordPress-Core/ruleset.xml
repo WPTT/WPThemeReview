@@ -40,6 +40,13 @@
 		<rule ref="WordPress.Arrays.ArrayDeclaration">
 			<exclude name="WordPress.Arrays.ArrayDeclaration.SingleLineNotAllowed" />
 		</rule>
+		<rule ref="WordPress.Arrays.ArrayDeclarationSpacing">
+			<!-- Exclude the upstream checks which are already thrown by the
+			     WordPress.Arrays.ArrayDeclaration sniff. -->
+			<exclude name="WordPress.Arrays.ArrayDeclarationSpacing.NotLowerCase" />
+			<exclude name="WordPress.Arrays.ArrayDeclarationSpacing.SpaceAfterKeyword" />
+			<exclude name="WordPress.Arrays.ArrayDeclarationSpacing.SpaceInEmptyArray" />
+		</rule>
 
 
 	<!--
@@ -52,9 +59,15 @@
 			<severity>0</severity>
 		</rule>
 
-		<!-- Rule: If you consider a long block unavoidable, please put a short comment at the end ...
-			 - typically this is appropriate for a logic block, longer than about 35 rows.
-			 https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards/issues/606 -->
+		<!-- Covers rule: If you consider a long block unavoidable, please put a short comment at the end ...
+			 - typically this is appropriate for a logic block, longer than about 35 rows. -->
+		<rule ref="Squiz.Commenting.LongConditionClosingComment">
+			<properties>
+				<property name="lineLimit" value="35" />
+				<property name="commentFormat" value="// End %s()." />
+			</properties>
+			<exclude name="Squiz.Commenting.LongConditionClosingComment.SpacingBefore" />
+		</rule>
 
 		<!-- Covers rule: Braces should always be used, even when they are not required. -->
 		<rule ref="Generic.ControlStructures.InlineControlStructure" />
@@ -88,7 +101,7 @@
 	-->
 		<!-- Covers rule: Never use shorthand PHP start tags. Always use full PHP tags. -->
 		<rule ref="Generic.PHP.DisallowShortOpenTag"/>
-		<rule ref="WordPress.PHP.DisallowAlternativePHPTags"/>
+		<rule ref="Generic.PHP.DisallowAlternativePHPTags"/>
 
 
 	<!--
@@ -149,6 +162,7 @@
 
 		<!-- Covers rule: When type casting, do it like so: $foo = (boolean) $bar; -->
 		<rule ref="Generic.Formatting.SpaceAfterCast"/>
+		<rule ref="Squiz.WhiteSpace.CastSpacing" />
 		<rule ref="WordPress.WhiteSpace.CastStructureSpacing"/>
 
 		<!-- Covers rule: ... array items, only include a space around the index if it is a variable. -->
@@ -194,7 +208,7 @@
 		<rule ref="WordPress.NamingConventions.ValidVariableName"/>
 
 		<!-- Covers rule: Class names should use capitalized words separated by underscores. -->
-		<rule ref="WordPress.Classes.ValidClassName"/>
+		<rule ref="PEAR.NamingConventions.ValidClassName"/>
 
 		<!-- Covers rule: Constants should be in all upper-case with underscores separating words. -->
 		<rule ref="Generic.NamingConventions.UpperCaseConstantName"/>
@@ -283,7 +297,7 @@
 		<rule ref="Generic.PHP.LowerCaseKeyword"/>
 
 		<!-- Class opening braces should be on the same line as the statement. -->
-		<rule ref="WordPress.Classes.ClassOpeningStatement"/>
+		<rule ref="Generic.Classes.OpeningBraceSameLine"/>
 
 
 	<!--
@@ -291,5 +305,6 @@
 	-->
 		<!-- Check for correct usage of the WP i18n functions. -->
 		<rule ref="WordPress.WP.I18n"/>
+
 
 </ruleset>

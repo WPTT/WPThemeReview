@@ -183,11 +183,11 @@ class WordPress_Sniffs_WP_PreparedSQLSniff extends WordPress_Sniff {
 				'NotPrepared',
 				array( $this->tokens[ $this->i ]['content'] )
 			);
-		}
+		} // End for().
 
 		return $this->end;
 
-	} // end process().
+	} // End process().
 
 	/**
 	 * Checks whether this is a call to a $wpdb method that we want to sniff.
@@ -207,7 +207,7 @@ class WordPress_Sniffs_WP_PreparedSQLSniff extends WordPress_Sniff {
 	protected function is_wpdb_method_call( $stackPtr ) {
 
 		// Check that this is a method call.
-		$is_object_call = $this->phpcsFile->findNext( array( T_OBJECT_OPERATOR ), ( $stackPtr + 1 ), null, null, null, true );
+		$is_object_call = $this->phpcsFile->findNext( array( T_OBJECT_OPERATOR ), ( $stackPtr + 1 ), null, false, null, true );
 		if ( false === $is_object_call ) {
 			return false;
 		}
@@ -218,7 +218,7 @@ class WordPress_Sniffs_WP_PreparedSQLSniff extends WordPress_Sniff {
 		// Find the opening parenthesis.
 		$opening_paren = $this->phpcsFile->findNext( T_WHITESPACE, ( $methodPtr + 1 ), null, true, null, true );
 
-		if ( ! $opening_paren ) {
+		if ( false === $opening_paren ) {
 			return false;
 		}
 
@@ -241,6 +241,6 @@ class WordPress_Sniffs_WP_PreparedSQLSniff extends WordPress_Sniff {
 		}
 
 		return true;
-	} // is_wpdb_method_call()
+	} // End is_wpdb_method_call().
 
 } // End class.

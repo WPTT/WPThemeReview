@@ -8,12 +8,12 @@
  */
 
 /**
- * Unit test class for the ClassOpeningStatement sniff.
+ * Unit test class for the ArrayDeclarationSpacing sniff.
  *
  * @package WPCS\WordPressCodingStandards
- * @since   0.10.0
+ * @since   0.11.0
  */
-class WordPress_Tests_Classes_ClassOpeningStatementUnitTest extends AbstractSniffUnitTest {
+class WordPress_Tests_Arrays_ArrayDeclarationSpacingUnitTest extends AbstractSniffUnitTest {
 
 	/**
 	 * Returns the lines where errors should occur.
@@ -21,21 +21,10 @@ class WordPress_Tests_Classes_ClassOpeningStatementUnitTest extends AbstractSnif
 	 * @return array <int line number> => <int number of errors>
 	 */
 	public function getErrorList() {
-
 		return array(
-			19 => 2,
-			23 => 1,
-			28 => 2,
-			34 => 1,
-			34 => 1,
-			38 => 1,
-			41 => 1,
-			44 => 1,
-			47 => 1,
-			70 => 1,
-			79 => 1,
+			5 => 2,
+			8 => 2,
 		);
-
 	}
 
 	/**
@@ -44,9 +33,7 @@ class WordPress_Tests_Classes_ClassOpeningStatementUnitTest extends AbstractSnif
 	 * @return array <int line number> => <int number of warnings>
 	 */
 	public function getWarningList() {
-		return array(
-			51 => 1,
-		);
+		return array();
 
 	}
 
