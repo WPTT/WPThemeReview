@@ -2,21 +2,19 @@
 /**
  * WordPress Coding Standard.
  *
- * @category PHP
- * @package  PHP_CodeSniffer
- * @link     https://make.wordpress.org/core/handbook/best-practices/coding-standards/
+ * @package WPCS\WordPressCodingStandards
+ * @link    https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards
+ * @license https://opensource.org/licenses/MIT MIT
  */
 
 /**
- * WordPress_Sniffs_Theme_NoFaviconSniff.
+ * Check for hardcoded favicons instead of using core implementation.
  *
- * ERROR | Verify that no favicon / Apple icon / Windows tile / Android whatever they
- * call it is being added from the theme. The current check is in Theme-Check plugin is
- * favicon.php, but could definitely use some fine-tuning and improvement.
+ * @link    https://make.wordpress.org/themes/handbook/review/required/#core-functionality-and-features
  *
- * @category  PHP
- * @package   PHP_CodeSniffer
- * @author    khacoder
+ * @package WPCS\WordPressCodingStandards
+ *
+ * @since   0.xx.0
  */
 class WordPress_Sniffs_Theme_NoFaviconSniff implements PHP_CodeSniffer_Sniff {
 
@@ -35,12 +33,10 @@ class WordPress_Sniffs_Theme_NoFaviconSniff implements PHP_CodeSniffer_Sniff {
 	 * @return array
 	 */
 	public function register() {
-		return array(
-			T_STRING,
-			T_CONSTANT_ENCAPSED_STRING,
-			T_INLINE_HTML,
-		);
-	}//end register()
+		$tokens   = PHP_CodeSniffer_Tokens::$stringTokens;
+		$tokens[] = T_INLINE_HTML;
+		return $tokens;
+	}
 
 	/**
 	 * Processes this test, when one of its tokens is encountered.
@@ -55,7 +51,7 @@ class WordPress_Sniffs_Theme_NoFaviconSniff implements PHP_CodeSniffer_Sniff {
 		$tokens = $phpcsFile->getTokens();
 		$token  = $tokens[ $stackPtr ];
 
-		$checks = array(
+		$favicon_links = array(
 			'<link rel="shortcut icon"',
 			"<link rel='shortcut icon'",
 			'<link rel="icon"',
@@ -67,10 +63,11 @@ class WordPress_Sniffs_Theme_NoFaviconSniff implements PHP_CodeSniffer_Sniff {
 			'<meta name="msapplication-TileImage"',
 			"<meta name='msapplication-TileImage'",
 		);
-		foreach ( $checks as $check ) {
+		foreach ( $favicon_links as $check ) {
 			if ( false !== strpos( $token['content'], $check ) ) {
-				$phpcsFile->addError( 'Possible Favicon found. Favicons are handled by the Site Icon setting in the customizer since version 4.3.' , $stackPtr, 'NoFavicon' );
+				$phpcsFile->addError( 'Code for Favicon found. Favicons are handled by the Site Icon setting in the customizer since version 4.3.' , $stackPtr, 'NoFavicon' );
 			}
 		}
-	}//end process()
+	}
+
 }
