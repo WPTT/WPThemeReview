@@ -1,27 +1,23 @@
 <?php
 /**
  * WordPress Coding Standard.
- * UseCapabilitiesNotRolesSniff
  *
- * @category PHP
- * @package  PHP_CodeSniffer
- * @link     https://make.wordpress.org/core/handbook/best-practices/coding-standards/
+ * @package WPCS\WordPressCodingStandards
+ * @link    https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards
+ * @license https://opensource.org/licenses/MIT MIT
  */
 
 /**
- * WordPress_Sniffs_Theme_NoSanitizeCallbackSniff
+ * Check thatsanitization is done correctly in the customizer.
  *
- * ERROR : Ensure that all calls the ->add_setting() for the Customizer include a
- * sanitize_callback or a sanitize_js_callback parameter and that it's non-empty.
- * An exception will need to be made for the (two) calls found in Kirki_Settings
- * as they do correctly comply, but are wrappers for the real call.
+ * @link    https://make.wordpress.org/themes/handbook/review/required/#code
  *
- * @category PHP
- * @package  PHP_CodeSniffer
- * @author   khacoder
+ * @package WPCS\WordPressCodingStandards
+ *
+ * @since   0.xx.0
  */
-class WordPress_Sniffs_Theme_NoSanitizeCallBackSniff implements PHP_CodeSniffer_Sniff
-{
+class WordPress_Sniffs_Theme_NoSanitizeCallbackSniff implements PHP_CodeSniffer_Sniff {
+
 	/**
 	 * Returns an array of tokens this test wants to listen for.
 	 *
@@ -35,7 +31,7 @@ class WordPress_Sniffs_Theme_NoSanitizeCallBackSniff implements PHP_CodeSniffer_
 			T_LNUMBER,
 			T_SEMICOLON,
 		);
-	}//end register()
+	}
 
 	/**
 	 * Processes this test, when one of its tokens is encountered.
@@ -50,7 +46,8 @@ class WordPress_Sniffs_Theme_NoSanitizeCallBackSniff implements PHP_CodeSniffer_
 
 		$tokens = $phpcsFile->getTokens();
 		$token  = $tokens[ $stackPtr ];
-		$types = array( T_STRING, T_CONSTANT_ENCAPSED_STRING, T_VARIABLE, T_LNUMBER, T_SEMICOLON );
+		$types  = array( T_STRING, T_CONSTANT_ENCAPSED_STRING, T_VARIABLE, T_LNUMBER, T_SEMICOLON );
+
 		if ( '$wp_customize' === $token['content'] ) {
 			$nextStackPtr = $phpcsFile->findNext( $types , $stackPtr + 1 );
 			if ( 'add_setting' === $tokens[ $nextStackPtr ]['content'] ) {
@@ -93,5 +90,5 @@ class WordPress_Sniffs_Theme_NoSanitizeCallBackSniff implements PHP_CodeSniffer_
 				}
 			}
 		}
-	}//end process()
+	}
 }
