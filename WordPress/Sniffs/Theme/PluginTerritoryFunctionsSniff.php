@@ -2,27 +2,24 @@
 /**
  * WordPress Coding Standard.
  *
- * @category PHP
- * @package  PHP_CodeSniffer
- * @link     https://make.wordpress.org/core/handbook/best-practices/coding-standards/
+ * @package WPCS\WordPressCodingStandards
+ * @link    https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards
+ * @license https://opensource.org/licenses/MIT MIT
  */
 
 /**
- * WordPress_Sniffs_Theme_PluginTerritoryFunctionsSniff.
+ * Restricts the use of various functions that are plugin territory.
  *
- * ERROR : The following three functions are not allowed (plugin territory): register_post_type(),
- * register_taxonomy(), add_shortcode(). Review this list with the Theme Review board as there might
- * be some more functions which could be added. The sniff could probably just extend the Forbidden
- * Functions sniff - though it should be kept as a separate sniff for clarity.
+ * @link    https://make.wordpress.org/themes/handbook/review/required/#presentation-vs-functionality
  *
- * @category Theme
- * @package  PHP_CodeSniffer
- * @author   khacoder
+ * @package WPCS\WordPressCodingStandards
+ *
+ * @since   0.xx.0
  */
-class WordPress_Sniffs_Theme_PluginTerritoryFunctionsSniff extends WordPress_Sniffs_Functions_FunctionRestrictionsSniff {
+class WordPress_Sniffs_Theme_PluginTerritoryFunctionsSniff extends WordPress_AbstractFunctionRestrictionsSniff {
 
 	/**
-	 * Groups of functions to restrict
+	 * Groups of functions to restrict.
 	 *
 	 * Example: groups => array(
 	 * 	'lambda' => array(
@@ -36,9 +33,9 @@ class WordPress_Sniffs_Theme_PluginTerritoryFunctionsSniff extends WordPress_Sni
 	 */
 	public function getGroups() {
 		return array(
-			'filefunctions' => array(
+			'plugin-territory' => array(
 				'type'      => 'error',
-				'message'   => '%s() is not allowed because it is considered a plugin territory function.',
+				'message'   => 'Function %s() is not allowed because it is plugin territory.',
 				'functions' => array(
 					'register_post_type',
 					'register_taxonomy',
@@ -50,4 +47,5 @@ class WordPress_Sniffs_Theme_PluginTerritoryFunctionsSniff extends WordPress_Sni
 		);
 
 	}
-} // end class
+
+} // End class.
