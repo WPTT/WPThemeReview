@@ -2,31 +2,29 @@
 /**
  * WordPress Coding Standard.
  *
- * @category PHP
- * @package  PHP_CodeSniffer
- * @link     https://make.wordpress.org/core/handbook/best-practices/coding-standards/
+ * @package WPCS\WordPressCodingStandards
+ * @link    https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards
+ * @license https://opensource.org/licenses/MIT MIT
  */
 
 /**
- * WordPress_Sniffs_Theme_FileIncludeSniff.
+ * Check if a theme uses include(_once) or require(_once) when get_template_part() should be used.
  *
- * WARNING (manual check required) | Check if a theme uses include(_once) or
- * require(_once) (where they should use get_template_part()). Current implementation
- * excluded the functions.php file from this check. We may want to continue doing so.
+ * @link    https://make.wordpress.org/themes/handbook/review/required/#core-functionality-and-features
  *
- * @category  PHP
- * @package   PHP_CodeSniffer
- * @author    khacoder
+ * @package WPCS\WordPressCodingStandards
+ *
+ * @since   0.xx.0
  */
-class WordPress_Sniffs_Theme_FileIncludeSniff extends WordPress_AbstractThemeSniff {
+class WordPress_Sniffs_Theme_FileIncludeSniff implements PHP_CodeSniffer_Sniff {
 
 	/**
-	 * A list of tokenizers this sniff supports.
+	 * A list of files to skip.
 	 *
 	 * @var array
 	 */
-	public $supportedTokenizers = array(
-		'PHP',
+	protected $file_whitelist = array(
+		'functions.php' => true,
 	);
 
 	/**
@@ -35,13 +33,8 @@ class WordPress_Sniffs_Theme_FileIncludeSniff extends WordPress_AbstractThemeSni
 	 * @return array
 	 */
 	public function register() {
-		return array(
-			T_REQUIRE,
-			T_REQUIRE_ONCE,
-			T_INCLUDE,
-			T_INCLUDE_ONCE,
-		);
-	}//end register()
+		return PHP_CodeSniffer_Tokens::$includeTokens;
+	}
 
 	/**
 	 * Processes this test, when one of its tokens is encountered.
@@ -56,21 +49,16 @@ class WordPress_Sniffs_Theme_FileIncludeSniff extends WordPress_AbstractThemeSni
 		$tokens = $phpcsFile->getTokens();
 		$token  = $tokens[ $stackPtr ];
 
-		$fileName = basename( $phpcsFile->getFileName() );
+		$file_name = basename( $phpcsFile->getFileName() );
 
-		$checks = array(
-			'include"',
-			'include_once',
-			'require',
-			'require_once',
-		);
-
-		if ( 'functions.php' !== $fileName ) {
-			foreach ( $checks as $check ) {
-				if ( false !== strpos( $token['content'], $check ) ) {
-					$phpcsFile->addWarning( 'The theme appears to use include or require. If these are being used to include separate sections of a template from independent files, then <strong>get_template_part()</strong> should be used instead.' , $stackPtr, 'FileIncludeCheck' );
-				}
-			}
+		if ( ! isset( $this->file_whitelist[ $file_name ] ) ) {
+			$phpcsFile->addWarning(
+				'Check that %s is not being used to load template files. "get_template_part()" should be used to load template files.' ,
+				$stackPtr,
+				'FileIncludeFound',
+				array( $token['content'] )
+			);
 		}
-	}//end process()
+	}
+
 }
