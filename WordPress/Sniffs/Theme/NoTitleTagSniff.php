@@ -2,28 +2,28 @@
 /**
  * WordPress Coding Standard.
  *
- * @category PHP
- * @package  PHP_CodeSniffer
- * @link     https://make.wordpress.org/core/handbook/best-practices/coding-standards/
+ * @package WPCS\WordPressCodingStandards
+ * @link    https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards
+ * @license https://opensource.org/licenses/MIT MIT
  */
 
 /**
- * WordPress_Sniffs_Theme_NoTitleTagSniff.
+ * Restricts the use of the <title> tag, unless it is within a <svg> tag.
  *
- * Forbids the use of the <title> tag, unless it is within a <svg> tag.
+ * @link https://make.wordpress.org/themes/handbook/review/required/
  *
- * @category  PHP
- * @package   PHP_CodeSniffer
- * @author    carolinan
+ * @package WPCS\WordPressCodingStandards
+ *
+ * @since   0.xx.0
  */
 class WordPress_Sniffs_Theme_NoTitleTagSniff implements PHP_CodeSniffer_Sniff {
 
 	/**
 	 * Property to keep track of whether a <svg> open tag has been encountered.
 	 *
-	 * @var bool
+	 * @var array
 	 */
-	private $in_svg = false;
+	private $in_svg;
 
 	/**
 	 * Returns an array of tokens this test wants to listen for.
@@ -33,9 +33,9 @@ class WordPress_Sniffs_Theme_NoTitleTagSniff implements PHP_CodeSniffer_Sniff {
 	public function register() {
 		return array(
 			T_INLINE_HTML, // Finds inline html.
-			T_CONSTANT_ENCAPSED_STRING, // Finds the title tag in php.
+			T_CONSTANT_ENCAPSED_STRING, // Finds the title tag in PHP.
 		 );
-	} // end register()
+	}
 
 	/**
 	 * Processes this test, when one of its tokens is encountered.
@@ -47,8 +47,14 @@ class WordPress_Sniffs_Theme_NoTitleTagSniff implements PHP_CodeSniffer_Sniff {
 	 * @return void
 	 */
 	public function process( PHP_CodeSniffer_File $phpcsFile, $stackPtr ) {
-		$tokens  = $phpcsFile->getTokens();
-		$content = $tokens[ $stackPtr ]['content'];
+		$tokens   = $phpcsFile->getTokens();
+		$content  = $tokens[ $stackPtr ]['content'];
+		$filename = $phpcsFile->getFileName();
+
+		// Set to false if it is the first time.
+		if ( ! isset( $this->in_svg[ $filename ] ) ) {
+			$this->in_svg[ $filename ] = false;
+		}
 
 		// No need to check an empty string.
 		if ( '' === trim( $content ) ) {
@@ -56,22 +62,26 @@ class WordPress_Sniffs_Theme_NoTitleTagSniff implements PHP_CodeSniffer_Sniff {
 		}
 
 		// Are we in a <svg> tag ?
-		if ( true === $this->in_svg ) {
+		if ( true === $this->in_svg[ $filename ] ) {
 			if ( false === strpos( $content, '</svg>' ) ) {
 				return;
 			} else {
 				// Make sure we check any content on this line after the closing svg tag.
-				$this->in_svg = false;
+				$this->in_svg[ $filename ] = false;
 				$content      = trim( substr( $content, ( strpos( $content, '</svg>' ) + 6 ) ) );
 			}
 		}
 
-		// We're not in svg, so check if it there's a <svg> open tag on this line.  PHP 5.2 create a seperate token for `<s` we need to check that the first two letters in the next token is vg.
-		if ( false !== strpos( $content, '<svg' ) || ( '<s' === trim( $content ) && 'vg' === substr( $tokens[ ( $stackPtr + 1 ) ]['content'], 0, 2 ) ) ) {
+		/*
+		 * We're not in svg, so check if it there's a <svg> open tag on this line.
+		 * PHP 5.2 creates a seperate token for `<s` we need to check that the first two letters in the next token are vg.
+		*/
+		$next_token = $phpcsFile->findNext( array( T_INLINE_HTML ), ( $stackPtr + 1 ) );
+		if ( false !== strpos( $content, '<svg' ) || ( '<s' === $content && 'vg' === substr( $tokens[ $next_token ]['content'], 0, 2 ) ) ) {
 			if ( false === strpos( $content, '</svg>' ) ) {
 				// Skip the next lines until the closing svg tag, but do check any content
 				// on this line before the svg tag.
-				$this->in_svg = true;
+				$this->in_svg[ $filename ] = true;
 				$content      = trim( substr( $content, 0, ( strpos( $content, '<svg' ) ) ) );
 			} else {
 				// Ok, we have open and close svg tag on the same line with possibly content before and/or after.
@@ -86,6 +96,6 @@ class WordPress_Sniffs_Theme_NoTitleTagSniff implements PHP_CodeSniffer_Sniff {
 			$phpcsFile->addError( "The title tag must not be used. Use add_theme_support( 'title-tag' ) instead.", $stackPtr, 'TagFound' );
 		}
 
-	} // end process()
+	} // End process().
 
-} // end class
+} // End Class.
