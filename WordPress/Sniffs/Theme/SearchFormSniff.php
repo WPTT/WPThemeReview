@@ -1,25 +1,24 @@
 <?php
 /**
  * WordPress Coding Standard.
- * SearchFormSniff
  *
- * @category PHP
- * @package  PHP_CodeSniffer
- * @link     https://make.wordpress.org/core/handbook/best-practices/coding-standards/
+ * @package WPCS\WordPressCodingStandards
+ * @link    https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards
+ * @license https://opensource.org/licenses/MIT MIT
  */
 
 /**
- * WordPress_Sniffs_Theme_SearchFormSniff
- *
- * ERROR : check that no include calls to searchform.php are found, if they are,
+ * Check that no include calls to searchform.php are found,
  * recommend using get_search_form() instead.
  *
- * @category PHP
- * @package  PHP_CodeSniffer
- * @author   khacoder
+ * @link    https://make.wordpress.org/themes/handbook/review/required/theme-check-plugin/#admin-menu
+ *
+ * @package WPCS\WordPressCodingStandards
+ *
+ * @since   0.xx.0
  */
-class WordPress_Sniffs_Theme_SearchFormSniff implements PHP_CodeSniffer_Sniff
-{
+class WordPress_Sniffs_Theme_SearchFormSniff implements PHP_CodeSniffer_Sniff {
+
 	/**
 	 * Returns an array of tokens this test wants to listen for.
 	 *
@@ -30,7 +29,7 @@ class WordPress_Sniffs_Theme_SearchFormSniff implements PHP_CodeSniffer_Sniff
 			T_STRING,
 			T_CONSTANT_ENCAPSED_STRING,
 		);
-	}//end register()
+	}
 
 	/**
 	 * Processes this test, when one of its tokens is encountered.
@@ -45,8 +44,10 @@ class WordPress_Sniffs_Theme_SearchFormSniff implements PHP_CodeSniffer_Sniff
 
 		$tokens = $phpcsFile->getTokens();
 		$token  = $tokens[ $stackPtr ];
+
 		if ( false !== strpos( trim( $token['content'] . '\"\'' ), 'searchform.php' ) ) {
-			$phpcsFile->addError( 'Please use get_search_form()instead of including searchform.php directly.', $stackPtr, 'SanitizeCallbackChecks' );
+			$phpcsFile->addError( 'Use get_search_form() instead of including searchform.php directly.', $stackPtr, 'IncludeSearchformFound' );
 		}
-	}//end process()
+	}
+
 }
