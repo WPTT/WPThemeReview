@@ -18,14 +18,39 @@
  */
 class WordPress_Sniffs_Theme_NoFaviconSniff implements PHP_CodeSniffer_Sniff {
 
+	const REGEX_TEMPLATE = '` (?:%s)`i';
+
+	const REGEX_ATTR_TEMPLATE = '%1$s=[\'"](?:%2$s)[\'"]';
+
 	/**
-	 * A list of tokenizers this sniff supports.
+	 * List of link and meta attributes that are blacklisted.
 	 *
 	 * @var array
 	 */
-	public $supportedTokenizers = array(
-		'PHP',
+	protected $attribute_blacklist = array(
+		'rel' => array(
+			'icon',
+			'shortcut icon',
+			'bookmark icon',
+			'apple-touch-icon',
+			'apple-touch-icon-precomposed',
+		),
+		'name' => array(
+			'msapplication-config',
+			'msapplication-TileImage',
+			'msapplication-square70x70logo',
+			'msapplication-square150x150logo',
+			'msapplication-wide310x150logo',
+			'msapplication-square310x310logo',
+		),
 	);
+
+	/**
+	 * The regex to catch the blacklisted attributes.
+	 *
+	 * @var string
+	 */
+	protected $favicon_regex;
 
 	/**
 	 * Returns an array of tokens this test wants to listen for.
@@ -33,6 +58,14 @@ class WordPress_Sniffs_Theme_NoFaviconSniff implements PHP_CodeSniffer_Sniff {
 	 * @return array
 	 */
 	public function register() {
+		$regex_parts = array();
+		foreach ( $this->attribute_blacklist as $key => $values ) {
+			$values = array_map( 'preg_quote', $values, array_fill( 0, count( $values ), '`' ) );
+			$values = implode( '|', $values );
+			$regex_parts[] = sprintf( self::REGEX_ATTR_TEMPLATE, preg_quote( $key ), $values );
+		}
+		$this->favicon_regex = sprintf( self::REGEX_TEMPLATE, implode( '|', $regex_parts ) );
+
 		$tokens   = PHP_CodeSniffer_Tokens::$stringTokens;
 		$tokens[] = T_INLINE_HTML;
 		return $tokens;
@@ -51,23 +84,10 @@ class WordPress_Sniffs_Theme_NoFaviconSniff implements PHP_CodeSniffer_Sniff {
 		$tokens = $phpcsFile->getTokens();
 		$token  = $tokens[ $stackPtr ];
 
-		$favicon_links = array(
-			'<link rel="shortcut icon"',
-			"<link rel='shortcut icon'",
-			'<link rel="icon"',
-			"<link rel='icon'",
-			'<link rel="apple-touch-icon"',
-			"<link rel='apple-touch-icon'",
-			'<link rel="apple-touch-icon-precomposed"',
-			"<link rel='apple-touch-icon-precomposed'",
-			'<meta name="msapplication-TileImage"',
-			"<meta name='msapplication-TileImage'",
-		);
-		foreach ( $favicon_links as $check ) {
-			if ( false !== strpos( $token['content'], $check ) ) {
-				$phpcsFile->addError( 'Code for Favicon found. Favicons are handled by the Site Icon setting in the customizer since version 4.3.' , $stackPtr, 'NoFavicon' );
-			}
+		if ( preg_match( $this->favicon_regex, $token['content'] ) > 0 ) {
+			$phpcsFile->addError( 'Code for Favicon found. Favicons are handled by the Site Icon setting in the customizer since version 4.3.' , $stackPtr, 'NoFavicon' );
 		}
+
 	}
 
 }
