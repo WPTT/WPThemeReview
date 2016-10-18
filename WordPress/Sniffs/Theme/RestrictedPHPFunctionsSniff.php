@@ -1,12 +1,18 @@
 <?php
 /**
- * WordPress_Sniffs_Theme_RestrictedPHPFunctionsSniff.
+ * WordPress Coding Standard.
  *
- * Forbids the use of certain exec and obfuscation functions within Themes.
+ * @package WPCS\WordPressCodingStandards
+ * @link    https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards
+ * @license https://opensource.org/licenses/MIT MIT
+ */
+
+/**
+ * Forbids usage of certain functions and recommends alternatives.
  *
- * @category Theme
- * @package  PHP_CodeSniffer
- * @author   Juliette Reinders Folmer <wpplugins_nospam@adviesenzo.nl>
+ * @package WPCS\WordPressCodingStandards
+ *
+ * @since   0.xx.0
  */
 class WordPress_Sniffs_Theme_RestrictedPHPFunctionsSniff extends WordPress_Sniffs_Functions_FunctionRestrictionsSniff {
 
@@ -66,7 +72,18 @@ class WordPress_Sniffs_Theme_RestrictedPHPFunctionsSniff extends WordPress_Sniff
 					'str_rot13',
 				),
 			),
+
+			'roles' => array(
+				'type'      => 'error',
+				'message'   => '%s() is not allowed. Use capabilities instead.',
+				'functions' => array(
+					'add_role',
+					'remove_role',
+					'get_role',
+				),
+			),
 		);
 
 	}
-} // end class
+
+} // End class.
