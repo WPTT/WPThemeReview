@@ -14,8 +14,8 @@
 <?php
 echo '
 <meta name="msapplication-config" content="/my/path/browserconfig.xml" />
-<meta name="msapplication-TileImage" content="', esc_url( plugins_url( 'images/icons/mstile-144x144.png?v=' . self::VERSION, __FILE__ ) ), '" />
-<meta name="msapplication-square70x70logo" content="', esc_url( plugins_url( 'images/icons/tiny.png?v=' . self::VERSION, __FILE__ ) ), '" />
-<meta name="msapplication-square150x150logo" content="', esc_url( plugins_url( 'images/icons/square.png?v=' . self::VERSION, __FILE__ ) ), '" />
-<meta name="msapplication-wide310x150logo" content="', esc_url( plugins_url( 'images/icons/wide.png?v=' . self::VERSION, __FILE__ ) ), '" />
-<meta name="msapplication-square310x310logo" content="', esc_url( plugins_url( 'images/icons/large.png?v=' . self::VERSION, __FILE__ ) ), '" />';
+<meta name="msapplication-TileImage" content="', esc_url( get_template_directory() . 'images/icons/mstile-144x144.png?v=' . self::VERSION ), '" />
+<meta name="msapplication-square70x70logo" content="', esc_url( get_template_directory() . 'images/icons/tiny.png?v=' . self::VERSION ), '" />
+<meta name="msapplication-square150x150logo" content="', esc_url( get_template_directory() . 'images/icons/square.png?v=' . self::VERSION ), '" />
+<meta name="msapplication-wide310x150logo" content="', esc_url( get_template_directory() . 'images/icons/wide.png?v=' . self::VERSION, __FILE__ ) ), '" />
+<meta name="msapplication-square310x310logo" content="', esc_url( get_template_directory() . 'images/icons/large.png?v=' . self::VERSION ), '" />';
