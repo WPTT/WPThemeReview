@@ -16,7 +16,7 @@
  *
  * @since   0.xx.0
  */
-class WordPress_Sniffs_Theme_SearchFormSniff implements PHP_CodeSniffer_Sniff {
+class WordPress_Sniffs_Theme_TemplateCallsSniff implements PHP_CodeSniffer_Sniff {
 
 	/**
 	 * Returns an array of tokens this test wants to listen for.

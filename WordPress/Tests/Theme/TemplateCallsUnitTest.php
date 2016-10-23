@@ -13,7 +13,7 @@
  * @package WPCS\WordPressCodingStandards
  * @since   0.xx.0
  */
-class WordPress_Tests_Theme_SearchFormUnitTest extends AbstractSniffUnitTest {
+class WordPress_Tests_Theme_TemplateCallsUnitTest extends AbstractSniffUnitTest {
 
 	/**
 	 * Returns the lines where errors should occur.
