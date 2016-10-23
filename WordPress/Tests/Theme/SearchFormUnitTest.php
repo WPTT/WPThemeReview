@@ -24,6 +24,8 @@ class WordPress_Tests_Theme_SearchFormUnitTest extends AbstractSniffUnitTest {
 		return array(
 			3 => 1,
 			4 => 1,
+			8 => 1,
+			11 => 1,
 		);
 
 	}

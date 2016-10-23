@@ -8,10 +8,9 @@
  */
 
 /**
- * Check that no include calls to searchform.php are found,
- * recommend using get_search_form() instead.
+ * Check that the correct template functions are used instead of directly calling template files.
  *
- * @link    https://make.wordpress.org/themes/handbook/review/required/theme-check-plugin/#admin-menu
+ * @link    https://make.wordpress.org/themes/handbook/review/required/#core-functionality-and-features
  *
  * @package WPCS\WordPressCodingStandards
  *
@@ -25,11 +24,25 @@ class WordPress_Sniffs_Theme_SearchFormSniff implements PHP_CodeSniffer_Sniff {
 	 * @return array
 	 */
 	public function register() {
-		return array(
-			T_STRING,
-			T_CONSTANT_ENCAPSED_STRING,
-		);
+		return PHP_CodeSniffer_Tokens::$stringTokens;
 	}
+
+	/**
+	 * Returns an array of files and the correct template function.
+	 *
+	 * @return array
+	 */
+	protected $template_files = array(
+		'searchform.php' => array(
+			'alt' => 'get_search_form()'
+		),
+		'header.php' => array(
+			'alt' => 'wp_head()'
+		),
+		'footer.php' => array(
+			'alt' => 'wp_footer()'
+		),
+	);
 
 	/**
 	 * Processes this test, when one of its tokens is encountered.
@@ -44,9 +57,18 @@ class WordPress_Sniffs_Theme_SearchFormSniff implements PHP_CodeSniffer_Sniff {
 
 		$tokens = $phpcsFile->getTokens();
 		$token  = $tokens[ $stackPtr ];
+		$string = trim( $token['content'], '\"\'\/' );
 
-		if ( false !== strpos( trim( $token['content'] . '\"\'' ), 'searchform.php' ) ) {
-			$phpcsFile->addError( 'Use get_search_form() instead of including searchform.php directly.', $stackPtr, 'IncludeSearchformFound' );
+		if ( isset( $this->template_files[ $string ] ) ) {
+			$phpcsFile->addError(
+				'Use %1$s instead of including %2$s directly.',
+				$stackPtr,
+				'DirectTemplateIncludeFound',
+				array(
+					$this->template_files[ $string ]['alt'],
+					$string,
+				)
+			);
 		}
 	}
 
