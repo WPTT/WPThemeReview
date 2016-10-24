@@ -4,13 +4,13 @@
 */
 
 $wp_customize->add_setting( 'setting_id', array(
-	'type' => 'theme_mod', // or 'option'
+	'type' => 'theme_mod',
 	'capability' => 'edit_theme_options',
-	'theme_supports' => '', // Rarely needed.
+	'theme_supports' => '',
 	'default' => '',
-	'transport' => 'refresh', // or postMessage
-	'sanitize_callback' => '',
-	'sanitize_js_callback' => '', // Basically to_json.
+	'transport' => 'refresh',
+	'sanitize_callback' => '', // Error.
+	'sanitize_js_callback' => '', // Error.
 ) );
 $customize->add_setting( 'jot_customize_options['.$jot_option['name'].']' , array(
 	'default'                => $jot_option['default'],
@@ -18,18 +18,18 @@ $customize->add_setting( 'jot_customize_options['.$jot_option['name'].']' , arra
 	'capability'             => 'edit_theme_options',
 	'theme_supports'         => '',
 	'transport'              => $jot_option['transport'],
-	//'sanitize_callback'    => $jot_option['sanitize'],
-	//'sanitize_js_callback' => '',
+	//'sanitize_callback'    => $jot_option['sanitize'], // Error.
+	//'sanitize_js_callback' => '', // Error.
 ));
 
 $custiomize_settings->add_setting( 'setting_id', array(
-	'type' => 'theme_mod', // or 'option'
+	'type' => 'theme_mod',
 	'capability' => 'edit_theme_options',
-	'theme_supports' => '', // Rarely needed.
+	'sanitize_callback' => '', // Error.
+	'sanitize_js_callback' => 'absint', // OK.
+	'theme_supports' => '',
 	'default' => '',
-	'transport' => 'refresh', // or postMessage
-	'sanitize_callback' => '',
-	'sanitize_js_callback' => 'aa', // Basically to_json.
+	'transport' => 'refresh',
 ) );
 $wp_customize->add_setting( 'jot_customize_options['.$jot_option['name'].']' , array(
 	'default'              => $jot_option['default'],
@@ -38,5 +38,24 @@ $wp_customize->add_setting( 'jot_customize_options['.$jot_option['name'].']' , a
 	'theme_supports'       => '',
 	'transport'            => $jot_option['transport'],
 	//'sanitize_callback'  => $jot_option['sanitize'],
-	'sanitize_js_callback' => 'bbb',
+	'sanitize_js_callback' => 'absint',
 ));
+$custiomize_settings->add_setting(
+	'setting_id',
+	array(
+		'capability' => 'edit_theme_options',
+		'sanitize_callback' => $sanitize_callback, // Ok.
+		'sanitize_js_callback' => $sanitize_callback, // OK.
+		'transport' => 'refresh',
+	)
+);
+$args = array(
+	'default'           => $default,
+	'type'              => $type,
+	'capability'        => $capability,
+	'transport'         => $transport,
+	'sanitize_callback' => $sanitize_callback,
+);
+$wp_customize->add_setting(
+	new JT_Customize_Setting_Class( $wp_customize, $name, $args )
+);
