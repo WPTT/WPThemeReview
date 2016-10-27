@@ -19,6 +19,26 @@
 class WordPress_Sniffs_Theme_TemplateCallsSniff implements PHP_CodeSniffer_Sniff {
 
 	/**
+	 * Returns an array of files and the correct template function.
+	 *
+	 * @var array
+	 */
+	protected $template_files = array(
+		'searchform.php' => array(
+			'alt' => 'get_search_form()',
+		),
+		'header.php' => array(
+			'alt' => 'get_header()',
+		),
+		'footer.php' => array(
+			'alt' => 'get_footer()',
+		),
+		'sidebar.php' => array(
+			'alt' => 'get_sidebar()',
+		),
+	);
+
+	/**
 	 * Returns an array of tokens this test wants to listen for.
 	 *
 	 * @return array
@@ -26,23 +46,6 @@ class WordPress_Sniffs_Theme_TemplateCallsSniff implements PHP_CodeSniffer_Sniff
 	public function register() {
 		return PHP_CodeSniffer_Tokens::$stringTokens;
 	}
-
-	/**
-	 * Returns an array of files and the correct template function.
-	 *
-	 * @return array
-	 */
-	protected $template_files = array(
-		'searchform.php' => array(
-			'alt' => 'get_search_form()'
-		),
-		'header.php' => array(
-			'alt' => 'wp_head()'
-		),
-		'footer.php' => array(
-			'alt' => 'wp_footer()'
-		),
-	);
 
 	/**
 	 * Processes this test, when one of its tokens is encountered.
