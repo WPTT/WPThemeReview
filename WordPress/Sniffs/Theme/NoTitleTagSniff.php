@@ -31,10 +31,10 @@ class WordPress_Sniffs_Theme_NoTitleTagSniff implements PHP_CodeSniffer_Sniff {
 	 * @return array
 	 */
 	public function register() {
-		return array(
-			T_INLINE_HTML, // Finds inline html.
-			T_CONSTANT_ENCAPSED_STRING, // Finds the title tag in PHP.
-		 );
+		$tokens                  = PHP_CodeSniffer_Tokens::$stringTokens;
+		$tokens[ T_INLINE_HTML ] = T_INLINE_HTML;
+
+		return $tokens;
 	}
 
 	/**
@@ -51,7 +51,7 @@ class WordPress_Sniffs_Theme_NoTitleTagSniff implements PHP_CodeSniffer_Sniff {
 		$content  = $tokens[ $stackPtr ]['content'];
 		$filename = $phpcsFile->getFileName();
 
-		// Set to false if it is the first time.
+		// Set to false if it is the first time this sniff is run on a file.
 		if ( ! isset( $this->in_svg[ $filename ] ) ) {
 			$this->in_svg[ $filename ] = false;
 		}
@@ -68,16 +68,12 @@ class WordPress_Sniffs_Theme_NoTitleTagSniff implements PHP_CodeSniffer_Sniff {
 			} else {
 				// Make sure we check any content on this line after the closing svg tag.
 				$this->in_svg[ $filename ] = false;
-				$content      = trim( substr( $content, ( strpos( $content, '</svg>' ) + 6 ) ) );
+				$content                   = trim( substr( $content, ( strpos( $content, '</svg>' ) + 6 ) ) );
 			}
 		}
 
-		/*
-		 * We're not in svg, so check if it there's a <svg> open tag on this line.
-		 * PHP 5.2 creates a seperate token for `<s` we need to check that the first two letters in the next token are vg.
-		*/
-		$next_token = $phpcsFile->findNext( array( T_INLINE_HTML ), ( $stackPtr + 1 ) );
-		if ( false !== strpos( $content, '<svg' ) || ( '<s' === $content && 'vg' === substr( $tokens[ $next_token ]['content'], 0, 2 ) ) ) {
+		// We're not in svg, so check if it there's a <svg> open tag on this line.
+		if ( true === $this->has_svg_open_tag( $content, $stackPtr, $tokens ) ) {
 			if ( false === strpos( $content, '</svg>' ) ) {
 				// Skip the next lines until the closing svg tag, but do check any content
 				// on this line before the svg tag.
@@ -97,5 +93,38 @@ class WordPress_Sniffs_Theme_NoTitleTagSniff implements PHP_CodeSniffer_Sniff {
 		}
 
 	} // End process().
+
+	/**
+	 * Check if a content string contains a SVG open tag.
+	 *
+	 * For PHP 5.3+ this is straightforward.
+	 * PHP 5.2 creates a seperate token for `<s` when used in inline HTML, so we
+	 * need to check that the first two letters in the next token are 'vg'.
+	 * We don't need to worry about checking the content of the next token as
+	 * it will be passed to this sniff in the next iteration and checked then.
+	 * Nor about checking content before the '<s' as the bug will break up the
+	 * inline html to several string tokens if it plays up.
+	 *
+	 * @param string $content  The current content string, might be a substring of
+	 *                         the original string.
+	 * @param int    $stackPtr The position of the current token in the token stack.
+	 * @param array  $tokens   The token stack for the current file.
+	 *
+	 * @return bool True when the string contains an SVG open tag, false otherwise.
+	 */
+	protected function has_svg_open_tag( $content, $stackPtr, $tokens ) {
+		// Check for the open tag in normal string tokens and T_INLINE_STRING for PHP 5.3+.
+		if ( false !== strpos( $content, '<svg' ) ) {
+			return true;
+
+		} elseif ( T_INLINE_HTML === $tokens[ $stackPtr ]['code'] && '<s' === $content ) {
+			// Ok, we might be coming across the token parser issue. Check the next token.
+			if ( isset( $tokens[ $stackPtr + 1 ] ) && T_INLINE_HTML === $tokens[ $stackPtr + 1 ]['code'] && 'vg' === substr( $tokens[ $stackPtr + 1 ]['content'], 0, 2 ) ) {
+				return true;
+			}
+		}
+
+		return false;
+	}
 
 } // End Class.
