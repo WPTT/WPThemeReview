@@ -36,12 +36,28 @@
 
 
 	<!-- Validate and/or sanitize untrusted data before entering into the database. -->
-	<rule ref="WordPress.VIP.ValidatedSanitizedInput">
+	<!--
+		Revert to changing the type at the sniff level instead of the error code level
+		once the PR has been merged and the miminmum PHPCS version has been increased.
+		https://github.com/squizlabs/PHP_CodeSniffer/pull/1247
+	-->
+	<rule ref="WordPress.VIP.ValidatedSanitizedInput.InputNotValidated">
+		<type>warning</type>
+	</rule>
+	<rule ref="WordPress.VIP.ValidatedSanitizedInput.InputNotSanitized">
 		<type>warning</type>
 	</rule>
 
 	<!-- All untrusted data should be escaped before output. -->
-	<rule ref="WordPress.XSS.EscapeOutput">
+	<!--
+		Revert to changing the type at the sniff level instead of the error code level
+		once the PR has been merged and the miminmum PHPCS version has been increased.
+		https://github.com/squizlabs/PHP_CodeSniffer/pull/1247
+	-->
+	<rule ref="WordPress.XSS.EscapeOutput.UnsafePrintingFunction">
+		<type>warning</type>
+	</rule>
+	<rule ref="WordPress.XSS.EscapeOutput.OutputNotEscaped">
 		<type>warning</type>
 	</rule>
 
