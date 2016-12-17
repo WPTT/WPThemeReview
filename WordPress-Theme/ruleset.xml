@@ -12,12 +12,10 @@
 	<!-- Alternative PHP open tags not allowed. -->
 	<rule ref="Generic.PHP.DisallowAlternativePHPTags"/>
 
-	<!-- Only UNIX line endings allowed. -->
+	<!-- Mixed line endings are not allowed. -->
 	<!-- Covers: https://github.com/Otto42/theme-check/blob/master/checks/lineendings.php -->
-	<rule ref="Generic.Files.LineEndings">
-		<properties>
-			<property name="eolChar" value="\n"/>
-		</properties>
+	<rule ref="Internal.LineEndings.Mixed">
+		<type>error</type>
 	</rule>
 
 	<!-- No ByteOrderMark allowed - important to prevent issues with content being sent before headers. -->
