@@ -32,7 +32,12 @@
 	<rule ref="WordPress.VIP.PluginMenuSlug"/>
 
 	<!-- Do not silence error notices. e.g. Error Control Operator @.. -->
-	<rule ref="Generic.PHP.NoSilencedErrors" />
+	<rule ref="Generic.PHP.NoSilencedErrors">
+		<properties>
+			<property name="error" value="true"/>
+		</properties>
+	</rule>
+
 
 
 	<!-- Validate and/or sanitize untrusted data before entering into the database. -->
