@@ -1,10 +1,20 @@
 <?php
 /**
- * Sniff to check theme for deregister and register of core scripts (jquery)
+ * WordPress Coding Standard.
  *
- * @category Theme
- * @package  PHP_CodeSniffer
- * @author   Simon Prosser <pross@pross.org.uk>
+ * @package WPCS\WordPressCodingStandards
+ * @link    https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards
+ * @license https://opensource.org/licenses/MIT MIT
+ */
+
+/**
+ * Forbids deregistering of core scripts (jquery).
+ *
+ * @link    https://make.wordpress.org/themes/handbook/review/required/#core-functionality-and-features
+ *
+ * @package WPCS\WordPressCodingStandards
+ *
+ * @since   0.xx.0
  */
 class WordPress_Sniffs_Theme_NoDeregisterCoreScriptSniff implements PHP_CodeSniffer_Sniff {
 
@@ -14,7 +24,7 @@ class WordPress_Sniffs_Theme_NoDeregisterCoreScriptSniff implements PHP_CodeSnif
 	 * @var array
 	 */
 	private $core_scripts = array(
-		'jquery',
+		'jquery' => 'jquery',
 	);
 
 	/**
@@ -25,12 +35,8 @@ class WordPress_Sniffs_Theme_NoDeregisterCoreScriptSniff implements PHP_CodeSnif
 	public function register() {
 		return array(
 			T_STRING,
-			T_CONSTANT_ENCAPSED_STRING,
-			T_DOUBLE_QUOTED_STRING,
-			T_OPEN_PARENTHESIS,
-			T_CLOSE_PARENTHESIS,
 		);
-	}//end register()
+	}
 
 	/**
 	 * Process a given string and remove quotes.
@@ -54,29 +60,27 @@ class WordPress_Sniffs_Theme_NoDeregisterCoreScriptSniff implements PHP_CodeSnif
 	 */
 	public function process( PHP_CodeSniffer_File $phpcsFile, $stackPtr ) {
 
-		$tokens  = $phpcsFile->getTokens();
-		$token   = $tokens[ $stackPtr ];
+		$tokens = $phpcsFile->getTokens();
+		$token  = $tokens[ $stackPtr ];
 
-		$content = $this->trim_quotes( $token['content'] );
+		$content = strtolower( $this->trim_quotes( $token['content'] ) );
 
-		if ( 'wp_deregister_script' === $content ) {
-
-			/**
-			 * Find next closing parenthesis after the function
-			 */
-			$closing = $phpcsFile->findNext( T_CLOSE_PARENTHESIS, $stackPtr );
-
-			/**
-			 * The script name will be right before the closing parenthesis
-			 */
-			$script = $phpcsFile->findPrevious( array( T_CONSTANT_ENCAPSED_STRING, T_DOUBLE_QUOTED_STRING ), $closing, $stackPtr );
-
-			$scriptname = $this->trim_quotes( $tokens[ $script ]['content'] );
-
-			if ( in_array( $scriptname, $this->core_scripts, true ) ) {
-
-				$phpcsFile->addError( 'Registering or deregistering core script %s is prohibited.', $stackPtr, 'RemovalDetected', $scriptname );
-			}
+		if ( 'wp_deregister_script' !== $content ) {
+			return;
 		}
-	}//end process()
-}//end class
+
+		/**
+		 * Find the script name as the first argument.
+		 */
+		$script = $phpcsFile->findNext( array( T_CONSTANT_ENCAPSED_STRING ), $stackPtr, null, false, null, true );
+
+		$script_handle = strtolower( $this->trim_quotes( $tokens[ $script ]['content'] ) );
+
+		if ( isset( $this->core_scripts[ $script_handle ] ) ) {
+
+			$phpcsFile->addError( 'Deregistering core script %s is prohibited.', $stackPtr, 'DeregisterDetected', $script_handle );
+		}
+
+	}
+
+} // End Class.
