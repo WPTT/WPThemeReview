@@ -19,24 +19,28 @@
 class WordPress_Sniffs_Theme_TemplateCallsSniff implements PHP_CodeSniffer_Sniff {
 
 	/**
-	 * Returns an array of files and the correct template function.
+	 * Returns an array of partial file names and the correct template function.
 	 *
-	 * @var array
+	 * Use a * wildcard in the array key to indicate that `file-variant.php` variations
+	 * should be matched as well.
+	 *
+	 * @var array <string partial file name> => <string alternative>
 	 */
 	protected $template_files = array(
-		'searchform.php' => array(
-			'alt' => 'get_search_form()',
-		),
-		'header.php' => array(
-			'alt' => 'get_header()',
-		),
-		'footer.php' => array(
-			'alt' => 'get_footer()',
-		),
-		'sidebar.php' => array(
-			'alt' => 'get_sidebar()',
-		),
+		'searchform' => 'get_search_form()',
+		'header*'    => 'get_header()',
+		'footer*'    => 'get_footer()',
+		'sidebar*'   => 'get_sidebar()',
 	);
+
+	/**
+	 * Regex for matching the filenames.
+	 *
+	 * The regex will be created once in the `register()` method based on the $template_files array.
+	 *
+	 * @var string
+	 */
+	private $regex = '`^/?(?P<filename>(?P<partial>%s)\.php)$`i';
 
 	/**
 	 * Returns an array of tokens this test wants to listen for.
@@ -44,6 +48,12 @@ class WordPress_Sniffs_Theme_TemplateCallsSniff implements PHP_CodeSniffer_Sniff
 	 * @return array
 	 */
 	public function register() {
+		// Prepare the regex only once.
+		$files = array_map( array( $this, 'prepare_name_for_regex' ), array_keys( $this->template_files ) );
+		$files = implode( '|', $files );
+
+		$this->regex = sprintf( $this->regex, $files );
+
 		return PHP_CodeSniffer_Tokens::$stringTokens;
 	}
 
@@ -60,19 +70,52 @@ class WordPress_Sniffs_Theme_TemplateCallsSniff implements PHP_CodeSniffer_Sniff
 
 		$tokens = $phpcsFile->getTokens();
 		$token  = $tokens[ $stackPtr ];
-		$string = trim( $token['content'], '\"\'\/' );
+		$string = trim( $token['content'], '"\'' );
 
-		if ( isset( $this->template_files[ $string ] ) ) {
+		if ( 1 === preg_match( $this->regex, $string, $matches ) ) {
+			$file_name   = $matches['partial'];
+			$alternative = '';
+
+			// Find alternative for full file name matches.
+			if ( isset( $this->template_files[ $file_name ] ) ) {
+				$alternative = $this->template_files[ $file_name ];
+			}
+
+			// Find alternative for wildcard file name matches.
+			if ( empty( $alternative ) ) {
+				$dash = strpos( $file_name, '-' );
+				$file_name = substr( $file_name, 0, $dash ) . '*';
+				if ( isset( $this->template_files[ $file_name ] ) ) {
+					$alternative = $this->template_files[ $file_name ];
+				}
+			}
+
 			$phpcsFile->addError(
-				'Use %1$s instead of including %2$s directly.',
+				'Use %1$s instead of including "%2$s" directly.',
 				$stackPtr,
 				'DirectTemplateIncludeFound',
 				array(
-					$this->template_files[ $string ]['alt'],
-					$string,
+					$alternative,
+					$matches['filename'],
 				)
 			);
 		}
 	}
 
+	/**
+	 * Prepare the partial file name for use in a regular expression.
+	 *
+	 * - Escape the file name for use in regex.
+	 * - Deal with wildcards indicating the potential for variants.
+	 *
+	 * @param string $file_name (Partial) file name.
+	 * @return string Regex escaped file name.
+	 */
+	protected function prepare_name_for_regex( $file_name ) {
+		$file_name = str_replace( '*' , '#', $file_name ); // Replace wildcards with placeholder.
+		$file_name = preg_quote( $file_name, '`' );
+		$file_name = str_replace( '#', '(?:-.*?)?', $file_name ); // Replace placeholder with optional regex wildcard.
+
+		return $file_name;
+	}
 }
