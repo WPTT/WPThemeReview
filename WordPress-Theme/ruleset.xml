@@ -18,6 +18,12 @@
 		<type>error</type>
 	</rule>
 
+	<!-- No minification of scripts or files unless you provide original files. -->
+	<!-- Covers: https://make.wordpress.org/themes/handbook/review/required/#stylesheets-and-scripts -->
+	<rule ref="Internal.Tokenizer.Exception">
+		<message>File appears to be minified and cannot be processed. The non-minified file must be included too.</message>
+	</rule>
+
 	<!-- No ByteOrderMark allowed - important to prevent issues with content being sent before headers. -->
 	<rule ref="Generic.Files.ByteOrderMark" />
 
