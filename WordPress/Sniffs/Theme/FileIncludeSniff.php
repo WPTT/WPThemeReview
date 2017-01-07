@@ -24,7 +24,9 @@ class WordPress_Sniffs_Theme_FileIncludeSniff implements PHP_CodeSniffer_Sniff {
 	 * @var array
 	 */
 	protected $file_whitelist = array(
-		'functions.php' => true,
+		'functions.php'				=> true,
+		'init.php'				=> true,
+		'class-tgm-plugin-activation.php'	=> true,
 	);
 
 	/**
