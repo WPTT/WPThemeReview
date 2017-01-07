@@ -18,20 +18,11 @@ class WordPress_Tests_Theme_NonPrintableCheckUnitTest extends AbstractSniffUnitT
 	/**
 	 * Returns the lines where errors should occur.
 	 *
-	 * @return array <int line number> => <int number of errors>
-	 */
-	public function getErrorList() {
-		return array();
-	}
-
-	/**
-	 * Returns the lines where warnings should occur.
-	 *
 	 * @param string $testFile The name of the file being tested.
 	 *
-	 * @return array <int line number> => <int number of warnings>
+	 * @return array <int line number> => <int number of errors>
 	 */
-	public function getWarningList( $testFile = '' ) {
+	public function getErrorList( $testFile = '' ) {
 		switch ( $testFile ) {
 			case 'NonPrintableCheckUnitTest.css':
 				return array(
@@ -40,7 +31,6 @@ class WordPress_Tests_Theme_NonPrintableCheckUnitTest extends AbstractSniffUnitT
 					6 => 1,
 					7 => 1,
 				);
-				break;
 			case 'NonPrintableCheckUnitTest.inc':
 				return array(
 					1  => 1,
@@ -57,19 +47,25 @@ class WordPress_Tests_Theme_NonPrintableCheckUnitTest extends AbstractSniffUnitT
 					18 => 1,
 					19 => 1,
 				);
-				break;
 			case 'NonPrintableCheckUnitTest.js':
 				return array(
 					2 => 1,
 					5 => 1,
 					8 => 1,
 				);
-				break;
 			default:
 				return array();
-				break;
 		}   // End switch().
 
+	}
+
+	/**
+	 * Returns the lines where warnings should occur.
+	 *
+	 * @return array <int line number> => <int number of warnings>
+	 */
+	public function getWarningList() {
+		return array();
 	}
 
 } // End class.

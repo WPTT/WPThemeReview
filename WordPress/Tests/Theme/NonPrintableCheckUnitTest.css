@@ -1,8 +1,8 @@
 /* 
-	Test comment OK 
-	 BAD
-			OK
-	   BAD
-	 BAD
-	 BAD
+	Test comment Ok.
+	 Bad - ASCII 002 017 023.
+			Ok.
+	   Bad ASCII 028 030.
+	 Bad - ASCII 018.
+	 Bad - ASCII 022.
 */ 

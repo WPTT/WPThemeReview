@@ -8,7 +8,7 @@
  */
 
 /**
- * Restricts the use of non-printable characters in themes
+ * Restricts the use of non-printable characters.
  *
  * @link    https://make.wordpress.org/themes/handbook/review/required/theme-check-plugin/#info
  *
@@ -35,10 +35,15 @@ class WordPress_Sniffs_Theme_NonPrintableCheckSniff extends WordPress_Sniff {
 	 * @return array
 	 */
 	public function register() {
-		return ( array_merge( PHP_CodeSniffer_Tokens::$commentTokens, PHP_CodeSniffer_Tokens::$emptyTokens, PHP_CodeSniffer_Tokens::$stringTokens, array(
-			T_STRING,
-			T_INLINE_HTML,
-		) ) );
+		return array_merge(
+			PHP_CodeSniffer_Tokens::$emptyTokens,
+			PHP_CodeSniffer_Tokens::$heredocTokens,
+			PHP_CodeSniffer_Tokens::$stringTokens,
+			array(
+				T_STRING,
+				T_INLINE_HTML,
+				T_BAD_CHARACTER,
+		));
 
 	}
 
@@ -54,10 +59,8 @@ class WordPress_Sniffs_Theme_NonPrintableCheckSniff extends WordPress_Sniff {
 	public function process( PHP_CodeSniffer_File $phpcsFile, $stackPtr ) {
 		$tokens   = $phpcsFile->getTokens();
 		$token    = $tokens[ $stackPtr ];
-		$filename = $phpcsFile->getFilename();
 		if ( preg_match( '/[\x00-\x08\x0B-\x0C\x0E-\x1F\x80-\xFF]/', $token['content'], $matches ) ) {
-			$warning = 'Non-printable characters were found in the ' . $filename . ' file. You may want to check this file for errors.';
-			$phpcsFile->addWarning( $warning, $stackPtr, 'NonPrintableCheck' );
+			$phpcsFile->addError( 'Non-printable characters were found in the file. You may want to check this file for errors.', $stackPtr, 'NonPrintableCheck' );
 		}
 
 	}
