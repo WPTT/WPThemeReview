@@ -35,16 +35,19 @@ class WordPress_Sniffs_Theme_NonPrintableCheckSniff extends WordPress_Sniff {
 	 * @return array
 	 */
 	public function register() {
-		return array_merge(
+		$targets                  = array_merge(
 			PHP_CodeSniffer_Tokens::$emptyTokens,
 			PHP_CodeSniffer_Tokens::$heredocTokens,
-			PHP_CodeSniffer_Tokens::$stringTokens,
-			array(
-				T_STRING,
-				T_INLINE_HTML,
-				T_BAD_CHARACTER,
-		));
+			PHP_CodeSniffer_Tokens::$stringTokens
+		);
+		$targets[ T_STRING ]      = T_STRING;
+		$targets[ T_INLINE_HTML ] = T_INLINE_HTML;
 
+		if ( defined( 'T_BAD_CHARACTER' ) ) {
+			$targets[ T_BAD_CHARACTER ] = T_BAD_CHARACTER;
+		}
+
+		return $targets;
 	}
 
 	/**
