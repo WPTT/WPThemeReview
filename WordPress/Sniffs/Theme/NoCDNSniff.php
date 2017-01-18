@@ -78,7 +78,7 @@ class WordPress_Sniffs_Theme_NoCDNSniff implements PHP_CodeSniffer_Sniff {
 					}
 				}
 
-				if ( false !== strpos( $match[0], 'cdn' ) && $found === false ) {
+				if ( false !== strpos( $match[0], 'cdn' ) && false === $found ) {
 					$phpcsFile->addWarning( 'Possible URL of a CDN has been found. The CSS or JavaScript resources cannot be loaded from a CDN but must be bundled.', $stackPtr, 'CDNFound' );
 				}
 			}
