@@ -81,4 +81,7 @@
 	<!-- Prohibit the use of the backtick operator. -->
 	<rule ref="Generic.PHP.BacktickOperator"/>
 
+	<!-- Prohibit overwriting of WordPress global variables. -->
+	<rule ref="WordPress.Variables.GlobalVariables"/>
+
 </ruleset>
