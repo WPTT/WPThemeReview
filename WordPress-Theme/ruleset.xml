@@ -52,6 +52,13 @@
 	<rule ref="WordPress.VIP.ValidatedSanitizedInput.InputNotSanitized">
 		<type>warning</type>
 	</rule>
+	</rule>
+	<rule ref="WordPress.VIP.ValidatedSanitizedInput.InputNotValidatedNotSanitized">
+		<type>warning</type>
+	</rule>
+	<rule ref="WordPress.VIP.ValidatedSanitizedInput.MissingUnslash">
+		<type>warning</type>
+	</rule>
 
 	<!-- All untrusted data should be escaped before output. -->
 	<!--
