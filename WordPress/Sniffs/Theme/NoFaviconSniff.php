@@ -64,7 +64,7 @@ class WordPress_Sniffs_Theme_NoFaviconSniff implements PHP_CodeSniffer_Sniff {
 		foreach ( $this->attribute_blacklist as $key => $values ) {
 			$values = array_map( 'preg_quote', $values, array_fill( 0, count( $values ), '`' ) );
 			$values = implode( '|', $values );
-			$regex_parts[] = sprintf( self::REGEX_ATTR_TEMPLATE, preg_quote( $key ), $values );
+			$regex_parts[] = sprintf( self::REGEX_ATTR_TEMPLATE, preg_quote( $key, '`' ), $values );
 		}
 
 		$this->favicon_regex = sprintf( self::REGEX_TEMPLATE, implode( '|', $regex_parts ) );
