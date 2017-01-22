@@ -58,7 +58,6 @@
 	<rule ref="WordPress.VIP.ValidatedSanitizedInput.InputNotSanitized">
 		<type>warning</type>
 	</rule>
-	</rule>
 	<rule ref="WordPress.VIP.ValidatedSanitizedInput.InputNotValidatedNotSanitized">
 		<type>warning</type>
 	</rule>
