@@ -47,9 +47,9 @@ class WordPress_Sniffs_Theme_NoAutoGenerateSniff implements PHP_CodeSniffer_Snif
 	 */
 	public function register() {
 		$tokens   = PHP_CodeSniffer_Tokens::$stringTokens;
-		$tokens[] = T_STRING;
 		$tokens[] = T_INLINE_HTML;
 		$tokens[] = T_HEREDOC;
+		$tokens[] = T_STRING; // Functions named after or prefixed with the generator name.
 		$tokens[] = T_NOWDOC;
 		$tokens[] = T_COMMENT;
 		$tokens[] = T_DOC_COMMENT_STRING;
@@ -77,10 +77,14 @@ class WordPress_Sniffs_Theme_NoAutoGenerateSniff implements PHP_CodeSniffer_Snif
 		}
 
 		foreach ( $this->generated_themes as $generated_theme ) {
-			// The check can have false positives like artisteers but chances of that in a valid theme is low.
+			/*
+			 * The check can have false positives like artisteers but chances of that happening
+			 * in a valid theme is low.
+			 */
 			if ( false === strpos( $content, $generated_theme ) ) {
 				continue;
 			}
+
 			$phpcsFile->addError(
 				'Auto generated themes are not allowed in the theme directory. Found: %s',
 				$stackPtr,
@@ -88,7 +92,6 @@ class WordPress_Sniffs_Theme_NoAutoGenerateSniff implements PHP_CodeSniffer_Snif
 				array( $generated_theme )
 			);
 		}
-
 	}
 
 }

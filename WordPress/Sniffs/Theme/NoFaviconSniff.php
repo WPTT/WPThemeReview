@@ -18,8 +18,22 @@
  */
 class WordPress_Sniffs_Theme_NoFaviconSniff implements PHP_CodeSniffer_Sniff {
 
+	/**
+	 * Regex template.
+	 *
+	 * Will be parsed together with the attribute blacklist in the register() method.
+	 *
+	 * @var string
+	 */
 	const REGEX_TEMPLATE = '` (?:%s)`i';
 
+	/**
+	 * (Partial) Regex template for recognizing a HTML attribute.
+	 *
+	 * Will be parsed together with the attribute blacklist in the register() method.
+	 *
+	 * @var string
+	 */
 	const REGEX_ATTR_TEMPLATE = '%1$s=[\'"](?:%2$s)[\'"]';
 
 	/**
@@ -93,7 +107,6 @@ class WordPress_Sniffs_Theme_NoFaviconSniff implements PHP_CodeSniffer_Sniff {
 		if ( preg_match( $this->favicon_regex, $token['content'] ) > 0 ) {
 			$phpcsFile->addError( 'Code for favicon found. Favicons are handled by the "Site Icon" setting in the customizer since version 4.3.' , $stackPtr, 'NoFavicon' );
 		}
-
 	}
 
 }
