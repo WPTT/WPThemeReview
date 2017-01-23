@@ -35,3 +35,17 @@ echo '
 	<svg width="500" height="300" >
 		...
 	</svg> <title>my title</title>'; // Bad.
+
+$html = <<<EOT
+	<title>my title</title> <!-- Bad. -->
+	<svg width="500" height="300" >
+		...
+	</svg> <title>my title</title><!-- Bad. -->
+EOT;
+
+$html = <<<'EOT'
+	<title>my title</title> <!-- Bad. -->
+	<svg width="500" height="300" >
+		...
+	</svg> <title>my title</title> <!-- Bad. -->
+EOT;
