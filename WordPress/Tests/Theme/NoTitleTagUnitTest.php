@@ -32,6 +32,10 @@ class WordPress_Tests_Theme_NoTitleTagUnitTest extends AbstractSniffUnitTest {
 			30 => version_compare( PHP_VERSION, '5.3.0', '>=' ) ? 1 : 2,
 			34 => 1,
 			37 => 1,
+			40 => 1,
+			43 => 1,
+			47 => ( PHP_VERSION_ID >= 50300 ) ? 1 : 0, // PHPCS on PHP 5.2 does not recognize T_NOWDOC.
+			50 => ( PHP_VERSION_ID >= 50300 ) ? 1 : 0, // PHPCS on PHP 5.2 does not recognize T_NOWDOC.
 		);
 
 	}
