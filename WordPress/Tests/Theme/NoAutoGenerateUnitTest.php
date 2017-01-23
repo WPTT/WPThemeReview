@@ -36,6 +36,8 @@ class WordPress_Tests_Theme_NoAutoGenerateUnitTest extends AbstractSniffUnitTest
 					14 => 1,
 					15 => 1,
 					22 => 1,
+					39 => 2,
+					45 => 2,
 				);
 				break;
 			case 'NoAutoGenerateUnitTest.css':

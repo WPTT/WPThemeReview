@@ -33,3 +33,15 @@ function is_wpthemegenerator(){
  */
 
 function wp_vs_them() {}
+
+$footer = <<<EOT
+<div>
+	Credits for themler and lubith!
+</div>
+EOT;
+
+$footer = <<<'EOT'
+<div>
+	Credits for themler and lubith!
+</div>
+EOT;
