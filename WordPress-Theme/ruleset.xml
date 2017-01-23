@@ -84,4 +84,11 @@
 	<!-- Prohibit overwriting of WordPress global variables. -->
 	<rule ref="WordPress.Variables.GlobalVariables"/>
 
+	<!-- Prohibit the use of the eval() PHP language construct. -->
+	<rule ref="Squiz.PHP.Eval"/>
+	<rule ref="Squiz.PHP.Eval.Discouraged">
+		<type>error</type>
+		<message>eval() is a security risk so not allowed.</message>
+	</rule>
+
 </ruleset>
