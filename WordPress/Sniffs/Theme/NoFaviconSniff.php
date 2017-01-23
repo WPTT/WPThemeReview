@@ -71,6 +71,8 @@ class WordPress_Sniffs_Theme_NoFaviconSniff implements PHP_CodeSniffer_Sniff {
 
 		$tokens   = PHP_CodeSniffer_Tokens::$stringTokens;
 		$tokens[] = T_INLINE_HTML;
+		$tokens[] = T_HEREDOC;
+		$tokens[] = T_NOWDOC;
 
 		return $tokens;
 	}
