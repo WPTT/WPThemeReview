@@ -33,6 +33,10 @@ class WordPress_Tests_Theme_NoFaviconUnitTest extends AbstractSniffUnitTest {
 			19 => 1,
 			20 => 1,
 			21 => 1,
+			24 => 1,
+			25 => 1,
+			29 => ( PHP_VERSION_ID >= 50300 ) ? 1 : 0, // PHPCS on PHP 5.2 does not recognize T_NOWDOC.
+			30 => ( PHP_VERSION_ID >= 50300 ) ? 1 : 0, // PHPCS on PHP 5.2 does not recognize T_NOWDOC.
 		);
 	}
 
