@@ -67,7 +67,7 @@ class WordPress_Sniffs_Theme_NoAutoGenerateSniff implements PHP_CodeSniffer_Snif
 
 		$tokens = $phpcsFile->getTokens();
 		$token  = $tokens[ $stackPtr ];
-		$content = trim( $token['content'] );
+		$content = trim( strtolower( $token['content'] ) );
 
 		// No need to check an empty string.
 		if ( '' === $content ) {
@@ -76,7 +76,7 @@ class WordPress_Sniffs_Theme_NoAutoGenerateSniff implements PHP_CodeSniffer_Snif
 
 		foreach ( $this->generated_themes as $generated_theme ) {
 			// The check can have false positives like artisteers but chances of that in a valid theme is low.
-			if ( false === strpos( strtolower( $content ), $generated_theme ) ) {
+			if ( false === strpos( $content, $generated_theme ) ) {
 				continue;
 			}
 			$phpcsFile->addError(
