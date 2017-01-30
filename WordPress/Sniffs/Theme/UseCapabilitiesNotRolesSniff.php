@@ -1,102 +1,231 @@
 <?php
 /**
  * WordPress Coding Standard.
- * UseCapabilitiesNotRolesSniff
  *
- * @category PHP
- * @package  PHP_CodeSniffer
- * @link     https://make.wordpress.org/core/handbook/best-practices/coding-standards/
+ * @package WPCS\WordPressCodingStandards
+ * @link    https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards
+ * @license https://opensource.org/licenses/MIT MIT
  */
 
 /**
- * WordPress_Sniffs_Theme_UseCapabilitiesNotRolesSniff
+ * User capabilities should be used not roles.
  *
- * WordPress Theme Requirements Coding Standards
- * ERROR | Check that capabilities are used not roles.
- * Functions to check: current_user_can(),
- * current_user_can_for_blog(), user_can(), add_..._page().
+ * @link    https://make.wordpress.org/themes/handbook/review/required/#options-and-settings
  *
- * @category PHP
- * @package  PHP_CodeSniffer
- * @author   khacoder
+ * @package WPCS\WordPressCodingStandards
+ *
+ * @since   0.xx.0
  */
-class WordPress_Sniffs_Theme_UseCapabilitiesNotRolesSniff implements PHP_CodeSniffer_Sniff
-{
-	/**
-	 * Returns an array of tokens this test wants to listen for.
-	 *
-	 * @return array
-	 */
-	public function register() {
-		return array(
-			T_STRING,
-			T_CONSTANT_ENCAPSED_STRING,
-			T_VARIABLE,
-			T_LNUMBER,
-		);
-	}//end register()
+class WordPress_Sniffs_Theme_UseCapabilitiesNotRolesSniff extends WordPress_AbstractFunctionParameterSniff {
 
 	/**
-	 * Processes this test, when one of its tokens is encountered.
+	 * The group name for this group of functions.
 	 *
-	 * @param PHP_CodeSniffer_File $phpcsFile The file being scanned.
-	 * @param int                  $stackPtr  The position of the current token
-	 *                                        in the stack passed in $tokens.
+	 * @since 0.xx.0
+	 *
+	 * @var string
+	 */
+	protected $group_name = 'caps_not_roles';
+
+	/**
+	 * Array of functions with position.
+	 *
+	 * The number represents the position in the function call
+	 * passed variables, here the capability is to be listed.
+	 *
+	 * @since 0.xx.0
+	 *
+	 * @var array Function name with parameter position.
+	 */
+	protected $target_functions = array(
+		'add_dashboard_page'        => 3,
+		'add_posts_page'            => 3,
+		'add_media_page'            => 3,
+		'add_pages_page'            => 3,
+		'add_comments_page'         => 3,
+		'add_theme_page'            => 3,
+		'add_plugins_page'          => 3,
+		'add_users_page'            => 3,
+		'add_management_page'       => 3,
+		'add_options_page'          => 3,
+		'add_menu_page'             => 3,
+		'add_utility_page'          => 3,
+		'add_submenu_page'          => 4,
+		'current_user_can'          => 1,
+		'author_can'                => 2,
+		'current_user_can_for_blog' => 2,
+	);
+
+	/**
+	 * Array of core roles.
+	 *
+	 * @since 0.xx.0
+	 *
+	 * @var array Role available in core.
+	 */
+	protected $core_roles = array(
+		'super_admin'   => true,
+		'administrator' => true,
+		'editor'        => true,
+		'author'        => true,
+		'contributor'   => true,
+		'subscriber'    => true,
+	);
+
+	/**
+	 * Array of core capabilities.
+	 *
+	 * @since 0.xx.0
+	 *
+	 * @var array Capabilities available in core.
+	 */
+	protected $core_capabilities = array(
+		'create_sites'           => true,
+		'delete_sites'           => true,
+		'manage_network'         => true,
+		'manage_sites'           => true,
+		'manage_network_users'   => true,
+		'manage_network_plugins' => true,
+		'manage_network_themes'  => true,
+		'manage_network_options' => true,
+		'create_sites'           => true,
+		'delete_sites'           => true,
+		'manage_network'         => true,
+		'manage_sites'           => true,
+		'manage_network_users'   => true,
+		'manage_network_plugins' => true,
+		'manage_network_themes'  => true,
+		'manage_network_options' => true,
+		'activate_plugins'       => true,
+		'delete_others_pages'    => true,
+		'delete_others_posts'    => true,
+		'delete_pages'           => true,
+		'delete_posts'           => true,
+		'delete_private_pages'   => true,
+		'delete_private_posts'   => true,
+		'delete_published_pages' => true,
+		'delete_published_posts' => true,
+		'edit_dashboard'         => true,
+		'edit_others_pages'      => true,
+		'edit_others_posts'      => true,
+		'edit_pages'             => true,
+		'edit_posts'             => true,
+		'edit_private_pages'     => true,
+		'edit_private_posts'     => true,
+		'edit_published_pages'   => true,
+		'edit_published_posts'   => true,
+		'edit_theme_options'     => true,
+		'export'                 => true,
+		'import'                 => true,
+		'list_users'             => true,
+		'manage_categories'      => true,
+		'manage_links'           => true,
+		'manage_options'         => true,
+		'moderate_comments'      => true,
+		'promote_users'          => true,
+		'publish_pages'          => true,
+		'publish_posts'          => true,
+		'read_private_pages'     => true,
+		'read_private_posts'     => true,
+		'read'                   => true,
+		'remove_users'           => true,
+		'switch_themes'          => true,
+		'upload_files'           => true,
+		'customize'              => true,
+		'delete_site'            => true,
+		'update_core'            => true,
+		'update_plugins'         => true,
+		'update_themes'          => true,
+		'install_plugins'        => true,
+		'install_themes'         => true,
+		'upload_plugins'         => true,
+		'upload_themes'          => true,
+		'delete_themes'          => true,
+		'delete_plugins'         => true,
+		'edit_plugins'           => true,
+		'edit_themes'            => true,
+		'edit_files'             => true,
+		'edit_users'             => true,
+		'create_users'           => true,
+		'delete_users'           => true,
+		'unfiltered_html'        => true,
+		'delete_others_pages'    => true,
+		'delete_others_posts'    => true,
+		'delete_pages'           => true,
+		'delete_posts'           => true,
+		'delete_private_pages'   => true,
+		'delete_private_posts'   => true,
+		'delete_published_pages' => true,
+		'delete_published_posts' => true,
+		'edit_others_pages'      => true,
+		'edit_others_posts'      => true,
+		'edit_pages'             => true,
+		'edit_posts'             => true,
+		'edit_private_pages'     => true,
+		'edit_private_posts'     => true,
+		'edit_published_pages'   => true,
+		'edit_published_posts'   => true,
+		'manage_categories'      => true,
+		'manage_links'           => true,
+		'moderate_comments'      => true,
+		'publish_pages'          => true,
+		'publish_posts'          => true,
+		'read'                   => true,
+		'read_private_pages'     => true,
+		'read_private_posts'     => true,
+		'upload_files'           => true,
+		'delete_posts'           => true,
+		'delete_published_posts' => true,
+		'edit_posts'             => true,
+		'edit_published_posts'   => true,
+		'publish_posts'          => true,
+		'read'                   => true,
+		'upload_files'           => true,
+		'delete_posts'           => true,
+		'edit_posts'             => true,
+		'read'                   => true,
+	);
+
+	/**
+	 * Process the parameters of a matched function.
+	 *
+	 * @since 0.xx.0
+	 *
+	 * @param int    $stackPtr        The position of the current token in the stack.
+	 * @param array  $group_name      The name of the group which was matched.
+	 * @param string $matched_content The token content (function name) which was matched.
+	 * @param array  $parameters      Array with information about the parameters.
 	 *
 	 * @return void
 	 */
-	public function process( PHP_CodeSniffer_File $phpcsFile, $stackPtr ) {
+	public function process_parameters( $stackPtr, $group_name, $matched_content, $parameters ) {
 
-		$tokens = $phpcsFile->getTokens();
-		$token  = $tokens[ $stackPtr ];
-
-		// the number represents the position in the function call passed variables,
-		// where the capability is to be listed.
-		$checks = array(
-			'add_dashboard_page' => 3,
-			'add_posts_page' => 3,
-			'add_media_page' => 3,
-			'add_pages_page' => 3,
-			'add_comments_page' => 3,
-			'add_theme_page' => 3,
-			'add_plugins_page' => 3,
-			'add_users_page' => 3,
-			'add_management_page' => 3,
-			'add_options_page' => 3,
-			'add_menu_page' => 3,
-			'add_utility_page' => 3,
-			'add_submenu_page' => 4,
-			'current_user_can' => 1,
-			'author_can' => 2,
-			'current_user_can_for_blog' => 2,
-		);
-
-		$roles = array(
-			'super_admin',
-			'administrator',
-			'editor',
-			'author',
-			'contributor',
-			'subscriber',
-		);
-
-		$types = array( T_CONSTANT_ENCAPSED_STRING , T_VARIABLE , T_LNUMBER );
-
-		foreach ( $checks as $key => $check ) {
-			if ( strpos( $token['content'] , $key ) !== false ) {
-
-				$nextStackPtr = $stackPtr;
-
-				for ( $i = 1; $i <= $check; $i++ ) {
-					$nextStackPtr = $phpcsFile->findNext( $types , $nextStackPtr + 1 );
-				}
-
-				if ( in_array( trim( $tokens[ $nextStackPtr ]['content'] , '\'\"' ) , $roles, true ) ) {
-					$phpcsFile->addError( 'Please use Capabilities and not Roles in [' . $key . '] ref:https://codex.wordpress.org/Roles_and_Capabilities', $nextStackPtr, 'UseCapabilitiesNotRoles' );
-				} elseif ( trim( $tokens[ $nextStackPtr ]['code'] , '\'\"' ) == T_VARIABLE ) {
-					$phpcsFile->addWarning( 'The capability in [' . $key . '] is a variable. Please check to ensure it is a capability and not a role. ref:https://codex.wordpress.org/Roles_and_Capabilities', $nextStackPtr, 'UseCapabilitiesNotRoles' );
-				}
-			}
+		$position = $this->target_functions[ $matched_content ];
+		if ( ! isset( $parameters[ $position ] ) ) {
+			return;
 		}
-	}//end process()
+
+		$matched_parameter = $this->strip_quotes( $parameters[ $position ]['raw'] );
+		if ( isset( $this->core_capabilities[ $matched_parameter ] ) ) {
+			return;
+		}
+
+		if ( isset( $this->core_roles[ $matched_parameter ] ) ) {
+			$this->phpcsFile->addError(
+				'Use capabilities and not roles in %s().',
+				$stackPtr,
+				'RoleFound',
+				array( $matched_content )
+			);
+		} else {
+			$this->phpcsFile->addWarning(
+				'The parameter %s is an unknown role or capability. Check %s() to ensure it is a capability and not a role.',
+				$stackPtr,
+				'PossibleRoleFound',
+				array( $matched_parameter, $matched_content )
+			);
+		}
+
+	}
+
 }

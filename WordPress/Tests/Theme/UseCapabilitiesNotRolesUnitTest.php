@@ -1,66 +1,62 @@
 <?php
 /**
- * WordPress Coding Standard
- * UseCapabilitiesNotRoles Unit Test.
+ * Unit test class for WordPress Coding Standard.
  *
- * @category PHP
- * @package  PHP_CodeSniffer
- * @link     https://make.wordpress.org/core/handbook/best-practices/coding-standards/
+ * @package WPCS\WordPressCodingStandards
+ * @link    https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards
+ * @license https://opensource.org/licenses/MIT MIT
  */
 
 /**
  * Unit test class for the UseCapabilitiesNotRoles sniff.
  *
- * A sniff unit test checks a .inc file for expected violations of a single
- * coding standard. Expected errors and warnings are stored in this class.
- *
- * @category  PHP
- * @package   PHP_CodeSniffer
- * @author    khacoder
+ * @package WPCS\WordPressCodingStandards
+ * @since   0.xx.0
  */
-class WordPress_Tests_Theme_UseCapabilitiesNotRolesUnitTest extends AbstractSniffUnitTest
-{
+class WordPress_Tests_Theme_UseCapabilitiesNotRolesUnitTest extends AbstractSniffUnitTest {
+
 	/**
 	 * Returns the lines where errors should occur.
 	 *
-	 * The key of the array should represent the line number and the value
-	 * should represent the number of errors that should occur on that line.
-	 *
-	 * @return array(int => int)
+	 * @return array <int line number> => <int number of errors>
 	 */
 	public function getErrorList() {
 		return array(
-			6 => 1,
-			7 => 1,
-			8 => 1,
-			9 => 1,
+			6  => 1,
+			7  => 1,
+			8  => 1,
+			9  => 1,
 			10 => 1,
 			11 => 1,
 			12 => 1,
 			13 => 1,
 			14 => 1,
 			15 => 1,
-			24 => 1,
+			23 => 1,
 			36 => 1,
 			39 => 1,
 		);
-	}//end getErrorList()
+	}
 
 	/**
 	 * Returns the lines where warnings should occur.
 	 *
-	 * The key of the array should represent the line number and the value
-	 * should represent the number of warnings that should occur on that line.
-	 *
-	 * @return array(int => int)
+	 * @return array <int line number> => <int number of warnings>
 	 */
 	public function getWarningList() {
 		return array(
 			16 => 1,
 			18 => 1,
+			19 => 1,
+			20 => 1,
 			21 => 1,
-			30 => 1,
+			22 => 1,
+			26 => 1,
 			34 => 1,
+			35 => 1,
+			37 => 1,
+			38 => 1,
 		);
-	}//end getWarningList()
-}//end class
+	}
+
+} // End class.
