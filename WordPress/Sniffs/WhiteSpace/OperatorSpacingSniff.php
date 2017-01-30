@@ -74,7 +74,9 @@ class WordPress_Sniffs_WhiteSpace_OperatorSpacingSniff implements PHP_CodeSniffe
 				$bracket = end( $tokens[ $stackPtr ]['nested_parenthesis'] );
 				if ( isset( $tokens[ $bracket ]['parenthesis_owner'] ) ) {
 					$function = $tokens[ $bracket ]['parenthesis_owner'];
-					if ( T_FUNCTION === $tokens[ $function ]['code'] ) {
+					if ( T_FUNCTION === $tokens[ $function ]['code']
+						|| T_CLOSURE === $tokens[ $function ]['code']
+					) {
 						return;
 					}
 				}
@@ -141,35 +143,28 @@ class WordPress_Sniffs_WhiteSpace_OperatorSpacingSniff implements PHP_CodeSniffe
 			if ( T_WHITESPACE !== $tokens[ ( $stackPtr - 1 ) ]['code'] ) {
 				$error = 'Expected 1 space before "%s"; 0 found';
 				$data  = array( $operator );
-				if ( isset( $phpcsFile->fixer ) ) {
-					$fix = $phpcsFile->addFixableError( $error, $stackPtr, 'NoSpaceBefore', $data );
-					if ( true === $fix ) {
-						$phpcsFile->fixer->beginChangeset();
-						$phpcsFile->fixer->addContentBefore( $stackPtr, ' ' );
-						$phpcsFile->fixer->endChangeset();
-					}
-				} else {
-					$phpcsFile->addError( $error, $stackPtr, 'NoSpaceBefore', $data );
+				$fix = $phpcsFile->addFixableError( $error, $stackPtr, 'NoSpaceBefore', $data );
+				if ( true === $fix ) {
+					$phpcsFile->fixer->beginChangeset();
+					$phpcsFile->fixer->addContentBefore( $stackPtr, ' ' );
+					$phpcsFile->fixer->endChangeset();
 				}
 			} elseif ( 1 !== strlen( $tokens[ ( $stackPtr - 1 ) ]['content'] ) && 1 !== $tokens[ ( $stackPtr - 1 ) ]['column'] ) {
 				// Don't throw an error for assignments, because other standards allow
 				// multiple spaces there to align multiple assignments.
-				if ( false === in_array( $tokens[ $stackPtr ]['code'], PHP_CodeSniffer_Tokens::$assignmentTokens, true )  ) {
+				if ( false === in_array( $tokens[ $stackPtr ]['code'], PHP_CodeSniffer_Tokens::$assignmentTokens, true ) ) {
 					$found = strlen( $tokens[ ( $stackPtr - 1 ) ]['content'] );
 					$error = 'Expected 1 space before "%s"; %s found';
 					$data  = array(
 						$operator,
 						$found,
 					);
-					if ( isset( $phpcsFile->fixer ) ) {
-						$fix = $phpcsFile->addFixableError( $error, $stackPtr, 'SpacingBefore', $data );
-						if ( true === $fix ) {
-							$phpcsFile->fixer->beginChangeset();
-							$phpcsFile->fixer->replaceToken( ( $stackPtr - 1 ), ' ' );
-							$phpcsFile->fixer->endChangeset();
-						}
-					} else {
-						$phpcsFile->addError( $error, $stackPtr, 'SpacingBefore', $data );
+
+					$fix = $phpcsFile->addFixableError( $error, $stackPtr, 'SpacingBefore', $data );
+					if ( true === $fix ) {
+						$phpcsFile->fixer->beginChangeset();
+						$phpcsFile->fixer->replaceToken( ( $stackPtr - 1 ), ' ' );
+						$phpcsFile->fixer->endChangeset();
 					}
 				}
 			} // End if().
@@ -178,15 +173,12 @@ class WordPress_Sniffs_WhiteSpace_OperatorSpacingSniff implements PHP_CodeSniffe
 				if ( T_WHITESPACE !== $tokens[ ( $stackPtr + 1 ) ]['code'] ) {
 					$error = 'Expected 1 space after "%s"; 0 found';
 					$data  = array( $operator );
-					if ( isset( $phpcsFile->fixer ) ) {
-						$fix = $phpcsFile->addFixableError( $error, $stackPtr, 'NoSpaceAfter', $data );
-						if ( true === $fix ) {
-							$phpcsFile->fixer->beginChangeset();
-							$phpcsFile->fixer->addContent( $stackPtr, ' ' );
-							$phpcsFile->fixer->endChangeset();
-						}
-					} else {
-						$phpcsFile->addError( $error, $stackPtr, 'NoSpaceAfter', $data );
+
+					$fix = $phpcsFile->addFixableError( $error, $stackPtr, 'NoSpaceAfter', $data );
+					if ( true === $fix ) {
+						$phpcsFile->fixer->beginChangeset();
+						$phpcsFile->fixer->addContent( $stackPtr, ' ' );
+						$phpcsFile->fixer->endChangeset();
 					}
 				} elseif ( 1 !== strlen( $tokens[ ( $stackPtr + 1 ) ]['content'] ) ) {
 					$found = strlen( $tokens[ ( $stackPtr + 1 ) ]['content'] );
@@ -195,15 +187,12 @@ class WordPress_Sniffs_WhiteSpace_OperatorSpacingSniff implements PHP_CodeSniffe
 						$operator,
 						$found,
 					);
-					if ( isset( $phpcsFile->fixer ) ) {
-						$fix = $phpcsFile->addFixableError( $error, $stackPtr, 'SpacingAfter', $data );
-						if ( true === $fix ) {
-							$phpcsFile->fixer->beginChangeset();
-							$phpcsFile->fixer->replaceToken( ( $stackPtr + 1 ), ' ' );
-							$phpcsFile->fixer->endChangeset();
-						}
-					} else {
-						$phpcsFile->addError( $error, $stackPtr, 'SpacingAfter', $data );
+
+					$fix = $phpcsFile->addFixableError( $error, $stackPtr, 'SpacingAfter', $data );
+					if ( true === $fix ) {
+						$phpcsFile->fixer->beginChangeset();
+						$phpcsFile->fixer->replaceToken( ( $stackPtr + 1 ), ' ' );
+						$phpcsFile->fixer->endChangeset();
 					}
 				} // End if().
 			} // End if().

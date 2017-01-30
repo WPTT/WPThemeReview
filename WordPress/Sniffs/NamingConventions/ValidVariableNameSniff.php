@@ -31,18 +31,18 @@ class WordPress_Sniffs_NamingConventions_ValidVariableNameSniff extends PHP_Code
 	 * @var array
 	 */
 	public $php_reserved_vars = array(
-		'_SERVER',
-		'_GET',
-		'_POST',
-		'_REQUEST',
-		'_SESSION',
-		'_ENV',
-		'_COOKIE',
-		'_FILES',
-		'GLOBALS',
-		'http_response_header',
-		'HTTP_RAW_POST_DATA',
-		'php_errormsg',
+		'_SERVER'              => true,
+		'_GET'                 => true,
+		'_POST'                => true,
+		'_REQUEST'             => true,
+		'_SESSION'             => true,
+		'_ENV'                 => true,
+		'_COOKIE'              => true,
+		'_FILES'               => true,
+		'GLOBALS'              => true,
+		'http_response_header' => true,
+		'HTTP_RAW_POST_DATA'   => true,
+		'php_errormsg'         => true,
 	);
 
 	/**
@@ -52,6 +52,7 @@ class WordPress_Sniffs_NamingConventions_ValidVariableNameSniff extends PHP_Code
 	 */
 	protected $wordpress_mixed_case_vars = array(
 		'EZSQL_ERROR' => true,
+		'PHP_SELF'    => true,
 	);
 
 	/**
@@ -60,12 +61,12 @@ class WordPress_Sniffs_NamingConventions_ValidVariableNameSniff extends PHP_Code
 	 * @var array
 	 */
 	public $whitelisted_mixed_case_member_var_names = array(
-		'ID',
-		'comment_ID',
-		'comment_post_ID',
-		'post_ID',
-		'comment_author_IP',
-		'cat_ID',
+		'ID'                => true,
+		'comment_ID'        => true,
+		'comment_post_ID'   => true,
+		'post_ID'           => true,
+		'comment_author_IP' => true,
+		'cat_ID'            => true,
 	);
 
 	/**
@@ -115,7 +116,7 @@ class WordPress_Sniffs_NamingConventions_ValidVariableNameSniff extends PHP_Code
 		$var_name = ltrim( $tokens[ $stack_ptr ]['content'], '$' );
 
 		// If it's a php reserved var, then its ok.
-		if ( in_array( $var_name, $this->php_reserved_vars, true ) ) {
+		if ( isset( $this->php_reserved_vars[ $var_name ] ) ) {
 			return;
 		}
 
@@ -141,7 +142,7 @@ class WordPress_Sniffs_NamingConventions_ValidVariableNameSniff extends PHP_Code
 						$obj_var_name = substr( $obj_var_name, 1 );
 					}
 
-					if ( ! in_array( $obj_var_name, $this->whitelisted_mixed_case_member_var_names, true ) && self::isSnakeCase( $obj_var_name ) === false ) {
+					if ( ! isset( $this->whitelisted_mixed_case_member_var_names[ $obj_var_name ] ) && self::isSnakeCase( $obj_var_name ) === false ) {
 						$error = 'Object property "%s" is not in valid snake_case format';
 						$data  = array( $original_var_name );
 						$phpcs_file->addError( $error, $var, 'NotSnakeCaseMemberVar', $data );
@@ -167,7 +168,7 @@ class WordPress_Sniffs_NamingConventions_ValidVariableNameSniff extends PHP_Code
 		}
 
 		if ( self::isSnakeCase( $var_name ) === false ) {
-			if ( $in_class && ! in_array( $var_name, $this->whitelisted_mixed_case_member_var_names, true ) ) {
+			if ( $in_class && ! isset( $this->whitelisted_mixed_case_member_var_names[ $var_name ] ) ) {
 				$error      = 'Object property "%s" is not in valid snake_case format';
 				$error_name = 'NotSnakeCaseMemberVar';
 			} elseif ( ! $in_class ) {
@@ -210,7 +211,7 @@ class WordPress_Sniffs_NamingConventions_ValidVariableNameSniff extends PHP_Code
 		}
 
 		$error_data = array( $var_name );
-		if ( ! in_array( $var_name, $this->whitelisted_mixed_case_member_var_names, true ) && false === self::isSnakeCase( $var_name ) ) {
+		if ( ! isset( $this->whitelisted_mixed_case_member_var_names[ $var_name ] ) && false === self::isSnakeCase( $var_name ) ) {
 			$error = 'Member variable "%s" is not in valid snake_case format.';
 			$phpcs_file->addError( $error, $stack_ptr, 'MemberNotSnakeCase', $error_data );
 		}
@@ -233,8 +234,13 @@ class WordPress_Sniffs_NamingConventions_ValidVariableNameSniff extends PHP_Code
 		if ( preg_match_all( '|[^\\\]\${?([a-zA-Z_\x7f-\xff][a-zA-Z0-9_\x7f-\xff]*)|', $tokens[ $stack_ptr ]['content'], $matches ) > 0 ) {
 			foreach ( $matches[1] as $var_name ) {
 				// If it's a php reserved var, then its ok.
-				if ( in_array( $var_name, $this->php_reserved_vars, true ) ) {
+				if ( isset( $this->php_reserved_vars[ $var_name ] ) ) {
 					continue;
+				}
+
+				// Likewise if it is a mixed-case var used by WordPress core.
+				if ( isset( $this->wordpress_mixed_case_vars[ $var_name ] ) ) {
+					return;
 				}
 
 				if ( false === self::isSnakeCase( $var_name ) ) {
@@ -270,11 +276,39 @@ class WordPress_Sniffs_NamingConventions_ValidVariableNameSniff extends PHP_Code
 			return;
 		}
 
+		if ( ! empty( $this->customPropertiesWhitelist ) ) {
+			if ( ! is_array( $this->customPropertiesWhitelist ) ) {
+				// Incorrectly set property.
+				$phpcs_file->addWarning(
+					'The customVariablesWhitelist property should be provided with type="array".',
+					0,
+					'WrongFormatCustomVariablesWhitelist'
+				);
+			}
+
+			// Potentially correct incorrect format.
+			if ( is_string( $this->customPropertiesWhitelist ) ) {
+				$this->customPropertiesWhitelist = array_map( 'trim', explode( ',', $this->customPropertiesWhitelist ) );
+			} else {
+				// Otherwise, disregard the value.
+				$this->customPropertiesWhitelist = array();
+			}
+		}
+
 		if ( ! empty( $this->customVariablesWhitelist ) ) {
-			$this->customPropertiesWhitelist = array_merge(
-				$this->customPropertiesWhitelist,
-				$this->customVariablesWhitelist
-			);
+			if ( ! is_array( $this->customVariablesWhitelist ) ) {
+				// Incorrectly set property, disregard it.
+				$phpcs_file->addWarning(
+					'The customVariablesWhitelist property should be provided with type="array".',
+					0,
+					'WrongFormatCustomVariablesWhitelist'
+				);
+			} else {
+				$this->customPropertiesWhitelist = array_merge(
+					$this->customPropertiesWhitelist,
+					$this->customVariablesWhitelist
+				);
+			}
 
 			$phpcs_file->addWarning(
 				'The customVariablesWhitelist property is deprecated in favor of customPropertiesWhitelist.',
@@ -286,7 +320,7 @@ class WordPress_Sniffs_NamingConventions_ValidVariableNameSniff extends PHP_Code
 		if ( ! empty( $this->customPropertiesWhitelist ) ) {
 			$this->whitelisted_mixed_case_member_var_names = array_merge(
 				$this->whitelisted_mixed_case_member_var_names,
-				$this->customPropertiesWhitelist
+				array_flip( $this->customPropertiesWhitelist )
 			);
 			$this->addedCustomProperties = true;
 		}
