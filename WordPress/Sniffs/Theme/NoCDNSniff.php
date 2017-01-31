@@ -25,31 +25,37 @@ class WordPress_Sniffs_Theme_NoCDNSniff extends WordPress_AbstractFunctionParame
 	 *
 	 * @var string
 	 */
-	protected $group_name = 'wp_enqueue_style';
+	protected $group_name = 'no_cdn';
 
 	/**
-	 * Array of functions and parameters.
+	 * Array of functions with positions.
+	 *
+	 * The number represents the position in the function call
+	 * passed variables, here the capability is to be listed.
 	 *
 	 * @since 0.xx.0
 	 *
 	 * @var array
 	 */
 	protected $target_functions = array(
-		'wp_enqueue_style' => array(
-			'bootstrapcdn.com' => 'bootstrapcdn.com',
-			'maxcdn.com'       => 'maxcdn.com',
-			'jquery.com'       => 'jquery.com',
-			'cdnjs.com'        => 'cdnjs.com',
-			'googlecode.com'   => 'googlecode.com',
-			),
-		'wp_enqueue_script' => array(
-			'bootstrapcdn.com' => 'bootstrapcdn.com',
-			'maxcdn.com'       => 'maxcdn.com',
-			'jquery.com'       => 'jquery.com',
-			'cdnjs.com'        => 'cdnjs.com',
-			'googlecode.com'   => 'googlecode.com',
-			),
-		);
+		'wp_enqueue_style'  => 2,
+		'wp_enqueue_script' => 2,
+	);
+
+	/**
+	 * Array of CDN URLs.
+	 *
+	 * @since 0.xx.0
+	 *
+	 * @var array
+	 */
+	protected $cdn_urls = array(
+		'bootstrapcdn.com' => 'bootstrapcdn.com',
+		'maxcdn.com'       => 'maxcdn.com',
+		'jquery.com'       => 'jquery.com',
+		'cdnjs.com'        => 'cdnjs.com',
+		'googlecode.com'   => 'googlecode.com',
+	);
 
 	/**
 	 * Process the parameters of a matched function.
@@ -65,16 +71,19 @@ class WordPress_Sniffs_Theme_NoCDNSniff extends WordPress_AbstractFunctionParame
 	 */
 	public function process_parameters( $stackPtr, $group_name, $matched_content, $parameters ) {
 
-		if ( ! isset( $parameters[2] ) ) {
+		$position = $this->target_functions[ $matched_content ];
+
+		if ( ! isset( $parameters[ $position ] ) ) {
 			return;
 		}
 
-		$matched_parameter = $this->strip_quotes( $parameters[2]['raw'] );
+		$matched_parameter = $this->strip_quotes( $parameters[ $position ]['raw'] );
 
-		foreach ( $this->target_functions[ $matched_content ] as $key => $value ) {
-			if ( false !== strpos( $matched_parameter, $value ) ) {
+		foreach ( $this->cdn_urls as $cdn ) {
+			if ( false !== strpos( $matched_parameter, $cdn ) ) {
 				$this->phpcsFile->addError( 'Loading resources from %s is prohibited.', $stackPtr, $matched_parameter . ' Found', array( $matched_parameter ) );
 			}
 		}
+
 	}
 }
