@@ -22,7 +22,6 @@ class WordPress_Tests_Theme_NoCDNUnitTest extends AbstractSniffUnitTest {
 	 */
 	public function getErrorList() {
 		return array(
-			2  => 1,
 			3  => 1,
 			4  => 1,
 			5  => 1,
@@ -33,18 +32,7 @@ class WordPress_Tests_Theme_NoCDNUnitTest extends AbstractSniffUnitTest {
 			10 => 1,
 			11 => 1,
 			12 => 1,
-			22 => 1,
-			27 => 1,
-			28 => 1,
-			29 => 1,
-			30 => 1,
-			31 => 1,
-			32 => 1,
-			33 => 1,
-			34 => 1,
-			35 => 1,
-			36 => 1,
-			37 => 1,
+			13 => 1,
 		);
 	}
 
@@ -54,11 +42,7 @@ class WordPress_Tests_Theme_NoCDNUnitTest extends AbstractSniffUnitTest {
 	 * @return array <int line number> => <int number of warnings>
 	 */
 	public function getWarningList() {
-		return array(
-			15 => 1,
-			16 => 1,
-			23 => 1,
-		);
+		return array();
 	}
 
 }

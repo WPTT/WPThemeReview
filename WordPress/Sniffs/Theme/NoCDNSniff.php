@@ -16,71 +16,64 @@
  *
  * @since   0.xx.0
  */
-class WordPress_Sniffs_Theme_NoCDNSniff implements PHP_CodeSniffer_Sniff {
+class WordPress_Sniffs_Theme_NoCDNSniff extends WordPress_AbstractFunctionParameterSniff {
 
 	/**
-	 * A list of tokenizers this sniff supports.
+	 * The group name for this group of functions.
+	 *
+	 * @since 0.xx.0
+	 *
+	 * @var string
+	 */
+	protected $group_name = 'wp_enqueue_style';
+
+	/**
+	 * Array of functions and parameters.
+	 *
+	 * @since 0.xx.0
 	 *
 	 * @var array
 	 */
-	public $supportedTokenizers = array(
-		'PHP',
-		'JS',
-		'CSS',
-	);
-
-	/**
-	 * Returns an array of tokens this test wants to listen for.
-	 *
-	 * @return array
-	 */
-	public function register() {
-		return array(
-			T_STRING,
-			T_CONSTANT_ENCAPSED_STRING,
-			T_INLINE_HTML,
-			T_URL,
+	protected $target_functions = array(
+		'wp_enqueue_style' => array(
+			'bootstrapcdn.com' => 'bootstrapcdn.com',
+			'maxcdn.com'       => 'maxcdn.com',
+			'jquery.com'       => 'jquery.com',
+			'cdnjs.com'        => 'cdnjs.com',
+			'googlecode.com'   => 'googlecode.com',
+			),
+		'wp_enqueue_script' => array(
+			'bootstrapcdn.com' => 'bootstrapcdn.com',
+			'maxcdn.com'       => 'maxcdn.com',
+			'jquery.com'       => 'jquery.com',
+			'cdnjs.com'        => 'cdnjs.com',
+			'googlecode.com'   => 'googlecode.com',
+			),
 		);
-	}
 
 	/**
-	 * Processes this test, when one of its tokens is encountered.
+	 * Process the parameters of a matched function.
 	 *
-	 * @param PHP_CodeSniffer_File $phpcsFile The file being scanned.
-	 * @param int                  $stackPtr  The position of the current token
-	 *                                        in the stack passed in $tokens.
+	 * @since 0.xx.0
+	 *
+	 * @param int    $stackPtr        The position of the current token in the stack.
+	 * @param array  $group_name      The name of the group which was matched.
+	 * @param string $matched_content The token content (function name) which was matched.
+	 * @param array  $parameters      Array with information about the parameters.
 	 *
 	 * @return void
 	 */
-	public function process( PHP_CodeSniffer_File $phpcsFile, $stackPtr ) {
-		$tokens = $phpcsFile->getTokens();
-		$token  = $tokens[ $stackPtr ];
+	public function process_parameters( $stackPtr, $group_name, $matched_content, $parameters ) {
 
-		// List of CDN's not allowed.
-		$cdn_list = array(
-			'maxcdn.bootstrapcdn.com',
-			'netdna.bootstrapcdn.com',
-			'html5shiv.googlecode.com/svn/trunk/html5.js',
-			'oss.maxcdn.com',
-			'code.jquery.com',
-			'cdnjs.com',
-		);
+		if ( ! isset( $parameters[2] ) ) {
+			return;
+		}
 
-		if ( preg_match_all( '#(?:(?:http|https|ftp):)?//([[:alnum:]\-\.])+(\\.)([[:alnum:]]){2,4}([[:blank:][:alnum:]\/\+\=\%\&\_\\\.\~\?\-]*)#' , $token['content'], $matches, PREG_SET_ORDER ) ) {
+		$matched_parameter = $this->strip_quotes( $parameters[2]['raw'] );
 
-			foreach ( $matches as $match ) {
-				$found = false;
-
-				foreach ( $cdn_list as $cdn_url ) {
-					if ( false !== strpos( $match[0], $cdn_url ) ) {
-						$phpcsFile->addError( 'Found the URL to a CDN: (' . $cdn_url . ') The CSS or JavaScript resources cannot be loaded from a CDN but must be bundled.', $stackPtr, 'CDNFound' );
-						$found = true;
-					}
-				}
-
-				if ( false !== strpos( $match[0], 'cdn' ) && false === $found ) {
-					$phpcsFile->addWarning( 'Possible URL of a CDN has been found. The CSS or JavaScript resources cannot be loaded from a CDN but must be bundled.', $stackPtr, 'CDNFound' );
-				}
+		foreach ( $this->target_functions[ $matched_content ] as $key => $value ) {
+			if ( false !== strpos( $matched_parameter, $value ) ) {
+				$this->phpcsFile->addError( 'Loading resources from %s is prohibited.', $stackPtr, $matched_parameter . ' Found', array( $matched_parameter ) );
 			}
 		}
 	}
