@@ -513,6 +513,10 @@ class WordPress_Sniffs_WP_I18nSniff extends WordPress_Sniff {
 				continue;
 			}
 
+			if ( empty( $arg['tokens'] ) ) {
+				continue;
+			}
+
 			foreach ( $arg['tokens'] as $token ) {
 				if ( empty( $token['content'] ) ) {
 					continue;
