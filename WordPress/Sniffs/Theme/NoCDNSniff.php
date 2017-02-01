@@ -84,6 +84,10 @@ class WordPress_Sniffs_Theme_NoCDNSniff extends WordPress_AbstractFunctionParame
 
 		$matched_parameter = $this->strip_quotes( $parameters[ $position ]['raw'] );
 
+		if ( false === strpos( $matched_parameter, '.com' ) && false === strpos( $matched_parameter, '.net' ) ) {
+			return;
+		}
+
 		foreach ( $this->cdn_urls as $cdn ) {
 			if ( false !== strpos( $matched_parameter, $cdn ) ) {
 				$this->phpcsFile->addError( 'Loading resources from %s is prohibited.', $stackPtr, $matched_parameter . ' Found', array( $matched_parameter ) );
