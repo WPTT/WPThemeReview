@@ -50,11 +50,16 @@ class WordPress_Sniffs_Theme_NoCDNSniff extends WordPress_AbstractFunctionParame
 	 * @var array
 	 */
 	protected $cdn_urls = array(
-		'bootstrapcdn.com' => 'bootstrapcdn.com',
-		'maxcdn.com'       => 'maxcdn.com',
-		'jquery.com'       => 'jquery.com',
-		'cdnjs.com'        => 'cdnjs.com',
-		'googlecode.com'   => 'googlecode.com',
+		'bootstrapcdn.com'      => 'bootstrapcdn.com',
+		'maxcdn.com'            => 'maxcdn.com',
+		'jquery.com'            => 'jquery.com',
+		'cdnjs.com'             => 'cdnjs.com',
+		'googlecode.com'        => 'googlecode.com',
+		'cdnjs.cloudflare.com'  => 'cdnjs.cloudflare.com',
+		'ajax.googleapis.com'   => 'ajax.googleapis.com',
+		'cdn.jsdelivr.net'      => 'cdn.jsdelivr.net',
+		'use.fontawesome.com'   => 'use.fontawesome.com',
+		'opensource.keycdn.com' => 'opensource.keycdn.com',
 	);
 
 	/**
@@ -82,6 +87,7 @@ class WordPress_Sniffs_Theme_NoCDNSniff extends WordPress_AbstractFunctionParame
 		foreach ( $this->cdn_urls as $cdn ) {
 			if ( false !== strpos( $matched_parameter, $cdn ) ) {
 				$this->phpcsFile->addError( 'Loading resources from %s is prohibited.', $stackPtr, $matched_parameter . ' Found', array( $matched_parameter ) );
+				break;
 			}
 		}
 
