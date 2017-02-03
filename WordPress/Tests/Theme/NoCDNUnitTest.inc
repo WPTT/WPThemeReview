@@ -25,3 +25,6 @@ wp_enqueue_script( 'bootstrap', 'http://opensource.keycdn.com/file.ext' );  // B
 /* ----- links in php comments will not be picked up ----- */
 //wp_enqueue_script( 'bootstrap', 'https://oss.maxcdn.com/libs/respond.js' );
 //wp_enqueue_style( 'bootstrap', 'http://maxcdn.bootstrapcdn.com/bootstrap/file.ext' );
+
+// Google fonts are allowed.
+wp_enqueue_style( 'google-fonts', 'https://fonts.googleapis.com/css?family=Open+Sans' );  // OK
