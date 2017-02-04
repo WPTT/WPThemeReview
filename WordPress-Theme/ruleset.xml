@@ -99,4 +99,12 @@
 		<message>eval() is a security risk so not allowed.</message>
 	</rule>
 
+	<!--
+		Use WordPress functionality and features first, if available.
+		https://make.wordpress.org/themes/handbook/review/required/#core-functionality-and-features
+	-->
+	<rule ref="WordPress.WP.AlternativeFunctions.file_system_read">
+		<type>error</type>
+	</rule>
+
 </ruleset>
