@@ -27,6 +27,14 @@
 	<!-- No ByteOrderMark allowed - important to prevent issues with content being sent before headers. -->
 	<rule ref="Generic.Files.ByteOrderMark" />
 
+	<!-- No removal of the admin bar allowed -->
+	<!-- Covers: https://github.com/wordpress/theme-check/blob/master/checks/adminbar.php -->
+	<rule ref="WordPress.VIP.AdminBarRemoval">
+		<properties>
+			<property name="remove_only" value="false" />
+		</properties>
+	</rule>
+
 	<!-- Check that the I18N functions are used correctly. -->
 	<!-- This sniff can also check the text domain, provided it's passed to PHPCS. -->
 	<rule ref="WordPress.WP.I18n" />
