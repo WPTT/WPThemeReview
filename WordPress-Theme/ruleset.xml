@@ -53,6 +53,9 @@
 	</rule>
 
 
+	<!-- No ByteOrderMark allowed - important to prevent issues with content being sent before headers. -->
+	<rule ref="Generic.Files.ByteOrderMark" />
+
 
 	<!-- Validate and/or sanitize untrusted data before entering into the database. -->
 	<!--

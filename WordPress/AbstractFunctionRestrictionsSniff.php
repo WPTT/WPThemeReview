@@ -261,7 +261,7 @@ abstract class WordPress_AbstractFunctionRestrictionsSniff extends WordPress_Sni
 	 * @since 0.11.0 Split out from the `process()` method.
 	 *
 	 * @param int    $stackPtr        The position of the current token in the stack.
-	 * @param array  $group_name      The name of the group which was matched.
+	 * @param string $group_name      The name of the group which was matched.
 	 * @param string $matched_content The token content (function name) which was matched.
 	 *
 	 * @return int|void Integer stack pointer to skip forward or void to continue
@@ -269,16 +269,10 @@ abstract class WordPress_AbstractFunctionRestrictionsSniff extends WordPress_Sni
 	 */
 	public function process_matched_token( $stackPtr, $group_name, $matched_content ) {
 
-		if ( 'warning' === $this->groups[ $group_name ]['type'] ) {
-			$addWhat = array( $this->phpcsFile, 'addWarning' );
-		} else {
-			$addWhat = array( $this->phpcsFile, 'addError' );
-		}
-
-		call_user_func(
-			$addWhat,
+		$this->addMessage(
 			$this->groups[ $group_name ]['message'],
 			$stackPtr,
+			( 'error' === $this->groups[ $group_name ]['type'] ),
 			$this->string_to_errorcode( $group_name . '_' . $matched_content ),
 			array( $matched_content )
 		);
