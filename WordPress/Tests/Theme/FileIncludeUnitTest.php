@@ -21,7 +21,28 @@ class WordPress_Tests_Theme_FileIncludeUnitTest extends AbstractSniffUnitTest {
 	 * @return array <int line number> => <int number of errors>
 	 */
 	public function getErrorList() {
-		return array();
+		return array(
+			11 => 1,
+			12 => 1,
+			13 => 1,
+			14 => 1,
+			15 => 1,
+			18 => 1,
+			19 => 1,
+			20 => 1,
+			21 => 1,
+			22 => 1,
+			25 => 1,
+			26 => 1,
+			27 => 1,
+			28 => 1,
+			29 => 1,
+			32 => 1,
+			33 => 1,
+			34 => 1,
+			35 => 1,
+			36 => 1,
+		);
 	}
 
 	/**
@@ -37,30 +58,6 @@ class WordPress_Tests_Theme_FileIncludeUnitTest extends AbstractSniffUnitTest {
 			6 => 1,
 			7 => 1,
 			8 => 1,
-
-			11 => 1,
-			12 => 1,
-			13 => 1,
-			14 => 1,
-			15 => 1,
-
-			18 => 1,
-			19 => 1,
-			20 => 1,
-			21 => 1,
-			22 => 1,
-
-			25 => 1,
-			26 => 1,
-			27 => 1,
-			28 => 1,
-			29 => 1,
-
-			32 => 1,
-			33 => 1,
-			34 => 1,
-			35 => 1,
-			36 => 1,
 		);
 	}
 
