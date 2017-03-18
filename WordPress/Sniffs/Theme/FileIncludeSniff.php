@@ -8,7 +8,15 @@
  */
 
 /**
- * Check if a theme uses include(_once) or require(_once) when get_template_part() should be used.
+ * Check if a theme loads one of the restricted files:
+ * - wp-load.php
+ * - wp-admin/admin.php
+ * - media.php
+ * - plugin.php
+ *
+ * Also check if a theme uses include(_once) or require(_once)
+ * when get_template_part() should be used.
+ *
  *
  * @link    https://make.wordpress.org/themes/handbook/review/required/#core-functionality-and-features
  *
@@ -26,6 +34,13 @@ class WordPress_Sniffs_Theme_FileIncludeSniff implements PHP_CodeSniffer_Sniff {
 	protected $file_whitelist = array(
 		'functions.php' => true,
 	);
+
+	/**
+	 * Pattern to match the restricted files.
+	 *
+	 * @var string
+	 */
+	protected $restricted_files = '/(\/|\'|\"|\s)(wp-load|wp-admin\/admin|media|plugin)\.php/';
 
 	/**
 	 * Returns an array of tokens this test wants to listen for.
@@ -51,6 +66,26 @@ class WordPress_Sniffs_Theme_FileIncludeSniff implements PHP_CodeSniffer_Sniff {
 
 		$file_name = basename( $phpcsFile->getFileName() );
 
+		// Get the starting position of the include/require statement.
+		$incStatementStart = $phpcsFile->findStartOfStatement( $stackPtr );
+
+		// Get the ending position of the include/require statement.
+		$incStatementEnd = $phpcsFile->findEndOfStatement( $incStatementStart + 1 );
+
+		// Get what's inside the include/require function.
+		$incStatemen = $phpcsFile->getTokensAsString( $incStatementStart, ( $incStatementEnd - $incStatementStart ) );
+
+		// Check if we are dealing with one of the restricted files, and throw an errow if yes.
+		if ( preg_match( $this->restricted_files, $incStatemen ) ) {
+			$phpcsFile->addError(
+				$error = '%s() is not allowed to load the restricted files such as wp-load.php, wp-admin/admin.php, media.php, and plugin.php. See http://bit.ly/2nw9zet for more details.',
+				$stackPtr,
+				'FileIncludeFound',
+				array( trim( $tokens[ $stackPtr ][ 'content' ] ) )
+			);
+		}
+
+		// If not, check if it's functions.php or not.
 		if ( ! isset( $this->file_whitelist[ $file_name ] ) ) {
 			$phpcsFile->addWarning(
 				'Check that %s is not being used to load template files. "get_template_part()" should be used to load template files.' ,
