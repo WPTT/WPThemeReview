@@ -17,7 +17,6 @@
  * Also check if a theme uses include(_once) or require(_once)
  * when get_template_part() should be used.
  *
- *
  * @link    https://make.wordpress.org/themes/handbook/review/required/#core-functionality-and-features
  *
  * @package WPCS\WordPressCodingStandards
@@ -81,7 +80,7 @@ class WordPress_Sniffs_Theme_FileIncludeSniff implements PHP_CodeSniffer_Sniff {
 				$error = '%s() is not allowed to load the restricted files such as wp-load.php, wp-admin/admin.php, media.php, and plugin.php. See http://bit.ly/2nw9zet for more details.',
 				$stackPtr,
 				'FileIncludeFound',
-				array( trim( $tokens[ $stackPtr ][ 'content' ] ) )
+				array( trim( $tokens[ $stackPtr ]['content'] ) )
 			);
 		}
 
