@@ -99,4 +99,7 @@
 		<message>eval() is a security risk so not allowed.</message>
 	</rule>
 
+	<!-- Check for deprecated WordPress functions. -->
+	<rule ref="WordPress.WP.DeprecatedFunctions"/>
+
 </ruleset>
