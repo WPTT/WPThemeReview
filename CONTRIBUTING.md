@@ -12,6 +12,13 @@ Once a commit is made to `develop`, a PR should be opened from `develop` into `m
 
 # Considerations when writing sniffs
 
+## Public properties
+
+When writing sniffs, always remember that any `public` sniff property can be overruled via a custom ruleset by the end-user.
+Only make a property `public` if that is the intended behaviour.
+
+When you introduce new `public` sniff properties, or your sniff extends a class from which you inherit a `public` property, please don't forget to update the [public properties wiki page](https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards/wiki/Customizable-sniff-properties) with the relevant details once your PR has been merged into the `develop` branch.
+
 ## Whitelist comments
 
 Sometimes, a sniff will flag code which upon further inspection by a human turns out to be OK.
@@ -23,16 +30,15 @@ Example usage:
 ```php
 class WordPress_Sniffs_CSRF_NonceVerificationSniff extends WordPress_Sniff {
 
-	public function process( PHP_CodeSniffer_File $phpcsFile, $stackPtr ) {
-		$this->init( $phpcsFile );
-		
+	public function process_token( $stackPtr ) {
+
 		// Check something.
 		
 		if ( $this->has_whitelist_comment( 'CSRF', $stackPtr ) ) {
 			return;
 		}
 		
-		$phpcsFile->addError( ... );
+		$this->phpcsFile->addError( ... );
 	}
 }
 ```
@@ -53,17 +59,7 @@ vendor/bin/phpunit --filter WordPress tests/AllTests.php
 
 Expected output:
 
-~~~sh
-PHPUnit 4.8.26 by Sebastian Bergmann and contributors.
-
-....................................
-
-Tests generated 90 unique error codes; 28 were fixable (31.11%)
-
-Time: 3.08 second, Memory: 24.00MB
-
-OK (36 tests, 0 assertions)
-~~~
+[![asciicast](https://asciinema.org/a/98078.png)](https://asciinema.org/a/98078)
 
 You can ignore any skipped tests as these are for `PHP_CodeSniffer` external tools.
 
@@ -79,7 +75,7 @@ the `WordPress/Sniffs/Arrays/ArrayDeclarationSniff.php` sniff has unit test clas
 `WordPress/Tests/Arrays/ArrayDeclarationUnitTest.php` that check `WordPress/Tests/Arrays/ArrayDeclarationUnitTest.inc`
 file. See the file naming convention? Lets take a look what inside `ArrayDeclarationUnitTest.php`:
 
-~~~php
+```php
 ...
 class WordPress_Tests_Arrays_ArrayDeclarationUnitTest extends AbstractSniffUnitTest
 {
@@ -96,13 +92,13 @@ class WordPress_Tests_Arrays_ArrayDeclarationUnitTest extends AbstractSniffUnitT
     }//end getErrorList()
 }
 ...
-~~~
+```
 
 Also note the class name convention. The method `getErrorList` MUST return an array of line numbers
 indicating errors (when running `phpcs`) found in `WordPress/Tests/Arrays/ArrayDeclarationUnitTest.inc`.
 If you run:
 
-~~~sh
+```sh
 $ cd /path-to-cloned/phpcs
 $ ./scripts/phpcs --standard=Wordpress -s CodeSniffer/Standards/WordPress/Tests/Arrays/ArrayDeclarationUnitTest.inc
 ...
@@ -131,7 +127,7 @@ FOUND 8 ERROR(S) AND 2 WARNING(S) AFFECTING 6 LINE(S)
     |         | (WordPress.WhiteSpace.OperatorSpacing)
 --------------------------------------------------------------------------------
 ....
-~~~
+```
 
 You'll see the line number and number of ERRORs we need to return in `getErrorList` method.
 In line #31 there are two ERRORs belong to `WordPress.WhiteSpace.OperatorSpacing` sniff and

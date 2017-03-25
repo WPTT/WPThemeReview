@@ -12,6 +12,7 @@
 * [Rulesets](#rulesets)
     + [Standards subsets](#standards-subsets)
     + [Using a custom ruleset](#using-a-custom-ruleset)
+    + [Customizing sniff behaviour](#customizing-sniff-behaviour)
     + [Recommended additional rulesets](#recommended-additional-rulesets)
 * [How to use](#how-to-use)
     + [Command line](#command-line)
@@ -33,13 +34,15 @@ This project is a collection of [PHP_CodeSniffer](https://github.com/squizlabs/P
 
  - In April 2009 original project from [Urban Giraffe](http://urbangiraffe.com/articles/wordpress-codesniffer-standard/) was published.
  - In May 2011 the project was forked on GitHub by [Chris Adams](http://chrisadams.me.uk/).
- - In April 2012 [XWP](https://xwp.co/) started to dedicate resources to the development and currently maintains the project, along with [J.D. Grimes](https://github.com/JDGrimes) and [Gary Jones](https://github.com/GaryJones).
+ - In April 2012 [XWP](https://xwp.co/) started to dedicate resources to development and lead creation of the the sniffs and rulesets for `WordPress-Core`, `WordPress-VIP` (WordPress.com VIP), and `WordPress-Extra`.
+ - In 2015, [J.D. Grimes](https://github.com/JDGrimes) began significant contributions, along with maintanance from [Gary Jones](https://github.com/GaryJones).
+ - In 2016, [Juliette Reinders Folmer](https://github.com/jrfnl) began contributing heavily, adding more commits in a year than anyone else in 5 years previous since the project's inception.
 
 ## Installation
 
 ### Requirements
 
-The WordPress Coding Standards require the [PHP_CodeSniffer](https://github.com/squizlabs/PHP_CodeSniffer) version **2.7.0** or higher.
+The WordPress Coding Standards require PHP 5.2 or higher and the [PHP_CodeSniffer](https://github.com/squizlabs/PHP_CodeSniffer) version **2.8.1** or higher.
 The WordPress Coding Standards are currently [not compatible with the upcoming PHPCS 3 release](https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards/issues/718).
 
 ### Composer
@@ -104,7 +107,13 @@ You can use the following as standard names when invoking `phpcs` to select snif
 
 ### Using a custom ruleset
 
-If you need to further customize selection of sniffs for your project — you can create custom `ruleset.xml` standard. See provided [project.ruleset.xml.example](project.ruleset.xml.example) file and [fully annotated example](https://github.com/squizlabs/PHP_CodeSniffer/wiki/Annotated-ruleset.xml) in PHP_CodeSniffer documentation.
+If you need to further customize the selection of sniffs for your project — you can create a custom `phpcs.xml` standard. See provided [project.ruleset.xml.example](project.ruleset.xml.example) file and [fully annotated example](https://github.com/squizlabs/PHP_CodeSniffer/wiki/Annotated-ruleset.xml) in PHP_CodeSniffer documentation.
+
+### Customizing sniff behaviour
+
+The WordPress Coding Standard contains a number of sniffs which are configurable. This means that you can turn parts of the sniff on or off, or change the behaviour by setting a property for the sniff in your custom `ruleset.xml` file.
+
+You can find a complete list of all the properties you can change in the [wiki](https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards/wiki/Customizable-sniff-properties).
 
 ### Recommended additional rulesets
 
@@ -152,7 +161,7 @@ Will result in following output:
 
 ### PhpStorm
 
-Please see “[PHP Code Sniffer with WordPress Coding Standards Integration](https://www.jetbrains.com/phpstorm/help/using-php-code-sniffer-tool.html)” in PhpStorm documentation.
+Please see “[PHP Code Sniffer with WordPress Coding Standards Integration](https://confluence.jetbrains.com/display/PhpStorm/WordPress+Development+using+PhpStorm#WordPressDevelopmentusingPhpStorm-PHPCodeSnifferwithWordPressCodingStandardsIntegrationinPhpStorm)” in PhpStorm documentation.
 
 ### Sublime Text
 

@@ -22,14 +22,20 @@ class WordPress_Tests_VIP_DirectDatabaseQueryUnitTest extends AbstractSniffUnitT
 	 */
 	public function getErrorList() {
 		return array(
-			6  => 1,
-			8  => 1,
-			32 => 1,
-			34 => 1,
-			50 => 1,
-			78 => 1,
-			79 => 1,
-			80 => 1,
+			6   => 1,
+			8   => 1,
+			32  => 1,
+			34  => 1,
+			50  => 1,
+			78  => 1,
+			79  => 1,
+			80  => 1,
+			170 => 1,
+			178 => 1,
+			190 => 1,
+			250 => 1,
+			257 => 1,
+			274 => ( PHP_VERSION_ID >= 50300 ) ? 1 : 0, // PHPCS on PHP 5.2 does not recognize T_NOWDOC.
 		);
 
 	}
@@ -46,6 +52,7 @@ class WordPress_Tests_VIP_DirectDatabaseQueryUnitTest extends AbstractSniffUnitT
 			38  => 1,
 			50  => 1,
 			112 => 1,
+			250 => 1,
 		);
 
 	}
