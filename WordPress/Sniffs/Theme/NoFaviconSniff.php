@@ -88,12 +88,7 @@ class NoFaviconSniff extends Sniff {
 
 		$this->favicon_regex = sprintf( self::REGEX_TEMPLATE, implode( '|', $regex_parts ) );
 
-		$tokens   = Tokens::$stringTokens;
-		$tokens[] = T_INLINE_HTML;
-		$tokens[] = T_HEREDOC;
-		$tokens[] = T_NOWDOC;
-
-		return $tokens;
+		return Tokens::$textStringTokens;
 	}
 
 	/**
