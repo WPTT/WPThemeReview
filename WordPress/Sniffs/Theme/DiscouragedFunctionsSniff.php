@@ -23,7 +23,7 @@ class WordPress_Sniffs_Theme_DiscouragedFunctionsSniff extends WordPress_Abstrac
 	 * 	'lambda' => array(
 	 * 		'type'      => 'error' | 'warning',
 	 * 		'message'   => 'Use anonymous functions instead please!',
-	 * 		'functions' => array( 'eval', 'create_function' ),
+	 * 		'functions' => array( 'file_get_contents', 'create_function' ),
 	 * 	)
 	 * )
 	 *
@@ -33,7 +33,7 @@ class WordPress_Sniffs_Theme_DiscouragedFunctionsSniff extends WordPress_Abstrac
 		return array(
 			'site_url' => array(
 				'type'      => 'warning',
-				'message'   => '%s() found. Use home_url() instead.',
+				'message'   => '%s() found. In most cases home_url() is a better function to use.',
 				'functions' => array(
 					'site_url',
 					'get_home_url',
@@ -41,7 +41,7 @@ class WordPress_Sniffs_Theme_DiscouragedFunctionsSniff extends WordPress_Abstrac
 			),
 			'archive_title' => array(
 				'type'      => 'warning',
-				'message'   => '%s() found. Use the_archive_title() instead.',
+				'message'   => '%s() found. In most cases the_archive_title() is a better function to use.',
 				'functions' => array(
 					'single_cat_title',
 					'single_tag_title',
@@ -49,7 +49,7 @@ class WordPress_Sniffs_Theme_DiscouragedFunctionsSniff extends WordPress_Abstrac
 			),
 			'archive_description' => array(
 				'type'      => 'warning',
-				'message'   => '%s() found. Use the_archive_description() instead.',
+				'message'   => '%s() found. In most cases the_archive_description() is a better function to use.',
 				'functions' => array(
 					'category_description',
 					'tag_description',
@@ -57,7 +57,7 @@ class WordPress_Sniffs_Theme_DiscouragedFunctionsSniff extends WordPress_Abstrac
 			),
 			'archive_pagination' => array(
 				'type'      => 'warning',
-				'message'   => '%s() found. Use the_posts_pagination() instead.',
+				'message'   => '%s() found. In most cases the_posts_pagination() is a better function to use.',
 				'functions' => array(
 					'paginate_links',
 				),
