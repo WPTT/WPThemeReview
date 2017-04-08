@@ -39,7 +39,7 @@ class WordPress_Tests_Theme_NoAutoGenerateUnitTest extends AbstractSniffUnitTest
 					39 => 2,
 					45 => 2,
 				);
-				break;
+
 			case 'NoAutoGenerateUnitTest.css':
 				return array(
 					3  => 1,
@@ -51,10 +51,9 @@ class WordPress_Tests_Theme_NoAutoGenerateUnitTest extends AbstractSniffUnitTest
 					14 => 1,
 					15 => 1,
 				);
-				break;
+
 			default:
 				return array();
-				break;
 		}
 	}
 
