@@ -42,6 +42,7 @@ class WordPress_Sniffs_Theme_PluginTerritoryFunctionsSniff extends WordPress_Abs
 					'add_shortcode',
 					'register_taxonomy_for_object_type',
 					'flush_rewrite_rules',
+					'add_post_type_support',
 				),
 			),
 		);
