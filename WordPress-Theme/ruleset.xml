@@ -45,6 +45,13 @@
 	<!-- Prevent path disclosure when using add_theme_page(). -->
 	<rule ref="WordPress.VIP.PluginMenuSlug"/>
 
+	<!--
+		Use a single unique theme slug – as the theme slug appears in style.css.
+		Covers: https://make.wordpress.org/themes/handbook/review/required/#language
+		The text domains still need to be passed via the CLI or defined in the XML ruleset. See: https://github.com/WPTRT/WordPress-Coding-Standards/pull/111
+	-->
+	<rule ref="WordPress.WP.I18n"/>
+
 	<!-- Do not silence error notices. e.g. Error Control Operator @.. -->
 	<rule ref="Generic.PHP.NoSilencedErrors">
 		<properties>
