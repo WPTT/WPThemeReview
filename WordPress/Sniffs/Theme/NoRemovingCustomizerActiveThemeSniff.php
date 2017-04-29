@@ -63,7 +63,7 @@ class WordPress_Sniffs_Theme_NoRemovingCustomizerActiveThemeSniff implements PHP
 		$tokens = $phpcsFile->getTokens();
 		$token  = $tokens[ $stackPtr ];
 		$content = trim( strtolower( $token['content'] ) );
-		// This will help us find 
+		// This will help us find our section and control names no matter what type of quotes that are used.
 		$content = str_replace(array('"', "'", " "), '', $content);
 
 		// No need to check an empty string.
