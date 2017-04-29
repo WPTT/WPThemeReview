@@ -45,7 +45,6 @@ class WordPress_Sniffs_Theme_NoRemovingCustomizerActiveThemeSniff implements PHP
 	 */
 	public function register() {
 		$tokens   = PHP_CodeSniffer_Tokens::$stringTokens;
-		$tokens[] = T_INLINE_HTML;
 		return $tokens;
 	}
 
