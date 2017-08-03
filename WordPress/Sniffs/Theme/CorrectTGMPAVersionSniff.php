@@ -231,8 +231,14 @@ class WordPress_Sniffs_Theme_CorrectTGMPAVersionSniff extends WordPress_Sniff {
 		 * Walk the doc block comments to find if this is the correct version of TGMPA.
 		 * Normally this will be in the first doc block encountered, so this is not as 'heavy' as it looks.
 		 */
-		$next_doc_block = 0;
-		$version        = false;
+		$next_doc_block    = 0;
+		$version           = false;
+		$pcre_esc_flavours = array_map(
+			'preg_quote',
+			$this->valid_flavours,
+			array_fill( 0, count( $this->valid_flavours ), '`' )
+		);
+		$pcre_flavours     = implode( '|', $pcre_esc_flavours );
 
 		do {
 			$next_doc_block	= $this->phpcsFile->findNext( T_DOC_COMMENT_OPEN_TAG, ( $next_doc_block + 1 ) );
@@ -253,6 +259,7 @@ class WordPress_Sniffs_Theme_CorrectTGMPAVersionSniff extends WordPress_Sniff {
 			if ( preg_match( '`^([0-9\.]+(?:-(?:alpha|beta|RC)(?:[0-9])?)?)`', $tags['version'], $matches ) > 0 ) {
 
 				$version = $matches[1];
+				$this->phpcsFile->recordMetric( 0, 'Version', $version );
 
 				if ( true === version_compare( $this->current_version, $version, '>' ) ) {
 					$error = 'Upgrade of the included TGM plugin activation library required. Current version: %s. Found version: %s';
@@ -271,6 +278,20 @@ class WordPress_Sniffs_Theme_CorrectTGMPAVersionSniff extends WordPress_Sniff {
 					$this->phpcsFile->addError( $error, 0, 'unstableVersion', $data );
 				}
 				unset( $matches, $error, $data );
+
+				if ( strpos( $tags['version'], 'for parent theme' ) !== false ) {
+					$this->phpcsFile->recordMetric( 0, 'Used in', 'parent theme' );
+				} elseif ( strpos( $tags['version'], 'for child theme' ) !== false ) {
+					$this->phpcsFile->recordMetric( 0, 'Used in', 'child theme' );
+				} else {
+					$this->phpcsFile->recordMetric( 0, 'Used in', 'unknown' );
+				}
+
+				if ( preg_match( '`for publication on (' . $pcre_flavours . ')`i', $tags['version'], $flavour_match ) > 0 ) {
+					$this->phpcsFile->recordMetric( 0, 'Publication Channel', $flavour_match[1] );
+				} else {
+					$this->phpcsFile->recordMetric( 0, 'Publication Channel', 'n/a' );
+				}
 
 				if ( ! empty( $this->required_flavour ) && isset( $this->valid_flavours[ $this->required_flavour ] ) ) {
 					$flavour_phrase = sprintf( 'for publication on %s', $this->valid_flavours[ $this->required_flavour ] );
@@ -291,7 +312,8 @@ class WordPress_Sniffs_Theme_CorrectTGMPAVersionSniff extends WordPress_Sniff {
 
 		// The file was recognized as TGMPA, but no valid file doc block for TGMPA was found.
 		if ( false === $version ) {
-			$error = 'Version unknown';
+
+			$this->phpcsFile->recordMetric( 0, 'Version', 'unknown' );
 
 			$error = 'The TGM Plugin Activation library was detected, but the version could not be determined. Ensure you use the latest stable release of the TGM Plugin Activation library (%s). Download a fresh copy now using the Custom TGMPA Generator at http://tgmpluginactivation.com/download/';
 			$data  = array( $this->current_version );
@@ -364,6 +386,7 @@ class WordPress_Sniffs_Theme_CorrectTGMPAVersionSniff extends WordPress_Sniff {
 				}
 
 				if ( false === $function_exists || 'tgmpa' !== $param ) {
+					$this->phpcsFile->recordMetric( 0, 'Manual editing detected', 'yes' );
 					$this->phpcsFile->addError(
 						'Manual editing of the TGM Plugin Activation file detected. Your edit will cause fatal errors for end-users. Download an official copy using the Custom TGMPA Generator. http://tgmpluginactivation.com/download/',
 						0,
@@ -371,6 +394,8 @@ class WordPress_Sniffs_Theme_CorrectTGMPAVersionSniff extends WordPress_Sniff {
 						array(),
 						9
 					);
+				} else {
+					$this->phpcsFile->recordMetric( 0, 'Manual editing detected', 'no' );
 				}
 				break;
 			}
