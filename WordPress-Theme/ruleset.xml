@@ -100,4 +100,7 @@
 	<!-- Check for deprecated WordPress functions. -->
 	<rule ref="WordPress.WP.DeprecatedFunctions"/>
 
+	<!-- Check for use of discouraged WordPress constants. -->
+	<rule ref="WordPress.WP.DiscouragedConstants"/>
+
 </ruleset>
