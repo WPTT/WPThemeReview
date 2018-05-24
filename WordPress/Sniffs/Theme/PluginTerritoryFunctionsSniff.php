@@ -25,7 +25,7 @@ class WordPress_Sniffs_Theme_PluginTerritoryFunctionsSniff extends WordPress_Abs
 	 * 	'lambda' => array(
 	 * 		'type'      => 'error' | 'warning',
 	 * 		'message'   => 'Use anonymous functions instead please!',
-	 * 		'functions' => array( 'eval', 'create_function' ),
+	 * 		'functions' => array( 'file_get_contents', 'create_function' ),
 	 * 	)
 	 * )
 	 *
