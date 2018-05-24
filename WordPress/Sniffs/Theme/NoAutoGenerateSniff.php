@@ -10,6 +10,7 @@
 namespace WordPress\Sniffs\Theme;
 
 use WordPress\Sniff;
+use PHP_CodeSniffer_Tokens as Tokens;
 
 /**
  * Check for auto generated themes.
@@ -50,7 +51,7 @@ class NoAutoGenerateSniff extends Sniff {
 	 * @return array
 	 */
 	public function register() {
-		$tokens   = PHP_CodeSniffer_Tokens::$stringTokens;
+		$tokens   = Tokens::$stringTokens;
 		$tokens[] = T_INLINE_HTML;
 		$tokens[] = T_HEREDOC;
 		$tokens[] = T_STRING; // Functions named after or prefixed with the generator name.

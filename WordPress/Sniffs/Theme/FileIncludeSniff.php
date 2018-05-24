@@ -10,6 +10,7 @@
 namespace WordPress\Sniffs\Theme;
 
 use WordPress\Sniff;
+use PHP_CodeSniffer_Tokens as Tokens;
 
 /**
  * Check if a theme uses include(_once) or require(_once) when get_template_part() should be used.
@@ -37,7 +38,7 @@ class FileIncludeSniff extends Sniff {
 	 * @return array
 	 */
 	public function register() {
-		return PHP_CodeSniffer_Tokens::$includeTokens;
+		return Tokens::$includeTokens;
 	}
 
 	/**
