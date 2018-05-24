@@ -10,6 +10,7 @@
 namespace WordPress\Sniffs\Theme;
 
 use WordPress\Sniff;
+use PHP_CodeSniffer_Tokens as Tokens;
 
 /**
  * Check for hardcoded favicons instead of using core implementation.
@@ -87,7 +88,7 @@ class NoFaviconSniff extends Sniff {
 
 		$this->favicon_regex = sprintf( self::REGEX_TEMPLATE, implode( '|', $regex_parts ) );
 
-		$tokens   = PHP_CodeSniffer_Tokens::$stringTokens;
+		$tokens   = Tokens::$stringTokens;
 		$tokens[] = T_INLINE_HTML;
 		$tokens[] = T_HEREDOC;
 		$tokens[] = T_NOWDOC;

@@ -10,6 +10,7 @@
 namespace WordPress\Sniffs\Theme;
 
 use WordPress\Sniff;
+use PHP_CodeSniffer_Tokens as Tokens;
 
 /**
  * Restricts the use of the <title> tag, unless it is within a <svg> tag.
@@ -35,7 +36,7 @@ class NoTitleTagSniff extends Sniff {
 	 * @return array
 	 */
 	public function register() {
-		$tokens                  = PHP_CodeSniffer_Tokens::$stringTokens;
+		$tokens                  = Tokens::$stringTokens;
 		$tokens[ T_INLINE_HTML ] = T_INLINE_HTML;
 		$tokens[ T_HEREDOC ]     = T_HEREDOC;
 		$tokens[ T_NOWDOC ]      = T_NOWDOC;
