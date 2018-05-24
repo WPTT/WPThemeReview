@@ -32,7 +32,6 @@ class PluginTerritoryFunctionsUnitTest extends AbstractSniffUnitTest {
 			6 => 1,
 			7 => 1,
 		);
-
 	}
 
 	/**
@@ -42,7 +41,6 @@ class PluginTerritoryFunctionsUnitTest extends AbstractSniffUnitTest {
 	 */
 	public function getWarningList() {
 		return array();
-
 	}
 
 } // End class.

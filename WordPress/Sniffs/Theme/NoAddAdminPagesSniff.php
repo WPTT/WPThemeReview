@@ -26,18 +26,17 @@ class NoAddAdminPagesSniff extends AbstractFunctionRestrictionsSniff {
 	 * Groups of functions to restrict.
 	 *
 	 * Example: groups => array(
-	 * 	'lambda' => array(
-	 * 		'type'      => 'error' | 'warning',
-	 * 		'message'   => 'Use anonymous functions instead please!',
-	 * 		'functions' => array( 'file_get_contents', 'create_function' ),
-	 * 	)
+	 *  'lambda' => array(
+	 *      'type'      => 'error' | 'warning',
+	 *      'message'   => 'Use anonymous functions instead please!',
+	 *      'functions' => array( 'file_get_contents', 'create_function' ),
+	 *  )
 	 * )
 	 *
 	 * @return array
 	 */
 	public function getGroups() {
 		return array(
-
 			'add_menu_pages' => array(
 				'type'      => 'error',
 				'message'   => 'Themes should use <strong>add_theme_page()</strong> for adding admin pages. Found %s.',

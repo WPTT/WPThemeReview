@@ -26,8 +26,8 @@ class NoTitleTagUnitTest extends AbstractSniffUnitTest {
 	 */
 	public function getErrorList() {
 		return array(
-			7 => 1,
-			9 => 1,
+			7  => 1,
+			9  => 1,
 			19 => 1,
 			24 => 1,
 			26 => 1,
@@ -40,7 +40,6 @@ class NoTitleTagUnitTest extends AbstractSniffUnitTest {
 			47 => 1,
 			50 => 1,
 		);
-
 	}
 
 	/**
@@ -50,7 +49,6 @@ class NoTitleTagUnitTest extends AbstractSniffUnitTest {
 	 */
 	public function getWarningList() {
 		return array();
-
 	}
 
 } // End class.

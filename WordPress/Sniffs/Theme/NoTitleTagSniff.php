@@ -82,7 +82,7 @@ class NoTitleTagSniff extends Sniff {
 				// Skip the next lines until the closing svg tag, but do check any content
 				// on this line before the svg tag.
 				$this->in_svg[ $filename ] = true;
-				$content      = trim( substr( $content, 0, ( strpos( $content, '<svg' ) ) ) );
+				$content                   = trim( substr( $content, 0, ( strpos( $content, '<svg' ) ) ) );
 			} else {
 				// Ok, we have open and close svg tag on the same line with possibly content before and/or after.
 				$before  = trim( substr( $content, 0, ( strpos( $content, '<svg' ) ) ) );
@@ -93,7 +93,11 @@ class NoTitleTagSniff extends Sniff {
 
 		// Now let's do the check for the <title> tag.
 		if ( false !== strpos( $content, '<title' ) ) {
-			$this->phpcsFile->addError( "The title tag must not be used. Use add_theme_support( 'title-tag' ) instead.", $stackPtr, 'TagFound' );
+			$this->phpcsFile->addError(
+				"The title tag must not be used. Use add_theme_support( 'title-tag' ) instead.",
+				$stackPtr,
+				'TagFound'
+			);
 		}
 
 	} // End process().

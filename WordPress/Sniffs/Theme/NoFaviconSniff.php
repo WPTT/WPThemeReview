@@ -81,8 +81,8 @@ class NoFaviconSniff extends Sniff {
 		$regex_parts = array();
 
 		foreach ( $this->attribute_blacklist as $key => $values ) {
-			$values = array_map( 'preg_quote', $values, array_fill( 0, count( $values ), '`' ) );
-			$values = implode( '|', $values );
+			$values        = array_map( 'preg_quote', $values, array_fill( 0, count( $values ), '`' ) );
+			$values        = implode( '|', $values );
 			$regex_parts[] = sprintf( self::REGEX_ATTR_TEMPLATE, preg_quote( $key, '`' ), $values );
 		}
 
@@ -105,7 +105,11 @@ class NoFaviconSniff extends Sniff {
 		$token = $this->tokens[ $stackPtr ];
 
 		if ( preg_match( $this->favicon_regex, $token['content'] ) > 0 ) {
-			$this->phpcsFile->addError( 'Code for favicon found. Favicons are handled by the "Site Icon" setting in the customizer since version 4.3.' , $stackPtr, 'NoFavicon' );
+			$this->phpcsFile->addError(
+				'Code for favicon found. Favicons are handled by the "Site Icon" setting in the customizer since WP version 4.3.',
+				$stackPtr,
+				'NoFavicon'
+			);
 		}
 	}
 
