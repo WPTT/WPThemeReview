@@ -7,13 +7,17 @@
  * @license https://opensource.org/licenses/MIT MIT
  */
 
+namespace WordPress\Tests\Theme;
+
+use PHP_CodeSniffer\Tests\Standards\AbstractSniffUnitTest;
+
 /**
  * Unit test class for the NoFavicon sniff.
  *
  * @package WPCS\WordPressCodingStandards
  * @since   0.xx.0
  */
-class WordPress_Tests_Theme_NoFaviconUnitTest extends AbstractSniffUnitTest {
+class NoFaviconUnitTest extends AbstractSniffUnitTest {
 
 	/**
 	 * Returns the lines where errors should occur.
