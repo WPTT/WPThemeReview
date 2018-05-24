@@ -43,4 +43,4 @@ class PluginTerritoryFunctionsUnitTest extends AbstractSniffUnitTest {
 		return array();
 	}
 
-} // End class.
+}

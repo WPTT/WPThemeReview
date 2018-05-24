@@ -51,4 +51,4 @@ class PluginTerritoryFunctionsSniff extends AbstractFunctionRestrictionsSniff {
 		);
 	}
 
-} // End class.
+}

@@ -51,4 +51,4 @@ class NoAddAdminPagesUnitTest extends AbstractSniffUnitTest {
 		return array();
 	}
 
-} // End class.
+}
