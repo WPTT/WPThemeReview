@@ -52,7 +52,7 @@ class FileIncludeSniff extends Sniff {
 
 		if ( ! isset( $this->file_whitelist[ $file_name ] ) ) {
 			$this->phpcsFile->addWarning(
-				'Check that %s is not being used to load template files. "get_template_part()" should be used to load template files.' ,
+				'Check that %s is not being used to load template files. "get_template_part()" should be used to load template files.',
 				$stackPtr,
 				'FileIncludeFound',
 				array( $token['content'] )
