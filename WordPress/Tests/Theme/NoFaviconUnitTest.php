@@ -39,8 +39,8 @@ class NoFaviconUnitTest extends AbstractSniffUnitTest {
 			21 => 1,
 			24 => 1,
 			25 => 1,
-			29 => ( PHP_VERSION_ID >= 50300 ) ? 1 : 0, // PHPCS on PHP 5.2 does not recognize T_NOWDOC.
-			30 => ( PHP_VERSION_ID >= 50300 ) ? 1 : 0, // PHPCS on PHP 5.2 does not recognize T_NOWDOC.
+			29 => 1,
+			30 => 1,
 		);
 	}
 

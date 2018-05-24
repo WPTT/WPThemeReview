@@ -32,14 +32,13 @@ class NoTitleTagUnitTest extends AbstractSniffUnitTest {
 			24 => 1,
 			26 => 1,
 			28 => 1,
-			// PHP 5.2 has an issue tokenizing `<s` so splits the string into two.
-			30 => ( PHP_VERSION_ID >= 50300 ) ? 1 : 2,
+			30 => 1,
 			34 => 1,
 			37 => 1,
 			40 => 1,
 			43 => 1,
-			47 => ( PHP_VERSION_ID >= 50300 ) ? 1 : 0, // PHPCS on PHP 5.2 does not recognize T_NOWDOC.
-			50 => ( PHP_VERSION_ID >= 50300 ) ? 1 : 0, // PHPCS on PHP 5.2 does not recognize T_NOWDOC.
+			47 => 1,
+			50 => 1,
 		);
 
 	}
