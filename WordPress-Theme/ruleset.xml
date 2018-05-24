@@ -58,6 +58,7 @@
 		once the PR has been merged and the miminmum PHPCS version has been increased.
 		https://github.com/squizlabs/PHP_CodeSniffer/pull/1247
 	-->
+	<rule ref="WordPress.VIP.ValidatedSanitizedInput"/>
 	<rule ref="WordPress.VIP.ValidatedSanitizedInput.InputNotValidated">
 		<type>warning</type>
 	</rule>
@@ -77,6 +78,7 @@
 		once the PR has been merged and the miminmum PHPCS version has been increased.
 		https://github.com/squizlabs/PHP_CodeSniffer/pull/1247
 	-->
+	<rule ref="WordPress.XSS.EscapeOutput"/>
 	<rule ref="WordPress.XSS.EscapeOutput.UnsafePrintingFunction">
 		<type>warning</type>
 	</rule>
