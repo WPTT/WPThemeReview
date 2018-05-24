@@ -7,6 +7,11 @@
  * @license https://opensource.org/licenses/MIT MIT
  */
 
+namespace WordPress\Sniffs\VIP;
+
+use WordPress\Sniff;
+use PHP_CodeSniffer_Tokens as Tokens;
+
 /**
  * Flag cron schedules less than 15 minutes.
  *
@@ -17,11 +22,26 @@
  * @since   0.3.0
  * @since   0.11.0 - Extends the WordPress_Sniff class.
  *                 - Now deals correctly with WP time constants.
+ * @since   0.13.0 Class name changed: this class is now namespaced.
+ * @since   0.14.0 The minimum cron interval tested against is now configurable.
  */
-class WordPress_Sniffs_VIP_CronIntervalSniff extends WordPress_Sniff {
+class CronIntervalSniff extends Sniff {
+
+	/**
+	 * Minimum allowed cron interval in seconds.
+	 *
+	 * Defaults to 900 (= 15 minutes), which is the requirement for the VIP platform.
+	 *
+	 * @since 0.14.0
+	 *
+	 * @var int
+	 */
+	public $min_interval = 900;
 
 	/**
 	 * Known WP Time constant names and their value.
+	 *
+	 * @since 0.11.0
 	 *
 	 * @var array
 	 */
@@ -55,7 +75,7 @@ class WordPress_Sniffs_VIP_CronIntervalSniff extends WordPress_Sniff {
 	 * @return void
 	 */
 	public function process_token( $stackPtr ) {
-		$token  = $this->tokens[ $stackPtr ];
+		$token = $this->tokens[ $stackPtr ];
 
 		if ( 'cron_schedules' !== $this->strip_quotes( $token['content'] ) ) {
 			return;
@@ -63,7 +83,7 @@ class WordPress_Sniffs_VIP_CronIntervalSniff extends WordPress_Sniff {
 
 		// If within add_filter.
 		$functionPtr = $this->phpcsFile->findPrevious( T_STRING, key( $token['nested_parenthesis'] ) );
-		if ( 'add_filter' !== $this->tokens[ $functionPtr ]['content'] ) {
+		if ( false === $functionPtr || 'add_filter' !== $this->tokens[ $functionPtr ]['content'] ) {
 			return;
 		}
 
@@ -73,7 +93,7 @@ class WordPress_Sniffs_VIP_CronIntervalSniff extends WordPress_Sniff {
 		}
 
 		// Detect callback function name.
-		$callbackArrayPtr = $this->phpcsFile->findNext( PHP_CodeSniffer_Tokens::$emptyTokens, $callback['start'], ( $callback['end'] + 1 ), true );
+		$callbackArrayPtr = $this->phpcsFile->findNext( Tokens::$emptyTokens, $callback['start'], ( $callback['end'] + 1 ), true );
 
 		// If callback is array, get second element.
 		if ( false !== $callbackArrayPtr
@@ -162,12 +182,23 @@ class WordPress_Sniffs_VIP_CronIntervalSniff extends WordPress_Sniff {
 			}
 		}
 
-		if ( isset( $interval ) && $interval < 900 ) {
-			$this->phpcsFile->addError( 'Scheduling crons at %s sec ( less than 15 min ) is prohibited.', $stackPtr, 'CronSchedulesInterval', array( $interval ) );
+		$this->min_interval = (int) $this->min_interval;
+
+		if ( isset( $interval ) && $interval < $this->min_interval ) {
+			$minutes = round( ( $this->min_interval / 60 ), 1 );
+			$this->phpcsFile->addError(
+				'Scheduling crons at %s sec ( less than %s minutes ) is prohibited.',
+				$stackPtr,
+				'CronSchedulesInterval',
+				array(
+					$interval,
+					$minutes,
+				)
+			);
 			return;
 		}
 
-	} // End process().
+	} // End process_token().
 
 	/**
 	 * Add warning about unclear cron schedule change.

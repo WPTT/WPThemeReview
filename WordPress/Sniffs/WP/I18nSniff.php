@@ -7,6 +7,12 @@
  * @license https://opensource.org/licenses/MIT MIT
  */
 
+namespace WordPress\Sniffs\WP;
+
+use WordPress\Sniff;
+use WordPress\PHPCSHelper;
+use PHP_CodeSniffer_Tokens as Tokens;
+
 /**
  * Makes sure WP internationalization functions are used properly.
  *
@@ -20,8 +26,9 @@
  *                 - Now has the ability to handle text-domain set via the command-line
  *                   as a comma-delimited list.
  *                   `phpcs --runtime-set text_domain my-slug,default`
+ * @since   0.13.0 Class name changed: this class is now namespaced.
  */
-class WordPress_Sniffs_WP_I18nSniff extends WordPress_Sniff {
+class I18nSniff extends Sniff {
 
 	/**
 	 * These Regexes copied from http://php.net/manual/en/function.sprintf.php#93552
@@ -119,6 +126,24 @@ class WordPress_Sniffs_WP_I18nSniff extends WordPress_Sniff {
 	public $check_translator_comments = true;
 
 	/**
+	 * Whether or not the `default` text domain is one of the allowed text domains.
+	 *
+	 * @since 0.14.0
+	 *
+	 * @var bool
+	 */
+	private $text_domain_contains_default = false;
+
+	/**
+	 * Whether or not the `default` text domain is the only allowed text domain.
+	 *
+	 * @since 0.14.0
+	 *
+	 * @var bool
+	 */
+	private $text_domain_is_default = false;
+
+	/**
 	 * Returns an array of tokens this test wants to listen for.
 	 *
 	 * @return array
@@ -139,13 +164,26 @@ class WordPress_Sniffs_WP_I18nSniff extends WordPress_Sniff {
 	public function process_token( $stack_ptr ) {
 		$token = $this->tokens[ $stack_ptr ];
 
+		// Reset defaults.
+		$this->text_domain_contains_default = false;
+		$this->text_domain_is_default       = false;
+
 		// Allow overruling the text_domain set in a ruleset via the command line.
-		$cl_text_domain = trim( PHP_CodeSniffer::getConfigData( 'text_domain' ) );
+		$cl_text_domain = trim( PHPCSHelper::get_config_data( 'text_domain' ) );
 		if ( ! empty( $cl_text_domain ) ) {
 			$this->text_domain = $cl_text_domain;
 		}
 
 		$this->text_domain = $this->merge_custom_array( $this->text_domain, array(), false );
+
+		if ( ! empty( $this->text_domain ) ) {
+			if ( in_array( 'default', $this->text_domain, true ) ) {
+				$this->text_domain_contains_default = true;
+				if ( count( $this->text_domain ) === 1 ) {
+					$this->text_domain_is_default = true;
+				}
+			}
+		}
 
 		if ( '_' === $token['content'] ) {
 			$this->phpcsFile->addError( 'Found single-underscore "_()" function when double-underscore expected.', $stack_ptr, 'SingleUnderscoreGetTextFunction' );
@@ -162,7 +200,7 @@ class WordPress_Sniffs_WP_I18nSniff extends WordPress_Sniff {
 
 		$func_open_paren_token = $this->phpcsFile->findNext( T_WHITESPACE, ( $stack_ptr + 1 ), null, true );
 		if ( false === $func_open_paren_token || T_OPEN_PARENTHESIS !== $this->tokens[ $func_open_paren_token ]['code'] ) {
-			 return;
+			return;
 		}
 
 		$arguments_tokens = array();
@@ -173,7 +211,7 @@ class WordPress_Sniffs_WP_I18nSniff extends WordPress_Sniff {
 		for ( $i = ( $func_open_paren_token + 1 ); $i < $this->tokens[ $func_open_paren_token ]['parenthesis_closer']; $i++ ) {
 			$this_token                = $this->tokens[ $i ];
 			$this_token['token_index'] = $i;
-			if ( isset( PHP_CodeSniffer_Tokens::$emptyTokens[ $this_token['code'] ] ) ) {
+			if ( isset( Tokens::$emptyTokens[ $this_token['code'] ] ) ) {
 				continue;
 			}
 			if ( T_COMMA === $this_token['code'] ) {
@@ -183,9 +221,7 @@ class WordPress_Sniffs_WP_I18nSniff extends WordPress_Sniff {
 			}
 
 			// Merge consecutive single or double quoted strings (when they span multiple lines).
-			if ( T_CONSTANT_ENCAPSED_STRING === $this_token['code'] || 'T_DOUBLE_QUOTED_STRING' === $this_token['type']
-				|| T_HEREDOC === $this_token['code'] || 'T_NOWDOC' === $this_token['type']
-			) {
+			if ( isset( Tokens::$textStringTokens[ $this_token['code'] ] ) ) {
 				for ( $j = ( $i + 1 ); $j < $this->tokens[ $func_open_paren_token ]['parenthesis_closer']; $j++ ) {
 					if ( $this_token['code'] === $this->tokens[ $j ]['code'] ) {
 						$this_token['content'] .= $this->tokens[ $j ]['content'];
@@ -205,7 +241,7 @@ class WordPress_Sniffs_WP_I18nSniff extends WordPress_Sniff {
 				}
 				$i = $this_token['parenthesis_closer'];
 			}
-		} // End for().
+		}
 
 		if ( ! empty( $argument_tokens ) ) {
 			$arguments_tokens[] = $argument_tokens;
@@ -274,7 +310,7 @@ class WordPress_Sniffs_WP_I18nSniff extends WordPress_Sniff {
 			);
 			$argument_assertions[] = array(
 				'arg_name' => 'plural',
-				'tokens' => array_shift( $arguments_tokens ),
+				'tokens'   => array_shift( $arguments_tokens ),
 			);
 			$argument_assertions[] = array(
 				'arg_name' => 'domain',
@@ -297,7 +333,7 @@ class WordPress_Sniffs_WP_I18nSniff extends WordPress_Sniff {
 				'arg_name' => 'domain',
 				'tokens'   => array_shift( $arguments_tokens ),
 			);
-		} // End if().
+		}
 
 		if ( ! empty( $arguments_tokens ) ) {
 			$this->phpcsFile->addError( 'Too many arguments for function "%s".', $func_open_paren_token, 'TooManyFunctionArgs', array( $translation_function ) );
@@ -336,15 +372,34 @@ class WordPress_Sniffs_WP_I18nSniff extends WordPress_Sniff {
 		$tokens    = $context['tokens'];
 		$arg_name  = $context['arg_name'];
 		$is_error  = empty( $context['warning'] );
-		$content   = $tokens[0]['content'];
+		$content   = isset( $tokens[0] ) ? $tokens[0]['content'] : '';
 
 		if ( empty( $tokens ) || 0 === count( $tokens ) ) {
 			$code = $this->string_to_errorcode( 'MissingArg' . ucfirst( $arg_name ) );
-			if ( 'domain' !== $arg_name || ! empty( $this->text_domain ) ) {
+			if ( 'domain' !== $arg_name ) {
+				$this->addMessage( 'Missing $%s arg.', $stack_ptr, $is_error, $code, array( $arg_name ) );
+				return false;
+			}
+
+			// Ok, we're examining a text domain, now deal correctly with the 'default' text domain.
+			if ( true === $this->text_domain_is_default ) {
+				return true;
+			}
+
+			if ( true === $this->text_domain_contains_default ) {
+				$this->phpcsFile->addWarning(
+					'Missing $%s arg. If this text string is supposed to use a WP Core translation, use the "default" text domain.',
+					$stack_ptr,
+					$code . 'Default',
+					array( $arg_name )
+				);
+			} elseif ( ! empty( $this->text_domain ) ) {
 				$this->addMessage( 'Missing $%s arg.', $stack_ptr, $is_error, $code, array( $arg_name ) );
 			}
+
 			return false;
 		}
+
 		if ( count( $tokens ) > 1 ) {
 			$contents = '';
 			foreach ( $tokens as $token ) {
@@ -359,13 +414,6 @@ class WordPress_Sniffs_WP_I18nSniff extends WordPress_Sniff {
 			$this->check_text( $context );
 		}
 
-		if ( T_CONSTANT_ENCAPSED_STRING === $tokens[0]['code'] ) {
-			if ( 'domain' === $arg_name && ! empty( $this->text_domain ) && ! in_array( $this->strip_quotes( $content ), $this->text_domain, true ) ) {
-				$this->addMessage( 'Mismatch text domain. Expected \'%s\' but got %s.', $stack_ptr, $is_error, 'TextDomainMismatch', array( implode( "' or '", $this->text_domain ), $content ) );
-				return false;
-			}
-			return true;
-		}
 		if ( T_DOUBLE_QUOTED_STRING === $tokens[0]['code'] || T_HEREDOC === $tokens[0]['code'] ) {
 			$interpolated_variables = $this->get_interpolated_variables( $content );
 			foreach ( $interpolated_variables as $interpolated_variable ) {
@@ -375,10 +423,54 @@ class WordPress_Sniffs_WP_I18nSniff extends WordPress_Sniff {
 			if ( ! empty( $interpolated_variables ) ) {
 				return false;
 			}
-			if ( 'domain' === $arg_name && ! empty( $this->text_domain ) && ! in_array( $this->strip_quotes( $content ), $this->text_domain, true ) ) {
-				$this->addMessage( 'Mismatch text domain. Expected \'%s\' but got %s.', $stack_ptr, $is_error, 'TextDomainMismatch', array( implode( "' or '", $this->text_domain ), $content ) );
-				return false;
+		}
+
+		if ( isset( Tokens::$textStringTokens[ $tokens[0]['code'] ] ) ) {
+			if ( 'domain' === $arg_name && ! empty( $this->text_domain ) ) {
+				$stripped_content = $this->strip_quotes( $content );
+
+				if ( ! in_array( $stripped_content, $this->text_domain, true ) ) {
+					$this->addMessage(
+						'Mismatched text domain. Expected \'%s\' but got %s.',
+						$stack_ptr,
+						$is_error,
+						'TextDomainMismatch',
+						array( implode( "' or '", $this->text_domain ), $content )
+					);
+					return false;
+				}
+
+				if ( true === $this->text_domain_is_default && 'default' === $stripped_content ) {
+					$fixable    = false;
+					$error      = 'No need to supply the text domain when the only accepted text-domain is "default".';
+					$error_code = 'SuperfluousDefaultTextDomain';
+
+					if ( $tokens[0]['token_index'] === $stack_ptr ) {
+						$prev = $this->phpcsFile->findPrevious( T_WHITESPACE, ( $stack_ptr - 1 ), null, true );
+						if ( false !== $prev && T_COMMA === $this->tokens[ $prev ]['code'] ) {
+							$fixable = true;
+						}
+					}
+
+					if ( false === $fixable ) {
+						$this->phpcsFile->addWarning( $error, $stack_ptr, $error_code );
+						return false;
+					}
+
+					$fix = $this->phpcsFile->addFixableWarning( $error, $stack_ptr, $error_code );
+					if ( true === $fix ) {
+						// Remove preceeding comma, whitespace and the text domain token.
+						$this->phpcsFile->fixer->beginChangeset();
+						for ( $i = $prev; $i <= $stack_ptr; $i++ ) {
+							$this->phpcsFile->fixer->replaceToken( $i, '' );
+						}
+						$this->phpcsFile->fixer->endChangeset();
+					}
+
+					return false;
+				}
 			}
+
 			return true;
 		}
 
@@ -463,9 +555,9 @@ class WordPress_Sniffs_WP_I18nSniff extends WordPress_Sniff {
 				// Prepare the strings for use a regex.
 				$replace_regexes[ $i ] = '`\Q' . $unordered_matches[ $i ] . '\E`';
 				// Note: the initial \\ is a literal \, the four \ in the replacement translate to also to a literal \.
-				$replacements[ $i ]    = str_replace( '\\', '\\\\', $suggestions[ $i ] );
+				$replacements[ $i ] = str_replace( '\\', '\\\\', $suggestions[ $i ] );
 				// Note: the $ needs escaping to prevent numeric sequences after the $ being interpreted as match replacements.
-				$replacements[ $i ]    = str_replace( '$', '\\$', $replacements[ $i ] );
+				$replacements[ $i ] = str_replace( '$', '\\$', $replacements[ $i ] );
 			}
 
 			$fix = $this->addFixableMessage(
@@ -479,11 +571,9 @@ class WordPress_Sniffs_WP_I18nSniff extends WordPress_Sniff {
 			if ( true === $fix ) {
 				$fixed_str = preg_replace( $replace_regexes, $replacements, $content, 1 );
 
-				$this->phpcsFile->fixer->beginChangeset();
 				$this->phpcsFile->fixer->replaceToken( $stack_ptr, $fixed_str );
-				$this->phpcsFile->fixer->endChangeset();
 			}
-		} // End if().
+		}
 
 		/*
 		 * NoEmptyStrings.
@@ -525,7 +615,7 @@ class WordPress_Sniffs_WP_I18nSniff extends WordPress_Sniff {
 					continue;
 				}
 
-				$previous_comment = $this->phpcsFile->findPrevious( PHP_CodeSniffer_Tokens::$commentTokens, ( $stack_ptr - 1 ) );
+				$previous_comment = $this->phpcsFile->findPrevious( Tokens::$commentTokens, ( $stack_ptr - 1 ) );
 
 				if ( false !== $previous_comment ) {
 					/*
@@ -553,8 +643,8 @@ class WordPress_Sniffs_WP_I18nSniff extends WordPress_Sniff {
 						if ( T_COMMENT === $this->tokens[ $previous_comment ]['code'] ) {
 							$comment_text = trim( $this->tokens[ $previous_comment ]['content'] );
 
-			  		   		// If it's multi-line /* */ comment, collect all the parts.
-			  		   		if ( '*/' === substr( $comment_text, -2 ) && '/*' !== substr( $comment_text, 0, 2 ) ) {
+							// If it's multi-line /* */ comment, collect all the parts.
+							if ( '*/' === substr( $comment_text, -2 ) && '/*' !== substr( $comment_text, 0, 2 ) ) {
 								for ( $i = ( $previous_comment - 1 ); 0 <= $i; $i-- ) {
 									if ( T_COMMENT !== $this->tokens[ $i ]['code'] ) {
 										break;
@@ -564,14 +654,14 @@ class WordPress_Sniffs_WP_I18nSniff extends WordPress_Sniff {
 								}
 							}
 
-			  		   		if ( true === $this->is_translators_comment( $comment_text ) ) {
+							if ( true === $this->is_translators_comment( $comment_text ) ) {
 								// Comment is ok.
 								return;
 							}
 						} elseif ( T_DOC_COMMENT_CLOSE_TAG === $this->tokens[ $previous_comment ]['code'] ) {
 							// If it's docblock comment (wrong style) make sure that it's a translators comment.
 							$db_start      = $this->phpcsFile->findPrevious( T_DOC_COMMENT_OPEN_TAG, ( $previous_comment - 1 ) );
-							$db_first_text = $this->phpcsFile->findNext( T_DOC_COMMENT_STRING, ( $db_start + 1 ),  $previous_comment );
+							$db_first_text = $this->phpcsFile->findNext( T_DOC_COMMENT_STRING, ( $db_start + 1 ), $previous_comment );
 
 							if ( true === $this->is_translators_comment( $this->tokens[ $db_first_text ]['content'] ) ) {
 								$this->phpcsFile->addWarning(
@@ -582,8 +672,8 @@ class WordPress_Sniffs_WP_I18nSniff extends WordPress_Sniff {
 								return;
 							}
 						}
-					} // End if().
-				} // End if().
+					}
+				}
 
 				// Found placeholders but no translators comment.
 				$this->phpcsFile->addWarning(
@@ -592,8 +682,8 @@ class WordPress_Sniffs_WP_I18nSniff extends WordPress_Sniff {
 					'MissingTranslatorsComment'
 				);
 				return;
-			} // End foreach().
-		} // End foreach().
+			}
+		}
 
 	} // End check_for_translator_comment().
 

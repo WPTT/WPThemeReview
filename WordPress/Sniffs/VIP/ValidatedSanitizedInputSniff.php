@@ -7,6 +7,10 @@
  * @license https://opensource.org/licenses/MIT MIT
  */
 
+namespace WordPress\Sniffs\VIP;
+
+use WordPress\Sniff;
+
 /**
  * Flag any non-validated/sanitized input ( _GET / _POST / etc. ).
  *
@@ -15,10 +19,11 @@
  * @package WPCS\WordPressCodingStandards
  *
  * @since   0.3.0
- * @since   0.4.0 This class now extends WordPress_Sniff.
- * @since   0.5.0 Method getArrayIndexKey() has been moved to WordPress_Sniff.
+ * @since   0.4.0  This class now extends WordPress_Sniff.
+ * @since   0.5.0  Method getArrayIndexKey() has been moved to WordPress_Sniff.
+ * @since   0.13.0 Class name changed: this class is now namespaced.
  */
-class WordPress_Sniffs_VIP_ValidatedSanitizedInputSniff extends WordPress_Sniff {
+class ValidatedSanitizedInputSniff extends Sniff {
 
 	/**
 	 * Check for validation functions for a variable within its own parenthesis only.
@@ -90,7 +95,9 @@ class WordPress_Sniffs_VIP_ValidatedSanitizedInputSniff extends WordPress_Sniff 
 			|| T_HEREDOC === $this->tokens[ $stackPtr ]['code']
 		) {
 			$interpolated_variables = array_map(
-				create_function( '$symbol', 'return "$" . $symbol;' ), // Replace with closure when 5.3 is minimum requirement for PHPCS.
+				function ( $symbol ) {
+					return '$' . $symbol;
+				},
 				$this->get_interpolated_variables( $this->tokens[ $stackPtr ]['content'] )
 			);
 			foreach ( array_intersect( $interpolated_variables, $superglobals ) as $bad_variable ) {
@@ -145,7 +152,7 @@ class WordPress_Sniffs_VIP_ValidatedSanitizedInputSniff extends WordPress_Sniff 
 			$this->phpcsFile->addError( 'Detected usage of a non-sanitized input variable: %s', $stackPtr, 'InputNotSanitized', $error_data );
 		}
 
-	} // End process().
+	} // End process_token().
 
 	/**
 	 * Merge custom functions provided via a custom ruleset with the defaults, if we haven't already.
@@ -160,6 +167,7 @@ class WordPress_Sniffs_VIP_ValidatedSanitizedInputSniff extends WordPress_Sniff 
 				$this->customSanitizingFunctions,
 				$this->sanitizingFunctions
 			);
+
 			$this->addedCustomFunctions['sanitize'] = $this->customSanitizingFunctions;
 		}
 
@@ -168,6 +176,7 @@ class WordPress_Sniffs_VIP_ValidatedSanitizedInputSniff extends WordPress_Sniff 
 				$this->customUnslashingSanitizingFunctions,
 				$this->unslashingSanitizingFunctions
 			);
+
 			$this->addedCustomFunctions['unslashsanitize'] = $this->customUnslashingSanitizingFunctions;
 		}
 	}

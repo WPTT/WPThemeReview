@@ -7,6 +7,11 @@
  * @license https://opensource.org/licenses/MIT MIT
  */
 
+namespace WordPress\Sniffs\VIP;
+
+use WordPress\Sniff;
+use PHP_CodeSniffer_Tokens as Tokens;
+
 /**
  * Flag Database direct queries.
  *
@@ -18,8 +23,9 @@
  * @since   0.3.0
  * @since   0.6.0  Removed the add_unique_message() function as it is no longer needed.
  * @since   0.11.0 This class now extends WordPress_Sniff.
+ * @since   0.13.0 Class name changed: this class is now namespaced.
  */
-class WordPress_Sniffs_VIP_DirectDatabaseQuerySniff extends WordPress_Sniff {
+class DirectDatabaseQuerySniff extends Sniff {
 
 	/**
 	 * List of custom cache get functions.
@@ -73,14 +79,14 @@ class WordPress_Sniffs_VIP_DirectDatabaseQuerySniff extends WordPress_Sniff {
 	 */
 	protected $methods = array(
 		'cachable' => array(
-			'delete' => true,
-			'get_var' => true,
-			'get_col' => true,
-			'get_row' => true,
+			'delete'      => true,
+			'get_var'     => true,
+			'get_col'     => true,
+			'get_row'     => true,
 			'get_results' => true,
-			'query' => true,
-			'replace' => true,
-			'update' => true,
+			'query'       => true,
+			'replace'     => true,
+			'update'      => true,
 		),
 		'noncachable' => array(
 			'insert' => true,
@@ -146,8 +152,12 @@ class WordPress_Sniffs_VIP_DirectDatabaseQuerySniff extends WordPress_Sniff {
 		}
 
 		// Check for Database Schema Changes.
-		$_pos = $stackPtr;
-		while ( $_pos = $this->phpcsFile->findNext( array( T_CONSTANT_ENCAPSED_STRING, T_DOUBLE_QUOTED_STRING, T_HEREDOC, T_NOWDOC ), ( $_pos + 1 ), $endOfStatement, false, null, true ) ) {
+		for ( $_pos = ( $stackPtr + 1 ); $_pos < $endOfStatement; $_pos++ ) {
+			$_pos = $this->phpcsFile->findNext( Tokens::$textStringTokens, $_pos, $endOfStatement, false, null, true );
+			if ( false === $_pos ) {
+				break;
+			}
+
 			if ( preg_match( '#\b(?:ALTER|CREATE|DROP)\b#i', $this->tokens[ $_pos ]['content'] ) > 0 ) {
 				$this->phpcsFile->addError( 'Attempting a database schema change is highly discouraged.', $_pos, 'SchemaChange' );
 			}
@@ -211,7 +221,7 @@ class WordPress_Sniffs_VIP_DirectDatabaseQuerySniff extends WordPress_Sniff {
 
 		return $endOfStatement;
 
-	} // End process().
+	} // End process_token().
 
 	/**
 	 * Merge custom functions provided via a custom ruleset with the defaults, if we haven't already.
@@ -230,6 +240,7 @@ class WordPress_Sniffs_VIP_DirectDatabaseQuerySniff extends WordPress_Sniff {
 				$this->customCacheGetFunctions,
 				$this->cacheGetFunctions
 			);
+
 			$this->addedCustomFunctions['cacheget'] = $this->customCacheGetFunctions;
 		}
 
@@ -238,6 +249,7 @@ class WordPress_Sniffs_VIP_DirectDatabaseQuerySniff extends WordPress_Sniff {
 				$this->customCacheSetFunctions,
 				$this->cacheSetFunctions
 			);
+
 			$this->addedCustomFunctions['cacheset'] = $this->customCacheSetFunctions;
 		}
 
@@ -246,6 +258,7 @@ class WordPress_Sniffs_VIP_DirectDatabaseQuerySniff extends WordPress_Sniff {
 				$this->customCacheDeleteFunctions,
 				$this->cacheDeleteFunctions
 			);
+
 			$this->addedCustomFunctions['cachedelete'] = $this->customCacheDeleteFunctions;
 		}
 	}

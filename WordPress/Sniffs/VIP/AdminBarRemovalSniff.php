@@ -7,6 +7,11 @@
  * @license https://opensource.org/licenses/MIT MIT
  */
 
+namespace WordPress\Sniffs\VIP;
+
+use WordPress\AbstractFunctionParameterSniff;
+use PHP_CodeSniffer_Tokens as Tokens;
+
 /**
  * Discourages removal of the admin bar.
  *
@@ -18,8 +23,9 @@
  * @since   0.11.0 - Extends the WordPress_AbstractFunctionParameterSniff class.
  *                 - Added the $remove_only property.
  *                 - Now also sniffs for manipulation of the admin bar visibility through CSS.
+ * @since   0.13.0 Class name changed: this class is now namespaced.
  */
-class WordPress_Sniffs_VIP_AdminBarRemovalSniff extends WordPress_AbstractFunctionParameterSniff {
+class AdminBarRemovalSniff extends AbstractFunctionParameterSniff {
 
 	/**
 	 * A list of tokenizers this sniff supports.
@@ -135,18 +141,20 @@ class WordPress_Sniffs_VIP_AdminBarRemovalSniff extends WordPress_AbstractFuncti
 	 */
 	public function register() {
 		// Set up all string targets.
-		$targets                  = PHP_CodeSniffer_Tokens::$stringTokens;
-		$targets[ T_INLINE_HTML ] = T_INLINE_HTML;
-		$targets[ T_HEREDOC ]     = T_HEREDOC;
-		$targets[ T_NOWDOC ]      = T_NOWDOC;
+		$this->string_tokens = Tokens::$textStringTokens;
 
-		$this->string_tokens = $targets;
+		$targets = $this->string_tokens;
 
 		// Add CSS style target.
 		$targets[] = T_STYLE;
 
 		// Set the target selectors regex only once.
-		$selectors = array_map( 'preg_quote', $this->target_css_selectors, array_fill( 0, count( $this->target_css_selectors ), '`' ) );
+		$selectors = array_map(
+			'preg_quote',
+			$this->target_css_selectors,
+			array_fill( 0, count( $this->target_css_selectors ), '`' )
+		);
+		// Parse the selectors array into the regex string.
 		$this->target_css_selectors_regex = sprintf( $this->target_css_selectors_regex, implode( '|', $selectors ) );
 
 		// Add function call targets.
@@ -193,7 +201,7 @@ class WordPress_Sniffs_VIP_AdminBarRemovalSniff extends WordPress_AbstractFuncti
 			return parent::process_token( $stackPtr );
 		}
 
-	} // End process().
+	} // End process_token().
 
 	/**
 	 * Process the parameters of a matched function.
@@ -359,13 +367,13 @@ class WordPress_Sniffs_VIP_AdminBarRemovalSniff extends WordPress_AbstractFuncti
 		$opener = $this->phpcsFile->findPrevious( T_OPEN_CURLY_BRACKET, $stackPtr );
 		if ( false !== $opener ) {
 			for ( $i = ( $opener - 1 ); $i >= 0; $i-- ) {
-				if ( isset( PHP_CodeSniffer_Tokens::$commentTokens[ $this->tokens[ $i ]['code'] ] )
+				if ( isset( Tokens::$commentTokens[ $this->tokens[ $i ]['code'] ] )
 					|| T_CLOSE_CURLY_BRACKET === $this->tokens[ $i ]['code']
 				) {
 					break;
 				}
 			}
-			$start = ( $i + 1 );
+			$start    = ( $i + 1 );
 			$selector = trim( $this->phpcsFile->getTokensAsString( $start, ( $opener - $start ) ) );
 			unset( $i );
 

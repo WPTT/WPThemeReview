@@ -7,13 +7,19 @@
  * @license https://opensource.org/licenses/MIT MIT
  */
 
+namespace WordPress\Tests\VIP;
+
+use PHP_CodeSniffer\Tests\Standards\AbstractSniffUnitTest;
+
 /**
  * Unit test class for the CronInterval sniff.
  *
  * @package WPCS\WordPressCodingStandards
+ *
  * @since   0.3.0
+ * @since   0.13.0 Class name changed: this class is now namespaced.
  */
-class WordPress_Tests_VIP_CronIntervalUnitTest extends AbstractSniffUnitTest {
+class CronIntervalUnitTest extends AbstractSniffUnitTest {
 
 	/**
 	 * Returns the lines where errors should occur.
@@ -22,13 +28,16 @@ class WordPress_Tests_VIP_CronIntervalUnitTest extends AbstractSniffUnitTest {
 	 */
 	public function getErrorList() {
 		return array(
-			12 => 1,
-			17 => 1,
-			37 => 1,
-			43 => 1,
-			53 => 1,
-			56 => 1, // False positive.
-			67 => 1,
+			12  => 1,
+			17  => 1,
+			37  => 1,
+			43  => 1,
+			53  => 1,
+			56  => 1, // False positive.
+			67  => 1,
+			85  => 1,
+			108 => 1,
+			115 => 1,
 		);
 
 	}

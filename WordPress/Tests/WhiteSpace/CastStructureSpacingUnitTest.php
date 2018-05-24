@@ -7,13 +7,19 @@
  * @license https://opensource.org/licenses/MIT MIT
  */
 
+namespace WordPress\Tests\WhiteSpace;
+
+use PHP_CodeSniffer\Tests\Standards\AbstractSniffUnitTest;
+
 /**
  * Unit test class for the CastStructureSpacing sniff.
  *
  * @package WPCS\WordPressCodingStandards
+ *
  * @since   0.3.0
+ * @since   0.13.0 Class name changed: this class is now namespaced.
  */
-class WordPress_Tests_WhiteSpace_CastStructureSpacingUnitTest extends AbstractSniffUnitTest {
+class CastStructureSpacingUnitTest extends AbstractSniffUnitTest {
 
 	/**
 	 * Returns the lines where errors should occur.
@@ -22,13 +28,13 @@ class WordPress_Tests_WhiteSpace_CastStructureSpacingUnitTest extends AbstractSn
 	 */
 	public function getErrorList() {
 		return array(
-			 3 => 2,
-			 6 => 2,
-			 9 => 2,
-			 12 => 2,
-			 15 => 2,
-			 18 => 2,
-			 21 => 2,
+			3  => 2,
+			6  => 2,
+			9  => 2,
+			12 => 2,
+			15 => 2,
+			18 => 2,
+			21 => 2,
 		);
 
 	}
