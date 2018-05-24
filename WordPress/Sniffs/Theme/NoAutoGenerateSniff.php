@@ -7,6 +7,10 @@
  * @license https://opensource.org/licenses/MIT MIT
  */
 
+namespace WordPress\Sniffs\Theme;
+
+use WordPress\Sniff;
+
 /**
  * Check for auto generated themes.
  *
@@ -14,7 +18,7 @@
  *
  * @since   0.xx.0
  */
-class WordPress_Sniffs_Theme_NoAutoGenerateSniff extends WordPress_Sniff {
+class NoAutoGenerateSniff extends Sniff {
 
 	/**
 	 * A list of tokenizers this sniff supports.

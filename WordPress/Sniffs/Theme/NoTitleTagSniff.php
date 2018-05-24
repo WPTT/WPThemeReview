@@ -7,6 +7,10 @@
  * @license https://opensource.org/licenses/MIT MIT
  */
 
+namespace WordPress\Sniffs\Theme;
+
+use WordPress\Sniff;
+
 /**
  * Restricts the use of the <title> tag, unless it is within a <svg> tag.
  *
@@ -16,7 +20,7 @@
  *
  * @since   0.xx.0
  */
-class WordPress_Sniffs_Theme_NoTitleTagSniff extends WordPress_Sniff {
+class NoTitleTagSniff extends Sniff {
 
 	/**
 	 * Property to keep track of whether a <svg> open tag has been encountered.

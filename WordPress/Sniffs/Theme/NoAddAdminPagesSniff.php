@@ -7,9 +7,11 @@
  * @license https://opensource.org/licenses/MIT MIT
  */
 
+namespace WordPress\Sniffs\Theme;
+
+use WordPress\AbstractFunctionRestrictionsSniff;
+
 /**
- * WordPress_Sniffs_Theme_NoAddAdminPagesSniff.
- *
  * Forbids the use of add_..._page() functions within Themes with the exception of `add_theme_page()`.
  *
  * @link    https://make.wordpress.org/themes/handbook/review/required/theme-check-plugin/#admin-menu
@@ -18,7 +20,7 @@
  *
  * @since   0.xx.0
  */
-class WordPress_Sniffs_Theme_NoAddAdminPagesSniff extends WordPress_Sniffs_Functions_FunctionRestrictionsSniff {
+class NoAddAdminPagesSniff extends AbstractFunctionRestrictionsSniff {
 
 	/**
 	 * Groups of functions to restrict.
