@@ -7,6 +7,10 @@
  * @license https://opensource.org/licenses/MIT MIT
  */
 
+namespace WordPress\Sniffs\Theme;
+
+use WordPress\Sniff;
+
 /**
  * Check for hardcoded favicons instead of using core implementation.
  *
@@ -16,7 +20,7 @@
  *
  * @since   0.xx.0
  */
-class WordPress_Sniffs_Theme_NoFaviconSniff extends WordPress_Sniff {
+class NoFaviconSniff extends Sniff {
 
 	/**
 	 * Regex template.

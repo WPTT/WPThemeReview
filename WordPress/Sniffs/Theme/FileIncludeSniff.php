@@ -7,6 +7,10 @@
  * @license https://opensource.org/licenses/MIT MIT
  */
 
+namespace WordPress\Sniffs\Theme;
+
+use WordPress\Sniff;
+
 /**
  * Check if a theme uses include(_once) or require(_once) when get_template_part() should be used.
  *
@@ -16,7 +20,7 @@
  *
  * @since   0.xx.0
  */
-class WordPress_Sniffs_Theme_FileIncludeSniff extends WordPress_Sniff {
+class FileIncludeSniff extends Sniff {
 
 	/**
 	 * A list of files to skip.

@@ -7,6 +7,10 @@
  * @license https://opensource.org/licenses/MIT MIT
  */
 
+namespace WordPress\Sniffs\Theme;
+
+use WordPress\AbstractFunctionRestrictionsSniff;
+
 /**
  * Restricts the use of various functions that are plugin territory.
  *
@@ -16,7 +20,7 @@
  *
  * @since   0.xx.0
  */
-class WordPress_Sniffs_Theme_PluginTerritoryFunctionsSniff extends WordPress_AbstractFunctionRestrictionsSniff {
+class PluginTerritoryFunctionsSniff extends AbstractFunctionRestrictionsSniff {
 
 	/**
 	 * Groups of functions to restrict.
