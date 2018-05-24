@@ -53,4 +53,4 @@ class NoFaviconUnitTest extends AbstractSniffUnitTest {
 		return array();
 	}
 
-} // End class.
+}

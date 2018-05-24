@@ -64,4 +64,4 @@ class NoAddAdminPagesSniff extends AbstractFunctionRestrictionsSniff {
 		);
 	}
 
-} // End class.
+}

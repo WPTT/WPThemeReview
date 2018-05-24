@@ -44,4 +44,4 @@ class FileIncludeUnitTest extends AbstractSniffUnitTest {
 		);
 	}
 
-} // End class.
+}

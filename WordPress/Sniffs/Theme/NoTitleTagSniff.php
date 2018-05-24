@@ -99,7 +99,6 @@ class NoTitleTagSniff extends Sniff {
 				'TagFound'
 			);
 		}
+	}
 
-	} // End process().
-
-} // End Class.
+}
