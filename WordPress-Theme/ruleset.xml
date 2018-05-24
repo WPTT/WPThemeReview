@@ -100,4 +100,18 @@
 	<!-- Check for deprecated WordPress functions. -->
 	<rule ref="WordPress.WP.DeprecatedFunctions"/>
 
+	<!-- Check for deprecated WordPress constants. -->
+	<!--
+		Change the type at the sniff level instead of the error code level
+		once the PR has been merged and the miminmum PHPCS version has been increased.
+		https://github.com/squizlabs/PHP_CodeSniffer/pull/1247
+	-->
+	<rule ref="WordPress.WP.DiscouragedConstants"/>
+	<rule ref="WordPress.WP.DiscouragedConstants.UsageFound">
+		<type>error</type>
+	</rule>
+	<rule ref="WordPress.WP.DiscouragedConstants.DeclarationFound">
+		<type>error</type>
+	</rule>
+
 </ruleset>
