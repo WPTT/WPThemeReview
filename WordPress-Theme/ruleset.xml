@@ -3,6 +3,8 @@
 	<!-- For more information: https://make.wordpress.org/themes/handbook/review/ -->
 	<description>Standards any Theme to be published on wordpress.org should comply with.</description>
 
+	<autoload>./../WordPress/PHPCSAliases.php</autoload>
+
 	<rule ref="WordPress.Theme"/>
 
 	<!-- No PHP short open tags allowed. -->
