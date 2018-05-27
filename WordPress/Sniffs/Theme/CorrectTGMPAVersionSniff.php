@@ -7,6 +7,11 @@
  * @license https://opensource.org/licenses/MIT MIT
  */
 
+namespace WordPress\Sniffs\Theme;
+
+use WordPress\Sniff;
+use PHP_CodeSniffer_Tokens as Tokens;
+
 /**
  * WordPress_Sniffs_Theme_CorrectTGMPAVersionSniff.
  *
@@ -22,7 +27,7 @@
  *
  * @since   0.xx.0
  */
-class WordPress_Sniffs_Theme_CorrectTGMPAVersionSniff extends WordPress_Sniff {
+class CorrectTGMPAVersionSniff extends Sniff {
 
 	const GITHUB_TGMPA_API_URL = 'https://api.github.com/repos/TGMPA/TGM-Plugin-Activation/releases/latest';
 
@@ -175,7 +180,7 @@ class WordPress_Sniffs_Theme_CorrectTGMPAVersionSniff extends WordPress_Sniff {
 					} elseif ( strpos( $name, '_Plugin_Activation' ) !== false ) {
 						// This may be TGMPA with renamed prefixes, so look for typical class comment.
 						$prev = $this->phpcsFile->findPrevious( T_WHITESPACE, ( $has_class_function - 1 ), null, true );
-						while ( false !== $prev && isset( PHP_CodeSniffer_Tokens::$commentTokens[ $this->tokens[ $prev ]['code'] ] ) ) {
+						while ( false !== $prev && isset( Tokens::$commentTokens[ $this->tokens[ $prev ]['code'] ] ) ) {
 							if ( ( T_COMMENT === $this->tokens[ $prev ]['code']
 								|| T_DOC_COMMENT_STRING === $this->tokens[ $prev ]['code'] )
 								&& ( strpos( $this->tokens[ $prev ]['content'], 'Automatic plugin installation and activation library' ) !== false
@@ -200,7 +205,7 @@ class WordPress_Sniffs_Theme_CorrectTGMPAVersionSniff extends WordPress_Sniff {
 
 				$has_class_function = $this->phpcsFile->findNext( array( T_CLASS, T_FUNCTION ), $start );
 			}
-		} // End if().
+		}
 
 		// If we're still not 100% sure this is TGMPA, exclude the file from further checks.
 		if ( false === $is_tgmpa ) {
@@ -241,7 +246,7 @@ class WordPress_Sniffs_Theme_CorrectTGMPAVersionSniff extends WordPress_Sniff {
 		$pcre_flavours     = implode( '|', $pcre_esc_flavours );
 
 		do {
-			$next_doc_block	= $this->phpcsFile->findNext( T_DOC_COMMENT_OPEN_TAG, ( $next_doc_block + 1 ) );
+			$next_doc_block = $this->phpcsFile->findNext( T_DOC_COMMENT_OPEN_TAG, ( $next_doc_block + 1 ) );
 
 			if ( false === $next_doc_block ) {
 				break;
@@ -305,7 +310,7 @@ class WordPress_Sniffs_Theme_CorrectTGMPAVersionSniff extends WordPress_Sniff {
 						);
 					}
 				}
-			} // End if().
+			}
 			break;
 
 		} while ( false !== $next_doc_block );
@@ -399,7 +404,7 @@ class WordPress_Sniffs_Theme_CorrectTGMPAVersionSniff extends WordPress_Sniff {
 				}
 				break;
 			}
-		} // End for().
+		}
 	}
 
 	/**
@@ -410,7 +415,7 @@ class WordPress_Sniffs_Theme_CorrectTGMPAVersionSniff extends WordPress_Sniff {
 	 * @return array
 	 */
 	protected function get_docblock_tags( $comment_opener ) {
-		$tags	= array();
+		$tags   = array();
 		$opener = $this->tokens[ $comment_opener ];
 
 		if ( ! isset( $opener['comment_tags'] ) ) {
@@ -426,7 +431,7 @@ class WordPress_Sniffs_Theme_CorrectTGMPAVersionSniff extends WordPress_Sniff {
 
 		for ( $i = 0; $i < $tag_count; $i++ ) {
 			$tag_token = $opener['comment_tags'][ $i ];
-			$tag	   = trim( $this->tokens[ $tag_token ]['content'], '@' );
+			$tag       = trim( $this->tokens[ $tag_token ]['content'], '@' );
 
 			$search_end = $closer;
 			if ( ( $i + 1 ) < $tag_count ) {
@@ -449,7 +454,7 @@ class WordPress_Sniffs_Theme_CorrectTGMPAVersionSniff extends WordPress_Sniff {
 			return;
 		}
 
-		$api_url	 = self::GITHUB_TGMPA_API_URL;
+		$api_url     = self::GITHUB_TGMPA_API_URL;
 		$oauth_token = false;
 		if ( '' !== $this->github_oauth_token && is_string( $this->github_oauth_token ) ) {
 			$oauth_token = $this->github_oauth_token;
@@ -463,14 +468,14 @@ class WordPress_Sniffs_Theme_CorrectTGMPAVersionSniff extends WordPress_Sniff {
 
 		$stream_options = array(
 			'http' => array(
-				'method'		   => 'GET',
-				'user_agent'	   => 'WordPress-Coding-Standards/Theme-Review-Sniffs',
+				'method'           => 'GET',
+				'user_agent'       => 'WordPress-Coding-Standards/Theme-Review-Sniffs',
 				'protocol_version' => 1.1,
 			),
 		);
 		$stream_context = stream_context_create( $stream_options );
-		$response		= file_get_contents( $api_url, false, $stream_context );
-		$headers		= $this->parse_response_headers( $http_response_header );
+		$response       = file_get_contents( $api_url, false, $stream_context );
+		$headers        = $this->parse_response_headers( $http_response_header );
 
 		// Check for invalid oAuth token response.
 		if ( 401 === $headers['response_code'] && false !== $oauth_token ) {
@@ -533,4 +538,4 @@ class WordPress_Sniffs_Theme_CorrectTGMPAVersionSniff extends WordPress_Sniff {
 		return $head;
 	}
 
-} // End class.
+}
