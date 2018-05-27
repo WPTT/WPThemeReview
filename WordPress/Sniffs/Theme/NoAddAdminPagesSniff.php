@@ -7,9 +7,11 @@
  * @license https://opensource.org/licenses/MIT MIT
  */
 
+namespace WordPress\Sniffs\Theme;
+
+use WordPress\AbstractFunctionRestrictionsSniff;
+
 /**
- * WordPress_Sniffs_Theme_NoAddAdminPagesSniff.
- *
  * Forbids the use of add_..._page() functions within Themes with the exception of `add_theme_page()`.
  *
  * @link    https://make.wordpress.org/themes/handbook/review/required/theme-check-plugin/#admin-menu
@@ -18,24 +20,23 @@
  *
  * @since   0.xx.0
  */
-class WordPress_Sniffs_Theme_NoAddAdminPagesSniff extends WordPress_Sniffs_Functions_FunctionRestrictionsSniff {
+class NoAddAdminPagesSniff extends AbstractFunctionRestrictionsSniff {
 
 	/**
 	 * Groups of functions to restrict.
 	 *
 	 * Example: groups => array(
-	 * 	'lambda' => array(
-	 * 		'type'      => 'error' | 'warning',
-	 * 		'message'   => 'Use anonymous functions instead please!',
-	 * 		'functions' => array( 'eval', 'create_function' ),
-	 * 	)
+	 *  'lambda' => array(
+	 *      'type'      => 'error' | 'warning',
+	 *      'message'   => 'Use anonymous functions instead please!',
+	 *      'functions' => array( 'file_get_contents', 'create_function' ),
+	 *  )
 	 * )
 	 *
 	 * @return array
 	 */
 	public function getGroups() {
 		return array(
-
 			'add_menu_pages' => array(
 				'type'      => 'error',
 				'message'   => 'Themes should use <strong>add_theme_page()</strong> for adding admin pages. Found %s.',
@@ -63,4 +64,4 @@ class WordPress_Sniffs_Theme_NoAddAdminPagesSniff extends WordPress_Sniffs_Funct
 		);
 	}
 
-} // End class.
+}

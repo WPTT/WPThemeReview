@@ -7,6 +7,10 @@
  * @license https://opensource.org/licenses/MIT MIT
  */
 
+namespace WordPress;
+
+use WordPress\Sniff;
+
 /**
  * Restricts array assignment of certain keys.
  *
@@ -18,7 +22,7 @@
  *                 `WordPress_Sniffs_Arrays_ArrayAssignmentRestrictionsSniff` to
  *                 `WordPress_AbstractArrayAssignmentRestrictionsSniff`.
  */
-abstract class WordPress_AbstractArrayAssignmentRestrictionsSniff extends WordPress_Sniff {
+abstract class AbstractArrayAssignmentRestrictionsSniff extends Sniff {
 
 	/**
 	 * Exclude groups.
@@ -48,11 +52,25 @@ abstract class WordPress_AbstractArrayAssignmentRestrictionsSniff extends WordPr
 	protected $excluded_groups = array();
 
 	/**
+	 * Cache for the group information.
+	 *
+	 * @since 0.13.0
+	 *
+	 * @var array
+	 */
+	protected $groups_cache = array();
+
+	/**
 	 * Returns an array of tokens this test wants to listen for.
 	 *
 	 * @return array
 	 */
 	public function register() {
+		// Retrieve the groups only once and don't set up a listener if there are no groups.
+		if ( false === $this->setup_groups() ) {
+			return array();
+		}
+
 		return array(
 			T_DOUBLE_ARROW,
 			T_CLOSE_SQUARE_BRACKET,
@@ -68,17 +86,39 @@ abstract class WordPress_AbstractArrayAssignmentRestrictionsSniff extends WordPr
 	 * This method should be overridden in extending classes.
 	 *
 	 * Example: groups => array(
-	 * 	'groupname' => array(
-	 * 		'type'     => 'error' | 'warning',
-	 * 		'message'  => 'Dont use this one please!',
-	 * 		'keys'     => array( 'key1', 'another_key' ),
-	 * 		'callback' => array( 'class', 'method' ), // Optional.
-	 * 	)
+	 *  'groupname' => array(
+	 *      'type'     => 'error' | 'warning',
+	 *      'message'  => 'Dont use this one please!',
+	 *      'keys'     => array( 'key1', 'another_key' ),
+	 *      'callback' => array( 'class', 'method' ), // Optional.
+	 *  )
 	 * )
 	 *
 	 * @return array
 	 */
 	abstract public function getGroups();
+
+	/**
+	 * Cache the groups.
+	 *
+	 * @since 0.13.0
+	 *
+	 * @return bool True if the groups were setup. False if not.
+	 */
+	protected function setup_groups() {
+		$this->groups_cache = $this->getGroups();
+
+		if ( empty( $this->groups_cache ) && empty( self::$groups ) ) {
+			return false;
+		}
+
+		// Allow for adding extra unit tests.
+		if ( ! empty( self::$groups ) ) {
+			$this->groups_cache = array_merge( $this->groups_cache, self::$groups );
+		}
+
+		return true;
+	}
 
 	/**
 	 * Processes this test, when one of its tokens is encountered.
@@ -89,15 +129,8 @@ abstract class WordPress_AbstractArrayAssignmentRestrictionsSniff extends WordPr
 	 */
 	public function process_token( $stackPtr ) {
 
-		$groups = $this->getGroups();
-
-		if ( empty( $groups ) ) {
-			$this->phpcsFile->removeTokenListener( $this, $this->register() );
-			return;
-		}
-
 		$this->excluded_groups = $this->merge_custom_array( $this->exclude );
-		if ( array_diff_key( $groups, $this->excluded_groups ) === array() ) {
+		if ( array_diff_key( $this->groups_cache, $this->excluded_groups ) === array() ) {
 			// All groups have been excluded.
 			// Don't remove the listener as the exclude property can be changed inline.
 			return;
@@ -116,9 +149,9 @@ abstract class WordPress_AbstractArrayAssignmentRestrictionsSniff extends WordPr
 		$inst = array();
 
 		/*
-		   Covers:
-		   $foo = array( 'bar' => 'taz' );
-		   $foo['bar'] = $taz;
+		 * Covers:
+		 * $foo = array( 'bar' => 'taz' );
+		 * $foo['bar'] = $taz;
 		 */
 		if ( in_array( $token['code'], array( T_CLOSE_SQUARE_BRACKET, T_DOUBLE_ARROW ), true ) ) {
 			$operator = $stackPtr; // T_DOUBLE_ARROW.
@@ -149,7 +182,7 @@ abstract class WordPress_AbstractArrayAssignmentRestrictionsSniff extends WordPr
 			return;
 		}
 
-		foreach ( $groups as $groupName => $group ) {
+		foreach ( $this->groups_cache as $groupName => $group ) {
 
 			if ( isset( $this->excluded_groups[ $groupName ] ) ) {
 				continue;
@@ -184,9 +217,9 @@ abstract class WordPress_AbstractArrayAssignmentRestrictionsSniff extends WordPr
 					);
 				}
 			}
-		} // End foreach().
+		}
 
-	} // End process().
+	} // End process_token().
 
 	/**
 	 * Callback to process each confirmed key, to check value.

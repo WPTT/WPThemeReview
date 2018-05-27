@@ -7,13 +7,17 @@
  * @license https://opensource.org/licenses/MIT MIT
  */
 
+namespace WordPress\Tests\Theme;
+
+use PHP_CodeSniffer\Tests\Standards\AbstractSniffUnitTest;
+
 /**
  * Unit test class for the NoAddAdminPages sniff.
  *
  * @package WPCS\WordPressCodingStandards
  * @since   0.xx.0
  */
-class WordPress_Tests_Theme_NoAddAdminPagesUnitTest extends AbstractSniffUnitTest {
+class NoAddAdminPagesUnitTest extends AbstractSniffUnitTest {
 
 	/**
 	 * Returns the lines where errors should occur.
@@ -22,10 +26,10 @@ class WordPress_Tests_Theme_NoAddAdminPagesUnitTest extends AbstractSniffUnitTes
 	 */
 	public function getErrorList() {
 		return array(
-			4 => 1,
-			5 => 1,
-			6 => 1,
-			9 => 1,
+			4  => 1,
+			5  => 1,
+			6  => 1,
+			9  => 1,
 			12 => 1,
 			13 => 1,
 			14 => 1,
@@ -47,4 +51,4 @@ class WordPress_Tests_Theme_NoAddAdminPagesUnitTest extends AbstractSniffUnitTes
 		return array();
 	}
 
-} // End class.
+}

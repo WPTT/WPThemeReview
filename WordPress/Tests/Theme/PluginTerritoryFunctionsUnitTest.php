@@ -7,13 +7,17 @@
  * @license https://opensource.org/licenses/MIT MIT
  */
 
+namespace WordPress\Tests\Theme;
+
+use PHP_CodeSniffer\Tests\Standards\AbstractSniffUnitTest;
+
 /**
  * Unit test class for the PluginTerritoryFunctions sniff.
  *
  * @package WPCS\WordPressCodingStandards
  * @since   0.xx.0
  */
-class WordPress_Tests_Theme_PluginTerritoryFunctionsUnitTest extends AbstractSniffUnitTest {
+class PluginTerritoryFunctionsUnitTest extends AbstractSniffUnitTest {
 
 	/**
 	 * Returns the lines where errors should occur.
@@ -28,7 +32,6 @@ class WordPress_Tests_Theme_PluginTerritoryFunctionsUnitTest extends AbstractSni
 			6 => 1,
 			7 => 1,
 		);
-
 	}
 
 	/**
@@ -38,7 +41,6 @@ class WordPress_Tests_Theme_PluginTerritoryFunctionsUnitTest extends AbstractSni
 	 */
 	public function getWarningList() {
 		return array();
-
 	}
 
-} // End class.
+}

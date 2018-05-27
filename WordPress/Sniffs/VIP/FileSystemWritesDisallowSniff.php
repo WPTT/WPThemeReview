@@ -7,6 +7,10 @@
  * @license https://opensource.org/licenses/MIT MIT
  */
 
+namespace WordPress\Sniffs\VIP;
+
+use WordPress\AbstractFunctionRestrictionsSniff;
+
 /**
  * Disallow Filesystem writes.
  *
@@ -17,8 +21,9 @@
  * @since   0.3.0
  * @since   0.11.0 Extends the WordPress_AbstractFunctionRestrictionsSniff instead of the
  *                 Generic_Sniffs_PHP_ForbiddenFunctionsSniff.
+ * @since   0.13.0 Class name changed: this class is now namespaced.
  */
-class WordPress_Sniffs_VIP_FileSystemWritesDisallowSniff extends WordPress_AbstractFunctionRestrictionsSniff {
+class FileSystemWritesDisallowSniff extends AbstractFunctionRestrictionsSniff {
 
 	/**
 	 * If true, an error will be thrown; otherwise a warning.
@@ -31,11 +36,11 @@ class WordPress_Sniffs_VIP_FileSystemWritesDisallowSniff extends WordPress_Abstr
 	 * Groups of functions to restrict.
 	 *
 	 * Example: groups => array(
-	 * 	'lambda' => array(
-	 * 		'type'      => 'error' | 'warning',
-	 * 		'message'   => 'Use anonymous functions instead please!',
-	 * 		'functions' => array( 'eval', 'create_function' ),
-	 * 	)
+	 *  'lambda' => array(
+	 *      'type'      => 'error' | 'warning',
+	 *      'message'   => 'Use anonymous functions instead please!',
+	 *      'functions' => array( 'file_get_contents', 'create_function' ),
+	 *  )
 	 * )
 	 *
 	 * @return array

@@ -7,13 +7,19 @@
  * @license https://opensource.org/licenses/MIT MIT
  */
 
+namespace WordPress\Tests\VIP;
+
+use PHP_CodeSniffer\Tests\Standards\AbstractSniffUnitTest;
+
 /**
  * Unit test class for the ValidatedSanitizedInput sniff.
  *
  * @package WPCS\WordPressCodingStandards
+ *
  * @since   0.3.0
+ * @since   0.13.0 Class name changed: this class is now namespaced.
  */
-class WordPress_Tests_VIP_ValidatedSanitizedInputUnitTest extends AbstractSniffUnitTest {
+class ValidatedSanitizedInputUnitTest extends AbstractSniffUnitTest {
 
 	/**
 	 * Returns the lines where errors should occur.
@@ -22,20 +28,20 @@ class WordPress_Tests_VIP_ValidatedSanitizedInputUnitTest extends AbstractSniffU
 	 */
 	public function getErrorList() {
 		return array(
-			5 => 3,
-			7 => 1,
-			10 => 1,
-			20 => 1,
-			33 => 3,
-			65 => 1,
-			79 => 1,
-			80 => 1,
-			81 => 1,
-			82 => 1,
-			85 => 1,
-			90 => 1,
-			93 => 1,
-			96 => 1,
+			5   => 3,
+			7   => 1,
+			10  => 1,
+			20  => 1,
+			33  => 3,
+			65  => 1,
+			79  => 1,
+			80  => 1,
+			81  => 1,
+			82  => 1,
+			85  => 1,
+			90  => 1,
+			93  => 1,
+			96  => 1,
 			100 => 2,
 			101 => 1,
 			104 => 2,

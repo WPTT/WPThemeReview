@@ -7,9 +7,10 @@
  * @license https://opensource.org/licenses/MIT MIT
  */
 
-if ( ! class_exists( 'PEAR_Sniffs_NamingConventions_ValidFunctionNameSniff', true ) ) {
-	throw new PHP_CodeSniffer_Exception( 'Class PEAR_Sniffs_NamingConventions_ValidFunctionNameSniff not found' );
-}
+namespace WordPress\Sniffs\NamingConventions;
+
+use PEAR_Sniffs_NamingConventions_ValidFunctionNameSniff as PHPCS_PEAR_ValidFunctionNameSniff;
+use PHP_CodeSniffer_File as File;
 
 /**
  * Enforces WordPress function name and method name format, based upon Squiz code.
@@ -19,6 +20,7 @@ if ( ! class_exists( 'PEAR_Sniffs_NamingConventions_ValidFunctionNameSniff', tru
  * @package WPCS\WordPressCodingStandards
  *
  * @since   0.1.0
+ * @since   0.13.0 Class name changed: this class is now namespaced.
  *
  * Last synced with parent class July 2016 up to commit 4fea2e651109e41066a81e22e004d851fb1287f6.
  * @link    https://github.com/squizlabs/PHP_CodeSniffer/blob/master/CodeSniffer/Standards/PEAR/Sniffs/NamingConventions/ValidFunctionNameSniff.php
@@ -26,7 +28,7 @@ if ( ! class_exists( 'PEAR_Sniffs_NamingConventions_ValidFunctionNameSniff', tru
  * {@internal While this class extends the PEAR parent, it does not actually use the checks
  * contained in the parent. It only uses the properties and the token registration from the parent.}}
  */
-class WordPress_Sniffs_NamingConventions_ValidFunctionNameSniff extends PEAR_Sniffs_NamingConventions_ValidFunctionNameSniff {
+class ValidFunctionNameSniff extends PHPCS_PEAR_ValidFunctionNameSniff {
 
 	/**
 	 * Additional double underscore prefixed methods specific to certain PHP native extensions.
@@ -54,13 +56,13 @@ class WordPress_Sniffs_NamingConventions_ValidFunctionNameSniff extends PEAR_Sni
 	/**
 	 * Processes the tokens outside the scope.
 	 *
-	 * @param PHP_CodeSniffer_File $phpcsFile The file being processed.
-	 * @param int                  $stackPtr  The position where this token was
-	 *                                        found.
+	 * @param \PHP_CodeSniffer\Files\File $phpcsFile The file being processed.
+	 * @param int                         $stackPtr  The position where this token was
+	 *                                               found.
 	 *
 	 * @return void
 	 */
-	protected function processTokenOutsideScope( PHP_CodeSniffer_File $phpcsFile, $stackPtr ) {
+	protected function processTokenOutsideScope( File $phpcsFile, $stackPtr ) {
 		$functionName = $phpcsFile->getDeclarationName( $stackPtr );
 
 		if ( ! isset( $functionName ) ) {
@@ -87,15 +89,10 @@ class WordPress_Sniffs_NamingConventions_ValidFunctionNameSniff extends PEAR_Sni
 		}
 
 		if ( strtolower( $functionName ) !== $functionName ) {
-			$suggested = preg_replace( '/([A-Z])/', '_$1', $functionName );
-			$suggested = strtolower( $suggested );
-			$suggested = str_replace( '__', '_', $suggested );
-			$suggested = trim( $suggested, '_' );
-
 			$error     = 'Function name "%s" is not in snake case format, try "%s"';
 			$errorData = array(
 				$functionName,
-				$suggested,
+				$this->get_name_suggestion( $functionName ),
 			);
 			$phpcsFile->addError( $error, $stackPtr, 'FunctionNameInvalid', $errorData );
 		}
@@ -105,14 +102,14 @@ class WordPress_Sniffs_NamingConventions_ValidFunctionNameSniff extends PEAR_Sni
 	/**
 	 * Processes the tokens within the scope.
 	 *
-	 * @param PHP_CodeSniffer_File $phpcsFile The file being processed.
-	 * @param int                  $stackPtr  The position where this token was
-	 *                                        found.
-	 * @param int                  $currScope The position of the current scope.
+	 * @param \PHP_CodeSniffer\Files\File $phpcsFile The file being processed.
+	 * @param int                         $stackPtr  The position where this token was
+	 *                                               found.
+	 * @param int                         $currScope The position of the current scope.
 	 *
 	 * @return void
 	 */
-	protected function processTokenWithinScope( PHP_CodeSniffer_File $phpcsFile, $stackPtr, $currScope ) {
+	protected function processTokenWithinScope( File $phpcsFile, $stackPtr, $currScope ) {
 		$methodName = $phpcsFile->getDeclarationName( $stackPtr );
 
 		if ( ! isset( $methodName ) ) {
@@ -120,7 +117,7 @@ class WordPress_Sniffs_NamingConventions_ValidFunctionNameSniff extends PEAR_Sni
 			return;
 		}
 
-		$className	= $phpcsFile->getDeclarationName( $currScope );
+		$className = $phpcsFile->getDeclarationName( $currScope );
 
 		// Ignore special functions.
 		if ( '' === ltrim( $methodName, '_' ) ) {
@@ -149,9 +146,9 @@ class WordPress_Sniffs_NamingConventions_ValidFunctionNameSniff extends PEAR_Sni
 		if ( 0 === strpos( $methodName, '__' ) ) {
 			$magicPart = strtolower( substr( $methodName, 2 ) );
 			if ( ! isset( $this->magicMethods[ $magicPart ] ) && ! isset( $this->methodsDoubleUnderscore[ $magicPart ] ) ) {
-				 $error     = 'Method name "%s" is invalid; only PHP magic methods should be prefixed with a double underscore';
-				 $errorData = array( $className . '::' . $methodName );
-				 $phpcsFile->addError( $error, $stackPtr, 'MethodDoubleUnderscore', $errorData );
+				$error     = 'Method name "%s" is invalid; only PHP magic methods should be prefixed with a double underscore';
+				$errorData = array( $className . '::' . $methodName );
+				$phpcsFile->addError( $error, $stackPtr, 'MethodDoubleUnderscore', $errorData );
 			}
 
 			return;
@@ -159,20 +156,29 @@ class WordPress_Sniffs_NamingConventions_ValidFunctionNameSniff extends PEAR_Sni
 
 		// Check for all lowercase.
 		if ( strtolower( $methodName ) !== $methodName ) {
-			$suggested = preg_replace( '/([A-Z])/', '_$1', $methodName );
-			$suggested = strtolower( $suggested );
-			$suggested = str_replace( '__', '_', $suggested );
-			$suggested = trim( $suggested, '_' );
-
 			$error     = 'Method name "%s" in class %s is not in snake case format, try "%s"';
 			$errorData = array(
 				$methodName,
 				$className,
-				$suggested,
+				$this->get_name_suggestion( $methodName ),
 			);
 			$phpcsFile->addError( $error, $stackPtr, 'MethodNameInvalid', $errorData );
 		}
 
 	} // End processTokenWithinScope().
+
+	/**
+	 * Transform the existing function/method name to one which complies with the naming conventions.
+	 *
+	 * @param string $name The function/method name.
+	 * @return string
+	 */
+	protected function get_name_suggestion( $name ) {
+		$suggested = preg_replace( '/([A-Z])/', '_$1', $name );
+		$suggested = strtolower( $suggested );
+		$suggested = str_replace( '__', '_', $suggested );
+		$suggested = trim( $suggested, '_' );
+		return $suggested;
+	}
 
 } // End class.

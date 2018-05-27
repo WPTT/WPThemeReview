@@ -7,6 +7,11 @@
  * @license https://opensource.org/licenses/MIT MIT
  */
 
+namespace WordPress\Sniffs\Theme;
+
+use WordPress\Sniff;
+use PHP_CodeSniffer_Tokens as Tokens;
+
 /**
  * Check for hardcoded favicons instead of using core implementation.
  *
@@ -16,7 +21,7 @@
  *
  * @since   0.xx.0
  */
-class WordPress_Sniffs_Theme_NoFaviconSniff implements PHP_CodeSniffer_Sniff {
+class NoFaviconSniff extends Sniff {
 
 	/**
 	 * Regex template.
@@ -76,14 +81,14 @@ class WordPress_Sniffs_Theme_NoFaviconSniff implements PHP_CodeSniffer_Sniff {
 		$regex_parts = array();
 
 		foreach ( $this->attribute_blacklist as $key => $values ) {
-			$values = array_map( 'preg_quote', $values, array_fill( 0, count( $values ), '`' ) );
-			$values = implode( '|', $values );
+			$values        = array_map( 'preg_quote', $values, array_fill( 0, count( $values ), '`' ) );
+			$values        = implode( '|', $values );
 			$regex_parts[] = sprintf( self::REGEX_ATTR_TEMPLATE, preg_quote( $key, '`' ), $values );
 		}
 
 		$this->favicon_regex = sprintf( self::REGEX_TEMPLATE, implode( '|', $regex_parts ) );
 
-		$tokens   = PHP_CodeSniffer_Tokens::$stringTokens;
+		$tokens   = Tokens::$stringTokens;
 		$tokens[] = T_INLINE_HTML;
 		$tokens[] = T_HEREDOC;
 		$tokens[] = T_NOWDOC;
@@ -94,18 +99,17 @@ class WordPress_Sniffs_Theme_NoFaviconSniff implements PHP_CodeSniffer_Sniff {
 	/**
 	 * Processes this test, when one of its tokens is encountered.
 	 *
-	 * @param PHP_CodeSniffer_File $phpcsFile The file being scanned.
-	 * @param int                  $stackPtr  The position of the current token
-	 *                                        in the stack passed in $tokens.
-	 *
-	 * @return void
+	 * @param int $stackPtr The position of the current token in the stack.
 	 */
-	public function process( PHP_CodeSniffer_File $phpcsFile, $stackPtr ) {
-		$tokens = $phpcsFile->getTokens();
-		$token  = $tokens[ $stackPtr ];
+	public function process_token( $stackPtr ) {
+		$token = $this->tokens[ $stackPtr ];
 
 		if ( preg_match( $this->favicon_regex, $token['content'] ) > 0 ) {
-			$phpcsFile->addError( 'Code for favicon found. Favicons are handled by the "Site Icon" setting in the customizer since version 4.3.' , $stackPtr, 'NoFavicon' );
+			$this->phpcsFile->addError(
+				'Code for favicon found. Favicons are handled by the "Site Icon" setting in the customizer since WP version 4.3.',
+				$stackPtr,
+				'NoFavicon'
+			);
 		}
 	}
 

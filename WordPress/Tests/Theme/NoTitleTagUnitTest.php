@@ -7,13 +7,17 @@
  * @license https://opensource.org/licenses/MIT MIT
  */
 
+namespace WordPress\Tests\Theme;
+
+use PHP_CodeSniffer\Tests\Standards\AbstractSniffUnitTest;
+
 /**
  * Unit test class for the NoTitleTag sniff.
  *
  * @package WPCS\WordPressCodingStandards
  * @since   0.xx.0
  */
-class WordPress_Tests_Theme_NoTitleTagUnitTest extends AbstractSniffUnitTest {
+class NoTitleTagUnitTest extends AbstractSniffUnitTest {
 
 	/**
 	 * Returns the lines where errors should occur.
@@ -22,22 +26,20 @@ class WordPress_Tests_Theme_NoTitleTagUnitTest extends AbstractSniffUnitTest {
 	 */
 	public function getErrorList() {
 		return array(
-			7 => 1,
-			9 => 1,
+			7  => 1,
+			9  => 1,
 			19 => 1,
 			24 => 1,
 			26 => 1,
 			28 => 1,
-			// PHP 5.2 has an issue tokenizing `<s` so splits the string into two.
-			30 => ( PHP_VERSION_ID >= 50300 ) ? 1 : 2,
+			30 => 1,
 			34 => 1,
 			37 => 1,
 			40 => 1,
 			43 => 1,
-			47 => ( PHP_VERSION_ID >= 50300 ) ? 1 : 0, // PHPCS on PHP 5.2 does not recognize T_NOWDOC.
-			50 => ( PHP_VERSION_ID >= 50300 ) ? 1 : 0, // PHPCS on PHP 5.2 does not recognize T_NOWDOC.
+			47 => 1,
+			50 => 1,
 		);
-
 	}
 
 	/**
@@ -47,7 +49,6 @@ class WordPress_Tests_Theme_NoTitleTagUnitTest extends AbstractSniffUnitTest {
 	 */
 	public function getWarningList() {
 		return array();
-
 	}
 
-} // End class.
+}

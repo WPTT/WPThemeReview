@@ -7,13 +7,19 @@
  * @license https://opensource.org/licenses/MIT MIT
  */
 
+namespace WordPress\Tests\PHP;
+
+use PHP_CodeSniffer\Tests\Standards\AbstractSniffUnitTest;
+
 /**
  * Unit test class for the StrictInArray sniff.
  *
  * @package WPCS\WordPressCodingStandards
+ *
  * @since   0.9.0
+ * @since   0.13.0 Class name changed: this class is now namespaced.
  */
-class WordPress_Tests_PHP_StrictInArrayUnitTest extends AbstractSniffUnitTest {
+class StrictInArrayUnitTest extends AbstractSniffUnitTest {
 
 	/**
 	 * Returns the lines where errors should occur.
@@ -33,9 +39,9 @@ class WordPress_Tests_PHP_StrictInArrayUnitTest extends AbstractSniffUnitTest {
 	 */
 	public function getWarningList() {
 		return array(
-			5 => 1,
-			6 => 1,
-			7 => 1,
+			5  => 1,
+			6  => 1,
+			7  => 1,
 			23 => 1,
 			24 => 1,
 			25 => 1,

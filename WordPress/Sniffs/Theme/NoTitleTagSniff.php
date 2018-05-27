@@ -7,6 +7,11 @@
  * @license https://opensource.org/licenses/MIT MIT
  */
 
+namespace WordPress\Sniffs\Theme;
+
+use WordPress\Sniff;
+use PHP_CodeSniffer_Tokens as Tokens;
+
 /**
  * Restricts the use of the <title> tag, unless it is within a <svg> tag.
  *
@@ -16,7 +21,7 @@
  *
  * @since   0.xx.0
  */
-class WordPress_Sniffs_Theme_NoTitleTagSniff extends WordPress_Sniff {
+class NoTitleTagSniff extends Sniff {
 
 	/**
 	 * Property to keep track of whether a <svg> open tag has been encountered.
@@ -31,7 +36,7 @@ class WordPress_Sniffs_Theme_NoTitleTagSniff extends WordPress_Sniff {
 	 * @return array
 	 */
 	public function register() {
-		$tokens                  = PHP_CodeSniffer_Tokens::$stringTokens;
+		$tokens                  = Tokens::$stringTokens;
 		$tokens[ T_INLINE_HTML ] = T_INLINE_HTML;
 		$tokens[ T_HEREDOC ]     = T_HEREDOC;
 		$tokens[ T_NOWDOC ]      = T_NOWDOC;
@@ -77,7 +82,7 @@ class WordPress_Sniffs_Theme_NoTitleTagSniff extends WordPress_Sniff {
 				// Skip the next lines until the closing svg tag, but do check any content
 				// on this line before the svg tag.
 				$this->in_svg[ $filename ] = true;
-				$content      = trim( substr( $content, 0, ( strpos( $content, '<svg' ) ) ) );
+				$content                   = trim( substr( $content, 0, ( strpos( $content, '<svg' ) ) ) );
 			} else {
 				// Ok, we have open and close svg tag on the same line with possibly content before and/or after.
 				$before  = trim( substr( $content, 0, ( strpos( $content, '<svg' ) ) ) );
@@ -88,9 +93,12 @@ class WordPress_Sniffs_Theme_NoTitleTagSniff extends WordPress_Sniff {
 
 		// Now let's do the check for the <title> tag.
 		if ( false !== strpos( $content, '<title' ) ) {
-			$this->phpcsFile->addError( "The title tag must not be used. Use add_theme_support( 'title-tag' ) instead.", $stackPtr, 'TagFound' );
+			$this->phpcsFile->addError(
+				"The title tag must not be used. Use add_theme_support( 'title-tag' ) instead.",
+				$stackPtr,
+				'TagFound'
+			);
 		}
+	}
 
-	} // End process().
-
-} // End Class.
+}

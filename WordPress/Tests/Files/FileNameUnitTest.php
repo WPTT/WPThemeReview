@@ -7,14 +7,20 @@
  * @license https://opensource.org/licenses/MIT MIT
  */
 
+namespace WordPress\Tests\Files;
+
+use PHP_CodeSniffer\Tests\Standards\AbstractSniffUnitTest;
+
 /**
  * Unit test class for the FileName sniff.
  *
  * @package WPCS\WordPressCodingStandards
+ *
  * @since   2013-06-11
  * @since   0.11.0     Actually added tests ;-)
+ * @since   0.13.0     Class name changed: this class is now namespaced.
  */
-class WordPress_Tests_Files_FileNameUnitTest extends AbstractSniffUnitTest {
+class FileNameUnitTest extends AbstractSniffUnitTest {
 
 	/**
 	 * Error files with the expected nr of errors.
@@ -28,14 +34,14 @@ class WordPress_Tests_Files_FileNameUnitTest extends AbstractSniffUnitTest {
 		 */
 
 		// File names generic.
-		'some_file.inc' => 1,
-		'SomeFile.inc'  => 1,
-		'some-File.inc' => 1,
+		'some_file.inc'                              => 1,
+		'SomeFile.inc'                               => 1,
+		'some-File.inc'                              => 1,
 
 		// Class file names.
-		'my-class.inc'              => 1,
-		'class-different-class.inc' => 1,
-		'ClassMyClass.inc'          => 2,
+		'my-class.inc'                               => 1,
+		'class-different-class.inc'                  => 1,
+		'ClassMyClass.inc'                           => 2,
 
 		// Theme specific exceptions in a non-theme context.
 		'single-my_post_type.inc'                    => 1,
@@ -46,40 +52,38 @@ class WordPress_Tests_Files_FileNameUnitTest extends AbstractSniffUnitTest {
 		 */
 
 		// Non-strict class names still have to comply with lowercase hyphenated.
-		'ClassNonStrictClass.inc' => 1,
+		'ClassNonStrictClass.inc'                    => 1,
 
 		/*
 		 * In /FileNameUnitTests/TestFiles.
 		 */
-		'test-sample-phpunit.inc'     => 0,
-		'test-sample-phpunit6.inc'    => 0,
-		'test-sample-wpunit.inc'      => 0,
-		// @todo Fix this! False positive, custom property setting not recognized.
-		// Is issue with unit tests, not with the sniff. If the property is set from the ruleset, it "should" work.
-		'test-sample-custom-unit.inc' => 1,
+		'test-sample-phpunit.inc'                    => 0,
+		'test-sample-phpunit6.inc'                   => 0,
+		'test-sample-wpunit.inc'                     => 0,
+		'test-sample-custom-unit.inc'                => 0,
 
 		/*
 		 * In /FileNameUnitTests/ThemeExceptions.
 		 */
 
 		// Files in a theme context.
-		'front_page.inc'       => 1,
-		'FrontPage.inc'        => 1,
-		'author-nice_name.inc' => 1,
+		'front_page.inc'                             => 1,
+		'FrontPage.inc'                              => 1,
+		'author-nice_name.inc'                       => 1,
 
 		/*
 		 * In /FileNameUnitTests/wp-includes.
 		 */
 
 		// Files containing template tags.
-		'general.inc' => 1,
+		'general.inc'                                => 1,
 
 		/*
 		 * In /.
 		 */
 
 		// Fall-back file in case glob() fails.
-		'FileNameUnitTest.inc' => 1,
+		'FileNameUnitTest.inc'                       => 1,
 	);
 
 	/**
@@ -90,13 +94,8 @@ class WordPress_Tests_Files_FileNameUnitTest extends AbstractSniffUnitTest {
 	 * @return string[]
 	 */
 	protected function getTestFiles( $testFileBase ) {
-		$sep             = DIRECTORY_SEPARATOR;
-		$test_files      = glob( dirname( $testFileBase ) . $sep . 'FileNameUnitTests{' . $sep . ',' . $sep . 'TestFiles' . $sep . ',' . $sep . 'ThemeExceptions' . $sep . ',' . $sep . 'wp-includes' . $sep . '}*.inc', GLOB_BRACE );
-
-		// Adjust the expected results array for PHP 5.2 as PHP 5.2 does not recognize namespaces.
-		if ( PHP_VERSION_ID < 50300 ) {
-			$this->expected_results['test-sample-phpunit6.inc'] = 1;
-		}
+		$sep        = DIRECTORY_SEPARATOR;
+		$test_files = glob( dirname( $testFileBase ) . $sep . 'FileNameUnitTests{' . $sep . ',' . $sep . '*' . $sep . '}*.inc', GLOB_BRACE );
 
 		if ( ! empty( $test_files ) ) {
 			return $test_files;

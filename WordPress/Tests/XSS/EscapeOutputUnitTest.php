@@ -7,13 +7,19 @@
  * @license https://opensource.org/licenses/MIT MIT
  */
 
+namespace WordPress\Tests\XSS;
+
+use PHP_CodeSniffer\Tests\Standards\AbstractSniffUnitTest;
+
 /**
  * Unit test class for the EscapeOutput sniff.
  *
  * @package WPCS\WordPressCodingStandards
+ *
  * @since   2013-06-11
+ * @since   0.13.0     Class name changed: this class is now namespaced.
  */
-class WordPress_Tests_XSS_EscapeOutputUnitTest extends AbstractSniffUnitTest {
+class EscapeOutputUnitTest extends AbstractSniffUnitTest {
 
 	/**
 	 * Returns the lines where errors should occur.
@@ -22,22 +28,22 @@ class WordPress_Tests_XSS_EscapeOutputUnitTest extends AbstractSniffUnitTest {
 	 */
 	public function getErrorList() {
 		return array(
-			17 => 1,
-			19 => 1,
-			36 => 1,
-			39 => 1,
-			40 => 1,
-			41 => 1,
-			43 => 1,
-			46 => 1,
-			53 => 1,
-			59 => 1,
-			60 => 1,
-			65 => 1,
-			68 => 1,
-			71 => 1,
-			73 => 1,
-			75 => 1,
+			17  => 1,
+			19  => 1,
+			36  => 1,
+			39  => 1,
+			40  => 1,
+			41  => 1,
+			43  => 1,
+			46  => 1,
+			53  => 1,
+			59  => 1,
+			60  => 1,
+			65  => 1,
+			68  => 1,
+			71  => 1,
+			73  => 1,
+			75  => 1,
 			101 => 1,
 			103 => 1,
 			111 => 1,
@@ -63,7 +69,11 @@ class WordPress_Tests_XSS_EscapeOutputUnitTest extends AbstractSniffUnitTest {
 			205 => 1,
 			206 => 1,
 			207 => 1,
-			212 => ( PHP_VERSION_ID < 50300 ) ? 1 : 0, // PHPCS on PHP 5.2 does not recognize T_NOWDOC.
+			223 => 1,
+			225 => 1,
+			226 => 1,
+			252 => 1,
+			253 => 1,
 		);
 
 	} // end getErrorList()

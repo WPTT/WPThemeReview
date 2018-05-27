@@ -7,13 +7,17 @@
  * @license https://opensource.org/licenses/MIT MIT
  */
 
+namespace WordPress\Tests\Theme;
+
+use PHP_CodeSniffer\Tests\Standards\AbstractSniffUnitTest;
+
 /**
  * Unit test class for the NoFavicon sniff.
  *
  * @package WPCS\WordPressCodingStandards
  * @since   0.xx.0
  */
-class WordPress_Tests_Theme_NoFaviconUnitTest extends AbstractSniffUnitTest {
+class NoFaviconUnitTest extends AbstractSniffUnitTest {
 
 	/**
 	 * Returns the lines where errors should occur.
@@ -22,8 +26,8 @@ class WordPress_Tests_Theme_NoFaviconUnitTest extends AbstractSniffUnitTest {
 	 */
 	public function getErrorList() {
 		return array(
-			8 => 1,
-			9 => 1,
+			8  => 1,
+			9  => 1,
 			10 => 1,
 			11 => 1,
 			12 => 1,
@@ -35,8 +39,8 @@ class WordPress_Tests_Theme_NoFaviconUnitTest extends AbstractSniffUnitTest {
 			21 => 1,
 			24 => 1,
 			25 => 1,
-			29 => ( PHP_VERSION_ID >= 50300 ) ? 1 : 0, // PHPCS on PHP 5.2 does not recognize T_NOWDOC.
-			30 => ( PHP_VERSION_ID >= 50300 ) ? 1 : 0, // PHPCS on PHP 5.2 does not recognize T_NOWDOC.
+			29 => 1,
+			30 => 1,
 		);
 	}
 
@@ -49,4 +53,4 @@ class WordPress_Tests_Theme_NoFaviconUnitTest extends AbstractSniffUnitTest {
 		return array();
 	}
 
-} // End class.
+}

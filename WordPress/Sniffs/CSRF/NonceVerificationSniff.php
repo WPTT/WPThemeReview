@@ -7,6 +7,10 @@
  * @license https://opensource.org/licenses/MIT MIT
  */
 
+namespace WordPress\Sniffs\CSRF;
+
+use WordPress\Sniff;
+
 /**
  * Checks that nonce verification accompanies form processing.
  *
@@ -15,8 +19,9 @@
  * @package WPCS\WordPressCodingStandards
  *
  * @since   0.5.0
+ * @since   0.13.0 Class name changed: this class is now namespaced.
  */
-class WordPress_Sniffs_CSRF_NonceVerificationSniff extends WordPress_Sniff {
+class NonceVerificationSniff extends Sniff {
 
 	/**
 	 * Superglobals to notify about when not accompanied by an nonce check.
@@ -157,7 +162,7 @@ class WordPress_Sniffs_CSRF_NonceVerificationSniff extends WordPress_Sniff {
 			'NoNonceVerification'
 		);
 
-	} // End process().
+	} // End process_token().
 
 	/**
 	 * Merge custom functions provided via a custom ruleset with the defaults, if we haven't already.
@@ -172,6 +177,7 @@ class WordPress_Sniffs_CSRF_NonceVerificationSniff extends WordPress_Sniff {
 				$this->customNonceVerificationFunctions,
 				$this->nonceVerificationFunctions
 			);
+
 			$this->addedCustomFunctions['nonce'] = $this->customNonceVerificationFunctions;
 		}
 
@@ -180,6 +186,7 @@ class WordPress_Sniffs_CSRF_NonceVerificationSniff extends WordPress_Sniff {
 				$this->customSanitizingFunctions,
 				$this->sanitizingFunctions
 			);
+
 			$this->addedCustomFunctions['sanitize'] = $this->customSanitizingFunctions;
 		}
 
@@ -188,6 +195,7 @@ class WordPress_Sniffs_CSRF_NonceVerificationSniff extends WordPress_Sniff {
 				$this->customUnslashingSanitizingFunctions,
 				$this->unslashingSanitizingFunctions
 			);
+
 			$this->addedCustomFunctions['unslashsanitize'] = $this->customUnslashingSanitizingFunctions;
 		}
 	}
