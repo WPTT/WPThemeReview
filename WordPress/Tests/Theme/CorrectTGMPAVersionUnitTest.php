@@ -7,13 +7,17 @@
  * @license https://opensource.org/licenses/MIT MIT
  */
 
+namespace WordPress\Tests\Theme;
+
+use PHP_CodeSniffer\Tests\Standards\AbstractSniffUnitTest;
+
 /**
  * Unit test class for the Correct TGMPA Version sniff.
  *
  * @package WPCS\WordPressCodingStandards
  * @since   0.xx.0
  */
-class WordPress_Tests_Theme_CorrectTGMPAVersionUnitTest extends AbstractSniffUnitTest {
+class CorrectTGMPAVersionUnitTest extends AbstractSniffUnitTest {
 
 	/**
 	 * Get a list of all test files to check.
@@ -24,15 +28,14 @@ class WordPress_Tests_Theme_CorrectTGMPAVersionUnitTest extends AbstractSniffUni
 	 */
 	protected function getTestFiles( $testFileBase ) {
 		$sep        = DIRECTORY_SEPARATOR;
-		$test_files = glob( dirname( $testFileBase ) . $sep . 'TGMPA' . $sep . 'CorrectVersionTests{ ' . $sep . ',' . $sep . '*' . $sep . '}*.inc', GLOB_BRACE );
+		$test_files = glob( __DIR__ . $sep . 'TGMPA' . $sep . 'CorrectVersionTests{ ' . $sep . ',' . $sep . '*' . $sep . '}*.inc', GLOB_BRACE );
 
 		if ( ! empty( $test_files ) ) {
 			return $test_files;
 		}
 
 		return array( $testFileBase . 'inc' );
-
-	} // End getTestFiles().
+	}
 
 	/**
 	 * Returns the lines where errors should occur.
@@ -90,8 +93,7 @@ class WordPress_Tests_Theme_CorrectTGMPAVersionUnitTest extends AbstractSniffUni
 
 			default:
 				return array();
-
-		} // End switch().
+		}
 	}
 
 	/**
@@ -113,9 +115,7 @@ class WordPress_Tests_Theme_CorrectTGMPAVersionUnitTest extends AbstractSniffUni
 
 			default:
 				return array();
-
-		} // End switch().
-
+		}
 	}
 
-} // End class.
+}
