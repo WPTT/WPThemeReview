@@ -36,14 +36,6 @@ class RestrictedPHPFunctionsSniff extends AbstractFunctionRestrictionsSniff {
 	public function getGroups() {
 		return array(
 
-			'eval' => array(
-				'type'      => 'error',
-				'message'   => '%s() is not allowed.',
-				'functions' => array(
-					'eval',
-				),
-			),
-
 			'system_calls' => array(
 				'type'      => 'error',
 				'message'   => 'PHP system calls are often disabled by server admins and should not be in themes. Found %s.',
