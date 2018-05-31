@@ -1,37 +1,37 @@
 <?php
+/**
+ * Unit test class for WordPress Coding Standard.
+ *
+ * @package WPCS\WordPressCodingStandards
+ * @link    https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards
+ * @license https://opensource.org/licenses/MIT MIT
+ */
 
 namespace WordPress\Tests\Theme;
 
 use PHP_CodeSniffer\Tests\Standards\AbstractSniffUnitTest;
 
 /**
- * Unit test class for the Theme_RestrictedPHPFunctions sniff.
+ * Unit test class for the Theme\RestrictedPHPFunctions sniff.
  *
- * A sniff unit test checks a .inc file for expected violations of a single
- * coding standard. Expected errors and warnings are stored in this class.
- *
- * @category Theme
- * @package  PHP_CodeSniffer
- * @author	 Juliette Reinders Folmer <wpplugins_nospam@adviesenzo.nl>
+ * @package WPCS\WordPressCodingStandards
+ * @since   0.xx.0
  */
 class RestrictedPHPFunctionsUnitTest extends AbstractSniffUnitTest {
 
 	/**
 	 * Returns the lines where errors should occur.
 	 *
-	 * The key of the array should represent the line number and the value
-	 * should represent the number of errors that should occur on that line.
-	 *
 	 * @return array(int => int)
 	 */
 	public function getErrorList() {
 		return array(
-			4 => 1,
-			5 => 1,
-			6 => 1,
-			7 => 1,
-			8 => 1,
-			9 => 1,
+			4  => 1,
+			5  => 1,
+			6  => 1,
+			7  => 1,
+			8  => 1,
+			9  => 1,
 			12 => 1,
 			15 => 1,
 			16 => 1,
@@ -40,21 +40,15 @@ class RestrictedPHPFunctionsUnitTest extends AbstractSniffUnitTest {
 			19 => 1,
 			20 => 1,
 		);
-
-	} // end getErrorList()
-
+	}
 
 	/**
 	 * Returns the lines where warnings should occur.
-	 *
-	 * The key of the array should represent the line number and the value
-	 * should represent the number of warnings that should occur on that line.
 	 *
 	 * @return array(int => int)
 	 */
 	public function getWarningList() {
 		return array();
+	}
 
-	} // end getWarningList()
-
-} // end class
+}
