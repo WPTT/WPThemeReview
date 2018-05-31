@@ -7,13 +7,17 @@
  * @license https://opensource.org/licenses/MIT MIT
  */
 
+namespace WordPress\Tests\Theme;
+
+use PHP_CodeSniffer\Tests\Standards\AbstractSniffUnitTest;
+
 /**
  * Unit test class for the NoSanitizeCallback sniff.
  *
  * @package WPCS\WordPressCodingStandards
  * @since   0.xx.0
  */
-class WordPress_Tests_Theme_NoSanitizeCallbackUnitTest extends AbstractSniffUnitTest {
+class NoSanitizeCallbackUnitTest extends AbstractSniffUnitTest {
 
 	/**
 	 * Returns the lines where errors should occur.
