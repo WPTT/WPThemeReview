@@ -7,6 +7,10 @@
  * @license https://opensource.org/licenses/MIT MIT
  */
 
+namespace WordPress\Sniffs\Theme;
+
+use WordPress\AbstractFunctionParameterSniff;
+
 /**
  * User capabilities should be used not roles.
  *
@@ -16,7 +20,7 @@
  *
  * @since   0.xx.0
  */
-class WordPress_Sniffs_Theme_UseCapabilitiesNotRolesSniff extends WordPress_AbstractFunctionParameterSniff {
+class UseCapabilitiesNotRolesSniff extends AbstractFunctionParameterSniff {
 
 	/**
 	 * The group name for this group of functions.
