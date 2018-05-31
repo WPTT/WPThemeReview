@@ -1,4 +1,9 @@
 <?php
+
+namespace WordPress\Tests\Theme;
+
+use PHP_CodeSniffer\Tests\Standards\AbstractSniffUnitTest;
+
 /**
  * Unit test class for the Theme_RestrictedPHPFunctions sniff.
  *
@@ -9,7 +14,7 @@
  * @package  PHP_CodeSniffer
  * @author	 Juliette Reinders Folmer <wpplugins_nospam@adviesenzo.nl>
  */
-class WordPress_Tests_Theme_RestrictedPHPFunctionsUnitTest extends AbstractSniffUnitTest {
+class RestrictedPHPFunctionsUnitTest extends AbstractSniffUnitTest {
 
 	/**
 	 * Returns the lines where errors should occur.

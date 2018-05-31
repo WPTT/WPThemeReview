@@ -7,6 +7,10 @@
  * @license https://opensource.org/licenses/MIT MIT
  */
 
+namespace WordPress\Sniffs\Theme;
+
+use WordPress\AbstractFunctionRestrictionsSniff;
+
 /**
  * Forbids usage of certain functions and recommends alternatives.
  *
@@ -14,7 +18,7 @@
  *
  * @since   0.xx.0
  */
-class WordPress_Sniffs_Theme_RestrictedPHPFunctionsSniff extends WordPress_Sniffs_Functions_FunctionRestrictionsSniff {
+class RestrictedPHPFunctionsSniff extends AbstractFunctionRestrictionsSniff {
 
 	/**
 	 * Groups of functions to restrict
