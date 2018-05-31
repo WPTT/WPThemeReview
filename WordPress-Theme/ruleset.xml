@@ -5,6 +5,9 @@
 
 	<autoload>./../WordPress/PHPCSAliases.php</autoload>
 
+	<!-- Treat all files as UTF-8. -->
+	<config name="encoding" value="utf-8"/>
+
 	<rule ref="WordPress.Theme"/>
 
 	<!-- No PHP short open tags allowed. -->
