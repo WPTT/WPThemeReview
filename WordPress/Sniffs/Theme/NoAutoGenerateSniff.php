@@ -51,11 +51,8 @@ class NoAutoGenerateSniff extends Sniff {
 	 * @return array
 	 */
 	public function register() {
-		$tokens   = Tokens::$stringTokens;
-		$tokens[] = T_INLINE_HTML;
-		$tokens[] = T_HEREDOC;
+		$tokens   = Tokens::$textStringTokens;
 		$tokens[] = T_STRING; // Functions named after or prefixed with the generator name.
-		$tokens[] = T_NOWDOC;
 		$tokens[] = T_COMMENT;
 		$tokens[] = T_DOC_COMMENT_STRING;
 		return $tokens;
