@@ -7,13 +7,17 @@
  * @license https://opensource.org/licenses/MIT MIT
  */
 
+namespace WordPress\Tests\Theme;
+
+use PHP_CodeSniffer\Tests\Standards\AbstractSniffUnitTest;
+
 /**
  * Unit test class for the NoDeregisterCoreScript sniff.
  *
  * @package WPCS\WordPressCodingStandards
  * @since   0.xx.0
  */
-class WordPress_Tests_Theme_NoDeregisterCoreScriptUnitTest extends AbstractSniffUnitTest {
+class NoDeregisterCoreScriptUnitTest extends AbstractSniffUnitTest {
 
 	/**
 	 * Returns the lines where errors should occur.
@@ -38,4 +42,4 @@ class WordPress_Tests_Theme_NoDeregisterCoreScriptUnitTest extends AbstractSniff
 		return array();
 	}
 
-} // End Class.
+}
