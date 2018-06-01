@@ -7,6 +7,11 @@
  * @license https://opensource.org/licenses/MIT MIT
  */
 
+namespace WordPress\Sniffs\Theme;
+
+use WordPress\AbstractFunctionParameterSniff;
+use PHP_CodeSniffer_Tokens as Tokens;
+
 /**
  * Forbids deregistering of core scripts (jquery).
  *
@@ -16,7 +21,7 @@
  *
  * @since 0.xx.0
  */
-class WordPress_Sniffs_Theme_NoDeregisterCoreScriptSniff extends WordPress_AbstractFunctionParameterSniff {
+class NoDeregisterCoreScriptSniff extends AbstractFunctionParameterSniff {
 
 	/**
 	 * The group name for this group of functions.
@@ -162,4 +167,4 @@ class WordPress_Sniffs_Theme_NoDeregisterCoreScriptSniff extends WordPress_Abstr
 		$this->phpcsFile->addError( 'Deregistering core script %s is prohibited.', $stackPtr, $matched_content . 'Found', array( $matched_parameter ) );
 	}
 
-} // End Class.
+}
