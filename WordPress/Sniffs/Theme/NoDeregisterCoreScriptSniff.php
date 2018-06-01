@@ -13,9 +13,9 @@ use WordPress\AbstractFunctionParameterSniff;
 use PHP_CodeSniffer_Tokens as Tokens;
 
 /**
- * Forbids deregistering of core scripts (jquery).
+ * Forbids deregistering of core scripts (javascript).
  *
- * @link https://make.wordpress.org/themes/handbook/review/required/#core-functionality-and-features
+ * @link https://make.wordpress.org/themes/handbook/review/required/#stylesheets-and-scripts
  *
  * @package WPCS\WordPressCodingStandards
  *
@@ -160,11 +160,66 @@ class NoDeregisterCoreScriptSniff extends AbstractFunctionParameterSniff {
 
 		$matched_parameter = $this->strip_quotes( $parameters[1]['raw'] );
 
-		if ( ! isset( $this->target_functions[ $matched_content ][ $matched_parameter ] ) ) {
+		if ( isset( $this->target_functions[ $matched_content ][ $matched_parameter ] ) ) {
+			$this->throw_prohibited_error( $stackPtr, array( $matched_parameter ) );
 			return;
 		}
 
-		$this->phpcsFile->addError( 'Deregistering core script %s is prohibited.', $stackPtr, $matched_content . 'Found', array( $matched_parameter ) );
+		// More extensive check to prevent people circumventing the sniff.
+		$text                 = '';
+		$found_variable_token = false;
+
+		for ( $i = $parameters[1]['start']; $i <= $parameters[1]['end']; $i++ ) {
+			if ( isset( Tokens::$stringTokens[ $this->tokens[ $i ]['code'] ] ) === false ) {
+				if ( T_VARIABLE === $this->tokens[ $i ]['code']
+					|| T_STRING === $this->tokens[ $i ]['code']
+				) {
+					$found_variable_token = true;
+				}
+
+				continue;
+			}
+
+			$text .= $this->strip_quotes( $this->tokens[ $i ]['content'] );
+		}
+
+		if ( isset( $this->target_functions[ $matched_content ][ $text ] ) ) {
+			$this->throw_prohibited_error( $stackPtr, array( $text ) );
+			return;
+		}
+
+		if ( true === $found_variable_token ) {
+			$this->throw_variable_handle_warning( $stackPtr, array( $matched_content ) );
+		}
 	}
 
+	/**
+	 * Throw the error for deregistering a core script.
+	 *
+	 * @param int   $stackPtr The position of the matched function call in the stack.
+	 * @param array $data     Optional input for the data replacements.
+	 */
+	public function throw_prohibited_error( $stackPtr, $data = array() ) {
+		$this->phpcsFile->addError(
+			'Deregistering core script "%s" is prohibited.',
+			$stackPtr,
+			'Found',
+			$data
+		);
+	}
+
+	/**
+	 * Throw a warning when a variable handle for deregistering a script is detected.
+	 *
+	 * @param int   $stackPtr The position of the matched function call in the stack.
+	 * @param array $data     Optional input for the data replacements.
+	 */
+	public function throw_variable_handle_warning( $stackPtr, $data = array() ) {
+		$this->phpcsFile->addWarning(
+			'Deregistering core scripts is prohibited. A variable script handle was found. Inspection of the %s() call needed.',
+			$stackPtr,
+			'VariableHandleFound',
+			$data
+		);
+	}
 }
