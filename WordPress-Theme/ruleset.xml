@@ -131,7 +131,7 @@
 	</rule>
 
 	<!-- If TGMPA is used, verify that the version is up to date. -->
-	<rule ref="WordPress.Theme.CorrectTGMPAVersions">
+	<rule ref="WordPress.Theme.CorrectTGMPAVersion">
 		<!-- Require that the Custom Generator is used to download & adjust TGMPA. -->
 		<properties>
 			<property name="required_flavour" value="wporg"/>
