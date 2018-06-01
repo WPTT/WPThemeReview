@@ -6,11 +6,10 @@
  * @link    https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards
  * @license https://opensource.org/licenses/MIT MIT
  */
-
+ 
 namespace WordPress\Tests\Theme;
 
 use PHP_CodeSniffer\Tests\Standards\AbstractSniffUnitTest;
-
 /**
  * Unit test class for the NoSanitizeCallback sniff.
  *
@@ -18,7 +17,6 @@ use PHP_CodeSniffer\Tests\Standards\AbstractSniffUnitTest;
  * @since   0.xx.0
  */
 class NoSanitizeCallbackUnitTest extends AbstractSniffUnitTest {
-
 	/**
 	 * Returns the lines where errors should occur.
 	 *
@@ -26,11 +24,13 @@ class NoSanitizeCallbackUnitTest extends AbstractSniffUnitTest {
 	 */
 	public function getErrorList() {
 		return array(
-			6 => 1,
+			12 => 1,
+			13 => 1,
 			15 => 1,
+			27 => 1,
+			33 => 1,
 		);
 	}
-
 	/**
 	 * Returns the lines where warnings should occur.
 	 *
@@ -38,9 +38,6 @@ class NoSanitizeCallbackUnitTest extends AbstractSniffUnitTest {
 	 */
 	public function getWarningList() {
 		return array(
-			25 => 1,
-			34 => 1,
 		);
 	}
-
 } // End class.
