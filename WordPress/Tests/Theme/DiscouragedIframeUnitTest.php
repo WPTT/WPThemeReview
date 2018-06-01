@@ -7,13 +7,17 @@
  * @license https://opensource.org/licenses/MIT MIT
  */
 
+namespace WordPress\Tests\Theme;
+
+use PHP_CodeSniffer\Tests\Standards\AbstractSniffUnitTest;
+
 /**
  * Unit test class for the DiscouragedIframe sniff.
  *
  * @package WPCS\WordPressCodingStandards
  * @since   0.xx.0
  */
-class WordPress_Tests_Theme_DiscouragedIframeUnitTest extends AbstractSniffUnitTest {
+class DiscouragedIframeUnitTest extends AbstractSniffUnitTest {
 
 	/**
 	 * Returns the lines where errors should occur.
@@ -37,4 +41,4 @@ class WordPress_Tests_Theme_DiscouragedIframeUnitTest extends AbstractSniffUnitT
 		return array();
 	}
 
-} // End class.
+}
