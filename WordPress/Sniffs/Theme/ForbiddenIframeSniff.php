@@ -21,7 +21,7 @@ use PHP_CodeSniffer_Tokens as Tokens;
  *
  * @since   0.xx.0
  */
-class DiscouragedIframeSniff extends Sniff {
+class ForbiddenIframeSniff extends Sniff {
 
 	/**
 	 * The regex to catch the blacklisted attributes.
