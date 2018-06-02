@@ -54,6 +54,17 @@
 		</properties>
 	</rule>
 
+	<!-- While most themes shouldn't query the database directly, if they do, it should be done correctly. -->
+	<!-- Don't use the PHP database functions and classes, use the WP abstraction layer instead. -->
+	<rule ref="WordPress.DB.RestrictedClasses"/>
+	<rule ref="WordPress.DB.RestrictedFunctions"/>
+
+	<!-- All SQL queries should be prepared as close to the time of querying the database as possible. -->
+	<rule ref="WordPress.WP.PreparedSQL"/>
+
+	<!-- Verify that placeholders in prepared queries are used correctly. -->
+	<rule ref="WordPress.DB.PreparedSQLPlaceholders"/>
+
 	<!-- Validate and/or sanitize untrusted data before entering into the database. -->
 	<!--
 		Revert to changing the type at the sniff level instead of the error code level
