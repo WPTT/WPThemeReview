@@ -9,9 +9,9 @@
 
 namespace WordPress\Sniffs\Theme;
 
-use WordPress\Sniff;
+use WordPress\AbstractFunctionParameterSniff;
 use PHP_CodeSniffer_Tokens as Tokens;
-use PHP_CodeSniffer_File as File;
+
 /**
  * Check that sanitization is done correctly in the customizer.
  *
@@ -21,54 +21,49 @@ use PHP_CodeSniffer_File as File;
  *
  * @since   0.xx.0
  */
-class NoSanitizeCallbackSniff extends Sniff {
+class NoSanitizeCallbackSniff extends AbstractFunctionParameterSniff {
+
 	/**
-	 * Returns an array of tokens this test wants to listen for.
+	 * The group name for this group of functions.
 	 *
-	 * @return array
+	 * @since 0.xx.0
+	 *
+	 * @var string
 	 */
-	public function register() {
-		return array(
-			T_STRING,
-			T_EVAL,
-		);
-	}
+	protected $group_name = 'no_sanitize_callback';
+
 	/**
-	 * Processes this test, when one of its tokens is encountered.
+	 * Array of functions to check.
 	 *
-	 * @param int $stackPtr  The position of the current token in the stack
-	 *                       passed in $this->tokens.
+	 * @since 0.xx.0
+	 *
+	 * @var array <string function name> => <int parameter position>
+	 */
+	protected $target_functions = array(
+		'add_setting' => 2,
+	);
+
+	/**
+	 * Process the parameters of a matched function.
+	 *
+	 * @since 0.xx.0
+	 *
+	 * @param int    $stackPtr        The position of the current token in the stack.
+	 * @param array  $group_name      The name of the group which was matched.
+	 * @param string $matched_content The token content (function name) which was matched.
+	 * @param array  $parameters      Array with information about the parameters.
 	 *
 	 * @return void
 	 */
-	public function process_token( $stackPtr ) {
-		$token = $this->tokens[ $stackPtr ];
-		// Exclude function definitions, static class methods, and namespaced calls.
-		$prev  = $this->phpcsFile->findPrevious( T_WHITESPACE, ( $stackPtr - 1 ), null, true );
-		$pprev = $this->phpcsFile->findPrevious( T_WHITESPACE, ( $prev - 1 ), null, true );
-		if (
-			T_STRING === $token['code']
-			&&
-			T_WHITESPACE !== $this->tokens[ $prev ]['code']
-			&&
-			// Skip sniffing if calling anything but class method.
-			T_OBJECT_OPERATOR !== $this->tokens[ $prev ]['code']
-			||
-			// Skip namespaced functions, ie: \foo\bar() not \bar().
-			(
-				T_NS_SEPARATOR === $this->tokens[ $prev ]['code']
-				&&
-				T_WHITESPACE !== $this->tokens[ $pprev ]['code']
-				&&
-				T_STRING === $this->tokens[ $pprev ]['code']
-			)
-		) {
+	public function process_parameters( $stackPtr, $group_name, $matched_content, $parameters ) {
+		$function_name = strtolower( $matched_content );
+		$target_param  = $this->target_functions[ $function_name ];
+
+		// Was the target parameter passed ?
+		if ( ! isset( $parameters[ $target_param ] ) ) {
 			return;
 		}
-		if ( 'add_setting' !== $token['content'] ) {
-			return;
-		}
-		$parameter_arg              = $this->get_function_call_parameter( $stackPtr, 2 );
+		$parameter_arg              = $parameters[ $target_param ];
 		$sanitize_callback_found    = false;
 		$sanitize_js_callback_found = false;
 		$sanitize_callback_key      = $parameter_arg['start'];
@@ -106,5 +101,42 @@ class NoSanitizeCallbackSniff extends Sniff {
 				}
 			}
 		}
+	}
+
+	/**
+	 * Verify is the current token is a function call.
+	 *
+	 * @since 0.xx.0
+	 *
+	 * @param int $stackPtr The position of the current token in the stack.
+	 *
+	 * @return bool
+	 */
+	public function is_targetted_token( $stackPtr ) {
+
+		// Exclude function definitions, static class methods, and namespaced calls.
+		$prev  = $this->phpcsFile->findPrevious( T_WHITESPACE, ( $stackPtr - 1 ), null, true );
+		$pprev = $this->phpcsFile->findPrevious( T_WHITESPACE, ( $prev - 1 ), null, true );
+		if (
+			T_STRING === $this->tokens[ $stackPtr ]['code']
+			&&
+			T_WHITESPACE !== $this->tokens[ $prev ]['code']
+			&&
+			// Skip sniffing if calling anything but class method.
+			T_OBJECT_OPERATOR !== $this->tokens[ $prev ]['code']
+			||
+			// Skip namespaced functions, ie: \foo\bar() not \bar().
+			(
+				T_NS_SEPARATOR === $this->tokens[ $prev ]['code']
+				&&
+				T_WHITESPACE !== $this->tokens[ $pprev ]['code']
+				&&
+				T_STRING === $this->tokens[ $pprev ]['code']
+			)
+		) {
+			return false;
+		}
+
+		return true;
 	}
 }
