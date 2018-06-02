@@ -101,6 +101,15 @@
 		<message>eval() is a security risk so not allowed.</message>
 	</rule>
 
+	<!-- Prohibit the use of the `goto` PHP language construct. -->
+	<!-- Duplicate of upstream PHPCS sniff. Should defer to upstream version once minimum PHPCS
+		 requirement has gone up to PHPCS 3.2.0 or higher. -->
+	<rule ref="WordPress.PHP.DiscourageGoto"/>
+	<rule ref="WordPress.PHP.DiscourageGoto.Found">
+		<type>error</type>
+		<message>The "goto" language construct should not be used.</message>
+	</rule>
+
 	<!-- Check for deprecated WordPress functions. -->
 	<rule ref="WordPress.WP.DeprecatedFunctions"/>
 
