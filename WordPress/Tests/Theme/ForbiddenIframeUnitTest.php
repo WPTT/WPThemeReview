@@ -26,9 +26,11 @@ class ForbiddenIframeUnitTest extends AbstractSniffUnitTest {
 	 */
 	public function getErrorList() {
 		return array(
-			5 => 1,
-			6 => 1,
-			8 => 1,
+			5  => 1,
+			6  => 1,
+			12 => 1,
+			17 => 1,
+			18 => 1,
 		);
 	}
 

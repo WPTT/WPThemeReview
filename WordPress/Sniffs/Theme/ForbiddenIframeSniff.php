@@ -13,9 +13,9 @@ use WordPress\Sniff;
 use PHP_CodeSniffer_Tokens as Tokens;
 
 /**
- * Check for use of iframe. Often used for malicious code.
+ * Check for use of <iframe>. Often used for malicious code.
  *
- * @link    https://make.wordpress.org/themes/handbook/review/required/#core-functionality-and-features
+ * @link    https://make.wordpress.org/themes/handbook/review/required/theme-check-plugin/#info
  *
  * @package WPCS\WordPressCodingStandards
  *
@@ -24,11 +24,13 @@ use PHP_CodeSniffer_Tokens as Tokens;
 class ForbiddenIframeSniff extends Sniff {
 
 	/**
-	 * The regex to catch the blacklisted attributes.
+	 * The regex to catch usage of <iframe ...>.
+	 *
+	 * This regex will prevent matches being made on `<iframe>` without attributes.
 	 *
 	 * @var string
 	 */
-	protected $iframe_regex;
+	const IFRAME_REGEX = '`(<iframe\s+[^>]+>)`i';
 
 	/**
 	 * Returns an array of tokens this test wants to listen for.
@@ -36,8 +38,6 @@ class ForbiddenIframeSniff extends Sniff {
 	 * @return array
 	 */
 	public function register() {
-		$this->iframe_regex = '/<(iframe)[^>]*>/';
-
 		return Tokens::$textStringTokens;
 	}
 
@@ -49,10 +49,13 @@ class ForbiddenIframeSniff extends Sniff {
 	 * @return void
 	 */
 	public function process_token( $stackPtr ) {
-		$token  = $this->tokens[ $stackPtr ];
-
-		if ( preg_match( $this->iframe_regex, $token['content'] ) > 0 ) {
-			$this->phpcsFile->addError( 'Usage of iframe is prohibited.' , $stackPtr, 'DiscouragedIframe' );
+		if ( preg_match( self::IFRAME_REGEX, $this->tokens[ $stackPtr ]['content'], $matches ) > 0 ) {
+			$this->phpcsFile->addError(
+				'Usage of the iframe HTML element is prohibited. Found: %s',
+				$stackPtr,
+				'Found',
+				array( $matches[1] )
+			);
 		}
 	}
 
