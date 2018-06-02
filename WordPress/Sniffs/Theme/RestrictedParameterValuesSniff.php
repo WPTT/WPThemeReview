@@ -7,6 +7,10 @@
  * @license https://opensource.org/licenses/MIT MIT
  */
 
+namespace WordPress\Sniffs\Theme;
+
+use WordPress\AbstractFunctionParameterSniff;
+
 /**
  * Check for usage of deprecated arguments in WP functions and provide alternative based on the parameter passed.
  *
@@ -14,7 +18,7 @@
  *
  * @since   0.xx.0
  */
-class WordPress_Sniffs_Theme_RestrictedParameterValuesSniff extends WordPress_AbstractFunctionParameterSniff {
+class RestrictedParameterValuesSniff extends AbstractFunctionParameterSniff {
 
 	/**
 	 * The group name for this group of functions.
@@ -31,12 +35,11 @@ class WordPress_Sniffs_Theme_RestrictedParameterValuesSniff extends WordPress_Ab
 	 * @since 0.xx.0
 	 *
 	 * @var array Multi-dimentional array with parameter details.
-	 *
-	 *               @type string Function name. {
-	 *                   @type int target Parameter positions. {
-	 *                       @type string  Alternative.
-	 *                   }
-	 *               }
+	 *            @type string Function name. {
+	 *                @type int target Parameter positions. {
+	 *                    @type string Alternative.
+	 *                }
+	 *            }
 	 */
 	protected $target_functions = array(
 		'get_bloginfo' => array(
@@ -117,7 +120,7 @@ class WordPress_Sniffs_Theme_RestrictedParameterValuesSniff extends WordPress_Ab
 				),
 			),
 		),
-	); // End $target_functions.
+	);
 
 	/**
 	 * Process the parameters of a matched function.
@@ -161,8 +164,7 @@ class WordPress_Sniffs_Theme_RestrictedParameterValuesSniff extends WordPress_Ab
 			}
 
 			$this->phpcsFile->addError( $message, $stackPtr, $matched_content . 'Found', $data );
-		} // End foreach().
-	} // End process_parameters().
-
+		}
+	}
 
 }

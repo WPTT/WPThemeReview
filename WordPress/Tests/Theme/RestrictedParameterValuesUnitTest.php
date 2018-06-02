@@ -7,13 +7,17 @@
  * @license https://opensource.org/licenses/MIT MIT
  */
 
+namespace WordPress\Tests\Theme;
+
+use PHP_CodeSniffer\Tests\Standards\AbstractSniffUnitTest;
+
 /**
- * Unit test class for the DeprecatedArgs sniff.
+ * Unit test class for the RestrictedParameterValues sniff.
  *
  * @package WPCS\WordPressCodingStandards
  * @since   0.xx.0
  */
-class WordPress_Tests_Theme_RestrictedParameterValuesUnitTest extends AbstractSniffUnitTest {
+class RestrictedParameterValuesUnitTest extends AbstractSniffUnitTest {
 
 	/**
 	 * Returns the lines where errors should occur.
@@ -54,4 +58,4 @@ class WordPress_Tests_Theme_RestrictedParameterValuesUnitTest extends AbstractSn
 		return array();
 	}
 
-}// End class.
+}
