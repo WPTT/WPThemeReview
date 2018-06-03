@@ -147,4 +147,8 @@
 		</properties>
 	</rule>
 
+	<!-- Themes should not use the PHP session functions nor access the $_SESSION variable. -->
+	<rule ref="WordPress.VIP.SessionFunctionsUsage"/>
+	<rule ref="WordPress.VIP.SessionVariableUsage"/>
+
 </ruleset>
