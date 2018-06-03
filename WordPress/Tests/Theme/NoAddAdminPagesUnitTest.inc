@@ -18,6 +18,7 @@ add_plugins_page();
 add_users_page();
 add_management_page();
 add_options_page();
+add_links_page();
 
 // Add Theme Page is allowed.
 add_theme_page(); // Ok.
