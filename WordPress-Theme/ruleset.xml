@@ -177,4 +177,7 @@
 	<rule ref="WordPress.VIP.SessionFunctionsUsage"/>
 	<rule ref="WordPress.VIP.SessionVariableUsage"/>
 
+	<!-- Themes should never touch the timezone. -->
+	<rule ref="WordPress.VIP.TimezoneChange"/>
+
 </ruleset>
