@@ -52,6 +52,7 @@ class NoAddAdminPagesSniff extends AbstractFunctionRestrictionsSniff {
 					// WordPress Administration Menus.
 					'add_dashboard_page',
 					'add_posts_page',
+					'add_links_page',
 					'add_media_page',
 					'add_pages_page',
 					'add_comments_page',
