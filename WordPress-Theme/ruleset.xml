@@ -17,6 +17,17 @@
 	<!-- Alternative PHP open tags not allowed. -->
 	<rule ref="Generic.PHP.DisallowAlternativePHPTags"/>
 
+	<!-- Files which start with a PHP open tag should have no whitespace preceding it. -->
+	<!-- Once PHPCS 3.x is the minimum, this block can be removed as errorcodes can then be included individually. -->
+	<rule ref="Squiz.WhiteSpace.SuperfluousWhitespace">
+		<exclude name="Squiz.WhiteSpace.SuperfluousWhitespace.EndFile"/>
+		<exclude name="Squiz.WhiteSpace.SuperfluousWhitespace.EndLine"/>
+		<exclude name="Squiz.WhiteSpace.SuperfluousWhitespace.EmptyLines"/>
+	</rule>
+	<rule ref="Squiz.WhiteSpace.SuperfluousWhitespace.StartFile">
+		<message>To help prevent PHP "headers already send" errors, whitespace before the PHP open tag should be removed.</message>
+	</rule>
+
 	<!-- Files should omit the closing PHP tag at the end of a file. -->
 	<rule ref="PSR2.Files.ClosingTag"/>
 	<rule ref="PSR2.Files.ClosingTag.NotAllowed">
