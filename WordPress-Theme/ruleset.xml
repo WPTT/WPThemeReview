@@ -123,8 +123,10 @@
 		<message>The "goto" language construct should not be used.</message>
 	</rule>
 
-	<!-- Check for deprecated WordPress functions. -->
+	<!-- Check for use of deprecated WordPress classes, functions and function parameters. -->
+	<rule ref="WordPress.WP.DeprecatedClasses"/>
 	<rule ref="WordPress.WP.DeprecatedFunctions"/>
+	<rule ref="WordPress.WP.DeprecatedParameters"/>
 
 	<!-- Check for deprecated WordPress constants. -->
 	<!--
