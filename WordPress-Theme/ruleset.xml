@@ -60,6 +60,13 @@
 			<property name="remove_only" value="false"/>
 		</properties>
 	</rule>
+	<!-- Prevent deprecation notices from showing. -->
+	<rule ref="WordPress.VIP.AdminBarRemoval.DeprecatedSniff">
+		<severity>0</severity>
+	</rule>
+	<rule ref="WordPress.VIP.AdminBarRemoval.FoundPropertyForDeprecatedSniff">
+		<severity>0</severity>
+	</rule>
 
 	<!-- Check that the I18N functions are used correctly. -->
 	<!-- This sniff can also check the text domain, provided it's passed to PHPCS. -->
@@ -69,7 +76,7 @@
 	<rule ref="WordPress.WP.EnqueuedResources"/>
 
 	<!-- Prevent path disclosure when using add_theme_page(). -->
-	<rule ref="WordPress.VIP.PluginMenuSlug"/>
+	<rule ref="WordPress.Security.PluginMenuSlug"/>
 
 	<!-- Do not silence error notices. e.g. Error Control Operator @.. -->
 	<rule ref="Generic.PHP.NoSilencedErrors">
@@ -84,7 +91,7 @@
 	<rule ref="WordPress.DB.RestrictedFunctions"/>
 
 	<!-- All SQL queries should be prepared as close to the time of querying the database as possible. -->
-	<rule ref="WordPress.WP.PreparedSQL"/>
+	<rule ref="WordPress.DB.PreparedSQL"/>
 
 	<!-- Verify that placeholders in prepared queries are used correctly. -->
 	<rule ref="WordPress.DB.PreparedSQLPlaceholders"/>
@@ -95,17 +102,17 @@
 		once the PR has been merged and the miminmum PHPCS version has been increased.
 		https://github.com/squizlabs/PHP_CodeSniffer/pull/1247
 	-->
-	<rule ref="WordPress.VIP.ValidatedSanitizedInput"/>
-	<rule ref="WordPress.VIP.ValidatedSanitizedInput.InputNotValidated">
+	<rule ref="WordPress.Security.ValidatedSanitizedInput"/>
+	<rule ref="WordPress.Security.ValidatedSanitizedInput.InputNotValidated">
 		<type>warning</type>
 	</rule>
-	<rule ref="WordPress.VIP.ValidatedSanitizedInput.InputNotSanitized">
+	<rule ref="WordPress.Security.ValidatedSanitizedInput.InputNotSanitized">
 		<type>warning</type>
 	</rule>
-	<rule ref="WordPress.VIP.ValidatedSanitizedInput.InputNotValidatedNotSanitized">
+	<rule ref="WordPress.Security.ValidatedSanitizedInput.InputNotValidatedNotSanitized">
 		<type>warning</type>
 	</rule>
-	<rule ref="WordPress.VIP.ValidatedSanitizedInput.MissingUnslash">
+	<rule ref="WordPress.Security.ValidatedSanitizedInput.MissingUnslash">
 		<type>warning</type>
 	</rule>
 
@@ -115,11 +122,11 @@
 		once the PR has been merged and the miminmum PHPCS version has been increased.
 		https://github.com/squizlabs/PHP_CodeSniffer/pull/1247
 	-->
-	<rule ref="WordPress.XSS.EscapeOutput"/>
-	<rule ref="WordPress.XSS.EscapeOutput.UnsafePrintingFunction">
+	<rule ref="WordPress.Security.EscapeOutput"/>
+	<rule ref="WordPress.Security.EscapeOutput.UnsafePrintingFunction">
 		<type>warning</type>
 	</rule>
-	<rule ref="WordPress.XSS.EscapeOutput.OutputNotEscaped">
+	<rule ref="WordPress.Security.EscapeOutput.OutputNotEscaped">
 		<type>warning</type>
 	</rule>
 
@@ -127,7 +134,7 @@
 	<rule ref="Generic.PHP.BacktickOperator"/>
 
 	<!-- Prohibit overwriting of WordPress global variables. -->
-	<rule ref="WordPress.Variables.GlobalVariables"/>
+	<rule ref="WordPress.WP.GlobalVariablesOverride"/>
 
 	<!-- Prohibit the use of the eval() PHP language construct. -->
 	<rule ref="Squiz.PHP.Eval"/>
@@ -186,9 +193,21 @@
 
 	<!-- Themes should not use the PHP session functions nor access the $_SESSION variable. -->
 	<rule ref="WordPress.VIP.SessionFunctionsUsage"/>
+	<!-- Prevent deprecation notices from showing. -->
+	<rule ref="WordPress.VIP.SessionFunctionsUsage.DeprecatedSniff">
+		<severity>0</severity>
+	</rule>
+	<rule ref="WordPress.VIP.SessionFunctionsUsage.FoundPropertyForDeprecatedSniff">
+		<severity>0</severity>
+	</rule>
+
 	<rule ref="WordPress.VIP.SessionVariableUsage"/>
+	<!-- Prevent deprecation notices from showing. -->
+	<rule ref="WordPress.VIP.SessionVariableUsage.DeprecatedSniff">
+		<severity>0</severity>
+	</rule>
 
 	<!-- Themes should never touch the timezone. -->
-	<rule ref="WordPress.VIP.TimezoneChange"/>
+	<rule ref="WordPress.WP.TimezoneChange"/>
 
 </ruleset>
