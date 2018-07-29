@@ -194,7 +194,7 @@ class NoDeregisterCoreScriptSniff extends AbstractFunctionParameterSniff {
 		}
 
 		if ( true === $found_variable_token ) {
-			$this->throw_variable_handle_warning( $stackPtr, array( $matched_content ) );
+			$this->throw_variable_handle_warning( $stackPtr, array( $matched_content, $matched_parameter ) );
 		}
 	}
 
@@ -221,7 +221,7 @@ class NoDeregisterCoreScriptSniff extends AbstractFunctionParameterSniff {
 	 */
 	public function throw_variable_handle_warning( $stackPtr, $data = array() ) {
 		$this->phpcsFile->addWarning(
-			'Deregistering core scripts is prohibited. A variable script handle was found. Inspection of the %s() call needed.',
+			'Deregistering core scripts is prohibited. A variable script handle was found. Inspection of the %s() call needed. Found: %s',
 			$stackPtr,
 			'VariableHandleFound',
 			$data
