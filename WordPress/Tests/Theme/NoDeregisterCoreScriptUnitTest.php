@@ -28,7 +28,7 @@ class NoDeregisterCoreScriptUnitTest extends AbstractSniffUnitTest {
 		return array(
 			32 => 1,
 			33 => 1,
-			34 => 1,
+			35 => 1,
 			37 => 1,
 			38 => 1,
 		);

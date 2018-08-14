@@ -164,9 +164,15 @@ class NoDeregisterCoreScriptSniff extends AbstractFunctionParameterSniff {
 		}
 
 		$matched_parameter = $this->strip_quotes( $parameters[1]['raw'] );
+		$first_param_token = $this->phpcsFile->findNext(
+			Tokens::$emptyTokens,
+			$parameters[1]['start'],
+			( $parameters[1]['end'] + 1 ),
+			true
+		);
 
 		if ( isset( $this->target_functions[ $matched_content ][ $matched_parameter ] ) ) {
-			$this->throw_prohibited_error( $stackPtr, array( $matched_parameter ) );
+			$this->throw_prohibited_error( $first_param_token, array( $matched_parameter ) );
 			return;
 		}
 
@@ -189,19 +195,19 @@ class NoDeregisterCoreScriptSniff extends AbstractFunctionParameterSniff {
 		}
 
 		if ( isset( $this->target_functions[ $matched_content ][ $text ] ) ) {
-			$this->throw_prohibited_error( $stackPtr, array( $text ) );
+			$this->throw_prohibited_error( $first_param_token, array( $text ) );
 			return;
 		}
 
 		if ( true === $found_variable_token ) {
-			$this->throw_variable_handle_warning( $stackPtr, array( $matched_content, $matched_parameter ) );
+			$this->throw_variable_handle_warning( $first_param_token, array( $matched_content, $matched_parameter ) );
 		}
 	}
 
 	/**
 	 * Throw the error for deregistering a core script.
 	 *
-	 * @param int   $stackPtr The position of the matched function call in the stack.
+	 * @param int   $stackPtr The position of the first non-empty parameter token in the stack.
 	 * @param array $data     Optional input for the data replacements.
 	 */
 	public function throw_prohibited_error( $stackPtr, $data = array() ) {
@@ -216,7 +222,7 @@ class NoDeregisterCoreScriptSniff extends AbstractFunctionParameterSniff {
 	/**
 	 * Throw a warning when a variable handle for deregistering a script is detected.
 	 *
-	 * @param int   $stackPtr The position of the matched function call in the stack.
+	 * @param int   $stackPtr The position of the first non-empty parameter token in the stack.
 	 * @param array $data     Optional input for the data replacements.
 	 */
 	public function throw_variable_handle_warning( $stackPtr, $data = array() ) {
