@@ -275,7 +275,7 @@ class AdminBarRemovalSniff extends AbstractFunctionParameterSniff {
 				$this->in_style[ $file_name ] = false;
 				$content                      = trim( substr( $content, 0, strpos( $content, '</style>' ) ) );
 			}
-		} elseif ( true === $this->has_html_open_tag( 'style', $stackPtr, $content ) ) {
+		} elseif ( false !== strpos( $content, '<style' ) ) {
 			// Ok, found a <style> open tag.
 			if ( false === strpos( $content, '</style>' ) ) {
 				// Make sure we check any content on this line after the opening style tag.

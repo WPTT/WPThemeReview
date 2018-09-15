@@ -26,6 +26,13 @@ use PHP_CodeSniffer_Tokens as Tokens;
  * @package WPCS\WordPressCodingStandards
  *
  * @since   0.xx.0
+ *
+ * {@internal This sniff currently has not (yet) been detached from the WordPress\Sniff class
+ * as the `detect_manual_editing()` method uses the WPCS `get_function_call_parameter()` and
+ * `strip_quotes()` methods.
+ * If/when WPCS re-organizes the generic methods into traits as is being discussed in
+ * {@link https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards/issues/1465},
+ * this sniff could be decoupled and use the trait(s) instead.}}
  */
 class CorrectTGMPAVersionSniff extends Sniff {
 

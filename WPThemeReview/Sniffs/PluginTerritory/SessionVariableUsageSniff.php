@@ -9,7 +9,8 @@
 
 namespace WPThemeReview\Sniffs\PluginTerritory;
 
-use WordPress\Sniff;
+use PHP_CodeSniffer\Sniffs\Sniff;
+use PHP_CodeSniffer\Files\File;
 
 /**
  * Discourages the use of the session variable.
@@ -25,7 +26,7 @@ use WordPress\Sniff;
  * @since   0.12.0 This class now extends WordPress_Sniff.
  * @since   0.13.0 Class name changed: this class is now namespaced.
  */
-class SessionVariableUsageSniff extends Sniff {
+class SessionVariableUsageSniff implements Sniff {
 
 	/**
 	 * Returns an array of tokens this test wants to listen for.
@@ -41,13 +42,19 @@ class SessionVariableUsageSniff extends Sniff {
 	/**
 	 * Processes this test, when one of its tokens is encountered.
 	 *
-	 * @param int $stackPtr The position of the current token in the stack.
+	 * @param \PHP_CodeSniffer\Files\File $phpcsFile The PHP_CodeSniffer file where the
+	 *                                               token was found.
+	 * @param int                         $stackPtr  The position of the current token
+	 *                                               in the stack.
 	 *
 	 * @return void
 	 */
-	public function process_token( $stackPtr ) {
-		if ( '$_SESSION' === $this->tokens[ $stackPtr ]['content'] ) {
-			$this->phpcsFile->addError(
+	public function process( File $phpcsFile, $stackPtr ) {
+
+		$tokens = $phpcsFile->getTokens();
+
+		if ( '$_SESSION' === $tokens[ $stackPtr ]['content'] ) {
+			$phpcsFile->addError(
 				'Usage of $_SESSION variable is prohibited.',
 				$stackPtr,
 				'SessionVarsProhibited'

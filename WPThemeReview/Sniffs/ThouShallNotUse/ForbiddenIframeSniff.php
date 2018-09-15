@@ -9,7 +9,8 @@
 
 namespace WPThemeReview\Sniffs\ThouShallNotUse;
 
-use WordPress\Sniff;
+use PHP_CodeSniffer\Sniffs\Sniff;
+use PHP_CodeSniffer\Files\File;
 use PHP_CodeSniffer_Tokens as Tokens;
 
 /**
@@ -21,7 +22,7 @@ use PHP_CodeSniffer_Tokens as Tokens;
  *
  * @since   0.xx.0
  */
-class ForbiddenIframeSniff extends Sniff {
+class ForbiddenIframeSniff implements Sniff {
 
 	/**
 	 * The regex to catch usage of <iframe ...>.
@@ -44,13 +45,19 @@ class ForbiddenIframeSniff extends Sniff {
 	/**
 	 * Processes this test, when one of its tokens is encountered.
 	 *
-	 * @param int $stackPtr The position of the current token in the stack.
+	 * @param \PHP_CodeSniffer\Files\File $phpcsFile The PHP_CodeSniffer file where the
+	 *                                               token was found.
+	 * @param int                         $stackPtr  The position of the current token
+	 *                                               in the stack.
 	 *
 	 * @return void
 	 */
-	public function process_token( $stackPtr ) {
-		if ( preg_match( self::IFRAME_REGEX, $this->tokens[ $stackPtr ]['content'], $matches ) > 0 ) {
-			$this->phpcsFile->addError(
+	public function process( File $phpcsFile, $stackPtr ) {
+
+		$tokens = $phpcsFile->getTokens();
+
+		if ( preg_match( self::IFRAME_REGEX, $tokens[ $stackPtr ]['content'], $matches ) > 0 ) {
+			$phpcsFile->addError(
 				'Usage of the iframe HTML element is prohibited. Found: %s',
 				$stackPtr,
 				'Found',

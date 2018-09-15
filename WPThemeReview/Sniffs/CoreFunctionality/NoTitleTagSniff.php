@@ -9,7 +9,8 @@
 
 namespace WPThemeReview\Sniffs\CoreFunctionality;
 
-use WordPress\Sniff;
+use PHP_CodeSniffer\Sniffs\Sniff;
+use PHP_CodeSniffer\Files\File;
 use PHP_CodeSniffer_Tokens as Tokens;
 
 /**
@@ -21,7 +22,7 @@ use PHP_CodeSniffer_Tokens as Tokens;
  *
  * @since   0.xx.0
  */
-class NoTitleTagSniff extends Sniff {
+class NoTitleTagSniff implements Sniff {
 
 	/**
 	 * Property to keep track of whether a <svg> open tag has been encountered.
@@ -42,13 +43,18 @@ class NoTitleTagSniff extends Sniff {
 	/**
 	 * Processes this test, when one of its tokens is encountered.
 	 *
-	 * @param int $stackPtr The position of the current token in the stack.
+	 * @param \PHP_CodeSniffer\Files\File $phpcsFile The PHP_CodeSniffer file where the
+	 *                                               token was found.
+	 * @param int                         $stackPtr  The position of the current token
+	 *                                               in the stack.
 	 *
 	 * @return void
 	 */
-	public function process_token( $stackPtr ) {
-		$content  = $this->tokens[ $stackPtr ]['content'];
-		$filename = $this->phpcsFile->getFileName();
+	public function process( File $phpcsFile, $stackPtr ) {
+
+		$tokens   = $phpcsFile->getTokens();
+		$content  = $tokens[ $stackPtr ]['content'];
+		$filename = $phpcsFile->getFileName();
 
 		// Set to false if it is the first time this sniff is run on a file.
 		if ( ! isset( $this->in_svg[ $filename ] ) ) {
@@ -72,7 +78,7 @@ class NoTitleTagSniff extends Sniff {
 		}
 
 		// We're not in svg, so check if it there's a <svg> open tag on this line.
-		if ( true === $this->has_html_open_tag( 'svg', $stackPtr, $content ) ) {
+		if ( false !== strpos( $content, '<svg' ) ) {
 			if ( false === strpos( $content, '</svg>' ) ) {
 				// Skip the next lines until the closing svg tag, but do check any content
 				// on this line before the svg tag.
@@ -88,7 +94,7 @@ class NoTitleTagSniff extends Sniff {
 
 		// Now let's do the check for the <title> tag.
 		if ( false !== strpos( $content, '<title' ) ) {
-			$this->phpcsFile->addError(
+			$phpcsFile->addError(
 				"The title tag must not be used. Use add_theme_support( 'title-tag' ) instead.",
 				$stackPtr,
 				'TagFound'

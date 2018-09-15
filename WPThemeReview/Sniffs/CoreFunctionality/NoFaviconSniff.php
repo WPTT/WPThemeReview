@@ -9,7 +9,8 @@
 
 namespace WPThemeReview\Sniffs\CoreFunctionality;
 
-use WordPress\Sniff;
+use PHP_CodeSniffer\Sniffs\Sniff;
+use PHP_CodeSniffer\Files\File;
 use PHP_CodeSniffer_Tokens as Tokens;
 
 /**
@@ -21,7 +22,7 @@ use PHP_CodeSniffer_Tokens as Tokens;
  *
  * @since   0.xx.0
  */
-class NoFaviconSniff extends Sniff {
+class NoFaviconSniff implements Sniff {
 
 	/**
 	 * Regex template.
@@ -94,13 +95,20 @@ class NoFaviconSniff extends Sniff {
 	/**
 	 * Processes this test, when one of its tokens is encountered.
 	 *
-	 * @param int $stackPtr The position of the current token in the stack.
+	 * @param \PHP_CodeSniffer\Files\File $phpcsFile The PHP_CodeSniffer file where the
+	 *                                               token was found.
+	 * @param int                         $stackPtr  The position of the current token
+	 *                                               in the stack.
+	 *
+	 * @return void
 	 */
-	public function process_token( $stackPtr ) {
-		$token = $this->tokens[ $stackPtr ];
+	public function process( File $phpcsFile, $stackPtr ) {
+
+		$tokens = $phpcsFile->getTokens();
+		$token  = $tokens[ $stackPtr ];
 
 		if ( preg_match( $this->favicon_regex, $token['content'] ) > 0 ) {
-			$this->phpcsFile->addError(
+			$phpcsFile->addError(
 				'Code for favicon found. Favicons are handled by the "Site Icon" setting in the customizer since WP version 4.3.',
 				$stackPtr,
 				'NoFavicon'
