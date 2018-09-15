@@ -14,11 +14,9 @@ use WordPress\AbstractFunctionRestrictionsSniff;
 /**
  * Restricts the use of various functions that are plugin territory.
  *
- * @link    https://make.wordpress.org/themes/handbook/review/required/#presentation-vs-functionality
+ * @link  https://make.wordpress.org/themes/handbook/review/required/#presentation-vs-functionality
  *
- * @package WPCS\WordPressCodingStandards
- *
- * @since   0.xx.0
+ * @since 0.1.0
  */
 class ForbiddenFunctionsSniff extends AbstractFunctionRestrictionsSniff {
 

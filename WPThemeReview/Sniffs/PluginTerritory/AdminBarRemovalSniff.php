@@ -15,22 +15,23 @@ use PHP_CodeSniffer_Tokens as Tokens;
 /**
  * Discourages removal of the admin bar.
  *
- * @link    https://vip.wordpress.com/documentation/vip/code-review-what-we-look-for/#removing-the-admin-bar
+ * @link  https://make.wordpress.org/themes/handbook/review/required/#core-functionality-and-features
  *
- * @package WPCS\WordPressCodingStandards
+ * @since WPCS 0.3.0
+ * @since WPCS 0.11.0 - Extends the WordPress_AbstractFunctionParameterSniff class.
+ *                    - Added the $remove_only property.
+ *                    - Now also sniffs for manipulation of the admin bar visibility through CSS.
+ * @since WPCS 0.13.0 Class name changed: this class is now namespaced.
  *
- * @since   0.3.0
- * @since   0.11.0 - Extends the WordPress_AbstractFunctionParameterSniff class.
- *                 - Added the $remove_only property.
- *                 - Now also sniffs for manipulation of the admin bar visibility through CSS.
- * @since   0.13.0 Class name changed: this class is now namespaced.
+ * @since TRTCS 0.1.0 As this sniff will be removed from WPCS in version 2.0, the
+ *                    sniff has been cherry-picked into the WPThemeReview standard.
  */
 class AdminBarRemovalSniff extends AbstractFunctionParameterSniff {
 
 	/**
 	 * A list of tokenizers this sniff supports.
 	 *
-	 * @since 0.11.0
+	 * @since WPCS 0.11.0
 	 *
 	 * @var array
 	 */
@@ -44,7 +45,7 @@ class AdminBarRemovalSniff extends AbstractFunctionParameterSniff {
 	 * Set to false to check for any form of manipulation of the visibility
 	 * of the admin bar.
 	 *
-	 * @since 0.11.0
+	 * @since WPCS 0.11.0
 	 *
 	 * @var bool
 	 */
@@ -53,7 +54,7 @@ class AdminBarRemovalSniff extends AbstractFunctionParameterSniff {
 	/**
 	 * Functions this sniff is looking for.
 	 *
-	 * @since 0.11.0
+	 * @since WPCS 0.11.0
 	 *
 	 * @var array
 	 */
@@ -65,7 +66,7 @@ class AdminBarRemovalSniff extends AbstractFunctionParameterSniff {
 	/**
 	 * CSS properties this sniff is looking for.
 	 *
-	 * @since 0.11.0
+	 * @since WPCS 0.11.0
 	 *
 	 * @var array
 	 */
@@ -87,7 +88,7 @@ class AdminBarRemovalSniff extends AbstractFunctionParameterSniff {
 	/**
 	 * CSS selectors this sniff is looking for.
 	 *
-	 * @since 0.11.0
+	 * @since WPCS 0.11.0
 	 *
 	 * @var array
 	 */
@@ -110,7 +111,7 @@ class AdminBarRemovalSniff extends AbstractFunctionParameterSniff {
 	/**
 	 * Regex template for use with the CSS selectors in combination with PHP text strings.
 	 *
-	 * @since 0.11.0
+	 * @since WPCS 0.11.0
 	 *
 	 * @var string
 	 */
@@ -119,7 +120,7 @@ class AdminBarRemovalSniff extends AbstractFunctionParameterSniff {
 	/**
 	 * Property to keep track of whether a <style> open tag has been encountered.
 	 *
-	 * @since 0.11.0
+	 * @since WPCS 0.11.0
 	 *
 	 * @var array
 	 */
@@ -128,7 +129,7 @@ class AdminBarRemovalSniff extends AbstractFunctionParameterSniff {
 	/**
 	 * Property to keep track of whether a one of the target selectors has been encountered.
 	 *
-	 * @since 0.11.0
+	 * @since WPCS 0.11.0
 	 *
 	 * @var array
 	 */
@@ -205,7 +206,7 @@ class AdminBarRemovalSniff extends AbstractFunctionParameterSniff {
 	/**
 	 * Process the parameters of a matched function.
 	 *
-	 * @since 0.11.0
+	 * @since WPCS 0.11.0
 	 *
 	 * @param int    $stackPtr        The position of the current token in the stack.
 	 * @param array  $group_name      The name of the group which was matched.
@@ -253,7 +254,7 @@ class AdminBarRemovalSniff extends AbstractFunctionParameterSniff {
 	/**
 	 * Processes this test, when one of its tokens is encountered.
 	 *
-	 * @since 0.11.0
+	 * @since WPCS 0.11.0
 	 *
 	 * @param int    $stackPtr  The position of the current token in the stack.
 	 * @param string $file_name The file name of the current file being processed.
@@ -348,7 +349,7 @@ class AdminBarRemovalSniff extends AbstractFunctionParameterSniff {
 	/**
 	 * Processes this test for T_STYLE tokens in CSS files.
 	 *
-	 * @since 0.11.0
+	 * @since WPCS 0.11.0
 	 *
 	 * @param int $stackPtr  The position of the current token in the stack passed in $tokens.
 	 *
@@ -406,7 +407,7 @@ class AdminBarRemovalSniff extends AbstractFunctionParameterSniff {
 	 * this method should be moved to the WordPress_Sniff class and expanded to cover
 	 * all types of comparisons.}}
 	 *
-	 * @since 0.11.0
+	 * @since WPCS 0.11.0
 	 *
 	 * @param mixed  $value         The value of CSS property.
 	 * @param string $compare_type  The type of comparison to use for the validation.

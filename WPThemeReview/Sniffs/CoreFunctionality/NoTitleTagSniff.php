@@ -16,11 +16,9 @@ use PHP_CodeSniffer_Tokens as Tokens;
 /**
  * Restricts the use of the <title> tag, unless it is within a <svg> tag.
  *
- * @link https://make.wordpress.org/themes/handbook/review/required/
+ * @link  https://make.wordpress.org/themes/handbook/review/required/
  *
- * @package WPCS\WordPressCodingStandards
- *
- * @since   0.xx.0
+ * @since 0.1.0
  */
 class NoTitleTagSniff implements Sniff {
 

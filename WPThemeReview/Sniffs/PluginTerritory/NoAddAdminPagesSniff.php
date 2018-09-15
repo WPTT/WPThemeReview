@@ -14,11 +14,9 @@ use WordPress\AbstractFunctionRestrictionsSniff;
 /**
  * Forbids the use of add_..._page() functions within Themes with the exception of `add_theme_page()`.
  *
- * @link    https://make.wordpress.org/themes/handbook/review/required/theme-check-plugin/#admin-menu
+ * @link  https://make.wordpress.org/themes/handbook/review/required/theme-check-plugin/#admin-menu
  *
- * @package WPCS\WordPressCodingStandards
- *
- * @since   0.xx.0
+ * @since 0.1.0
  */
 class NoAddAdminPagesSniff extends AbstractFunctionRestrictionsSniff {
 

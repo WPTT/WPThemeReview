@@ -16,11 +16,9 @@ use PHP_CodeSniffer_Tokens as Tokens;
 /**
  * Check for hardcoded favicons instead of using core implementation.
  *
- * @link    https://make.wordpress.org/themes/handbook/review/required/#core-functionality-and-features
+ * @link  https://make.wordpress.org/themes/handbook/review/required/#core-functionality-and-features
  *
- * @package WPCS\WordPressCodingStandards
- *
- * @since   0.xx.0
+ * @since 0.1.0
  */
 class NoFaviconSniff implements Sniff {
 

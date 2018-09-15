@@ -16,11 +16,9 @@ use PHP_CodeSniffer_Tokens as Tokens;
 /**
  * Check if a theme uses include(_once) or require(_once) when get_template_part() should be used.
  *
- * @link    https://make.wordpress.org/themes/handbook/review/required/#core-functionality-and-features
+ * @link  https://make.wordpress.org/themes/handbook/review/required/#core-functionality-and-features
  *
- * @package WPCS\WordPressCodingStandards
- *
- * @since   0.xx.0
+ * @since 0.1.0
  */
 class FileIncludeSniff implements Sniff {
 

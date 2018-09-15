@@ -16,15 +16,16 @@ use PHP_CodeSniffer\Files\File;
  * Discourages the use of the session variable.
  * Creating a session writes a file to the server and is unreliable in a multi-server environment.
  *
- * @link    https://vip.wordpress.com/documentation/vip/code-review-what-we-look-for/#session_start-and-other-session-related-functions
+ * @link  https://make.wordpress.org/themes/handbook/review/...... @todo
  *
- * @package WPCS\WordPressCodingStandards
+ * @since WPCS 0.3.0
+ * @since WPCS 0.10.0 The sniff no longer needlessly extends the Generic_Sniffs_PHP_ForbiddenFunctionsSniff
+ *                    which it didn't use.
+ * @since WPCS 0.12.0 This class now extends WordPress_Sniff.
+ * @since WPCS 0.13.0 Class name changed: this class is now namespaced.
  *
- * @since   0.3.0
- * @since   0.10.0 The sniff no longer needlessly extends the Generic_Sniffs_PHP_ForbiddenFunctionsSniff
- *                 which it didn't use.
- * @since   0.12.0 This class now extends WordPress_Sniff.
- * @since   0.13.0 Class name changed: this class is now namespaced.
+ * @since TRTCS 0.1.0 As this sniff will be removed from WPCS in version 2.0, the
+ *                    sniff has been cherry-picked into the WPThemeReview standard.
  */
 class SessionVariableUsageSniff implements Sniff {
 

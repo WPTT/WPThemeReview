@@ -15,18 +15,16 @@ use PHP_CodeSniffer_Tokens as Tokens;
 /**
  * Forbids deregistering of core scripts (javascript).
  *
- * @link https://make.wordpress.org/themes/handbook/review/required/#stylesheets-and-scripts
+ * @link  https://make.wordpress.org/themes/handbook/review/required/#stylesheets-and-scripts
  *
- * @package WPCS\WordPressCodingStandards
- *
- * @since 0.xx.0
+ * @since 0.1.0
  */
 class NoDeregisterCoreScriptSniff extends AbstractFunctionParameterSniff {
 
 	/**
 	 * The group name for this group of functions.
 	 *
-	 * @since 0.xx.0
+	 * @since 0.1.0
 	 *
 	 * @var string
 	 */
@@ -40,7 +38,7 @@ class NoDeregisterCoreScriptSniff extends AbstractFunctionParameterSniff {
 	 *
 	 *            @link https://developer.wordpress.org/reference/functions/wp_enqueue_script/}}
 	 *
-	 * @since 0.xx.0
+	 * @since 0.1.0
 	 *
 	 * @var array
 	 */
@@ -148,7 +146,7 @@ class NoDeregisterCoreScriptSniff extends AbstractFunctionParameterSniff {
 	/**
 	 * Process the parameters of a matched function.
 	 *
-	 * @since 0.xx.0
+	 * @since 0.1.0
 	 *
 	 * @param int    $stackPtr        The position of the current token in the stack.
 	 * @param array  $group_name      The name of the group which was matched.

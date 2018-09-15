@@ -21,11 +21,9 @@ use PHP_CodeSniffer_Tokens as Tokens;
  *   the correct settings.
  * - Check against a persistent manual search & replace error made by theme authors.
  *
- * @link    https://make.wordpress.org/themes/handbook/review/...... @todo
+ * @link  https://make.wordpress.org/themes/handbook/review/...... @todo
  *
- * @package WPCS\WordPressCodingStandards
- *
- * @since   0.xx.0
+ * @since 0.1.0
  *
  * {@internal This sniff currently has not (yet) been detached from the WordPress\Sniff class
  * as the `detect_manual_editing()` method uses the WPCS `get_function_call_parameter()` and

@@ -14,8 +14,7 @@ use PHP_CodeSniffer\Tests\Standards\AbstractSniffUnitTest;
 /**
  * Unit test class for the Correct TGMPA Version sniff.
  *
- * @package WPCS\WordPressCodingStandards
- * @since   0.xx.0
+ * @since 0.1.0
  */
 class CorrectTGMPAVersionUnitTest extends AbstractSniffUnitTest {
 

@@ -14,8 +14,7 @@ use PHP_CodeSniffer\Tests\Standards\AbstractSniffUnitTest;
 /**
  * Unit test class for the PluginTerritory/ForbiddenFunctions sniff.
  *
- * @package WPCS\WordPressCodingStandards
- * @since   0.xx.0
+ * @since 0.1.0
  */
 class ForbiddenFunctionsUnitTest extends AbstractSniffUnitTest {
 

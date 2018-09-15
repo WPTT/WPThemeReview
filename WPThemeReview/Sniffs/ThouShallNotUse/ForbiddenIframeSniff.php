@@ -16,11 +16,9 @@ use PHP_CodeSniffer_Tokens as Tokens;
 /**
  * Check for use of <iframe>. Often used for malicious code.
  *
- * @link    https://make.wordpress.org/themes/handbook/review/required/theme-check-plugin/#info
+ * @link  https://make.wordpress.org/themes/handbook/review/required/theme-check-plugin/#info
  *
- * @package WPCS\WordPressCodingStandards
- *
- * @since   0.xx.0
+ * @since 0.1.0
  */
 class ForbiddenIframeSniff implements Sniff {
 

@@ -16,9 +16,7 @@ use PHP_CodeSniffer_Tokens as Tokens;
 /**
  * Check for auto generated themes.
  *
- * @package WPCS\WordPressCodingStandards
- *
- * @since   0.xx.0
+ * @since 0.1.0
  */
 class NoAutoGenerateSniff implements Sniff {
 
