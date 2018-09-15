@@ -1,0 +1,79 @@
+sudo: false
+
+dist: trusty
+
+cache:
+  apt: true
+  directories:
+    # Cache directory for older Composer versions.
+    - $HOME/.composer/cache/files
+    # Cache directory for more recent Composer versions.
+    - $HOME/.cache/composer/files
+
+language:
+  - php
+
+php:
+  - 5.4
+  - 5.5
+  - 5.6
+  - 7.0
+  - 7.1
+  - 7.3
+  - nightly
+
+env:
+  # Highest supported PHPCS version.
+  - PHPCS_BRANCH="dev-master" LINT=1
+  # Lowest supported PHPCS version.
+  - PHPCS_BRANCH="3.3.0"
+
+matrix:
+  fast_finish: true
+  include:
+    # Seperate builds for PHP 7.2 with additional checks.
+    - php: 7.2
+      env: PHPCS_BRANCH="dev-master" LINT=1 SNIFF=1
+      addons:
+        apt:
+          packages:
+            - libxml2-utils
+    - php: 7.2
+      env: PHPCS_BRANCH="3.3.0"
+
+  allow_failures:
+    # Allow failures for unstable builds.
+    - php: nightly
+    - php: 7.3
+
+before_install:
+  # Speed up build time by disabling Xdebug.
+  - phpenv config-rm xdebug.ini || echo 'No xdebug config.'
+  - export XMLLINT_INDENT="	"
+  - composer require squizlabs/php_codesniffer:${PHPCS_BRANCH} --no-update --no-suggest --no-scripts
+  - |
+    if [[ "$SNIFF" == "1" ]]; then
+      # Use the Travis image PHPUnit version rather than installing via Composer.
+      composer remove --dev phpunit/phpunit --no-update --no-suggest --no-scripts
+      composer install --dev --no-suggest
+      # The post-install-cmd script takes care of the installed_paths.
+    else
+      composer install --no-dev --no-suggest --no-scripts
+      composer install-standards
+    fi
+
+script:
+  # Lint the PHP files against parse errors.
+  - if [[ "$LINT" == "1" ]]; then if find . -path ./vendor -prune -o -name "*.php" -exec php -l {} \; | grep "^[Parse error|Fatal error]"; then exit 1; fi; fi
+  # Run the unit tests.
+  - phpunit --filter WPThemeReview $(pwd)/vendor/squizlabs/php_codesniffer/tests/AllTests.php
+  # Check the codestyle of the WPThemeReview codebase.
+  - if [[ "$SNIFF" == "1" ]]; then $(pwd)/vendor/bin/phpcs; fi
+  # Validate the xml files.
+  # @link http://xmlsoft.org/xmllint.html
+  - if [[ "$SNIFF" == "1" ]]; then xmllint --noout ./*/ruleset.xml; fi
+  # Check the code-style consistency of the xml files.
+  - if [[ "$SNIFF" == "1" ]]; then diff -B --tabsize=4 ./WPThemeReview/ruleset.xml <(xmllint --format "./WPThemeReview/ruleset.xml"); fi
+  # Validate the composer.json file.
+  # @link https://getcomposer.org/doc/03-cli.md#validate
+  - if [[ "$LINT" == "1" ]]; then composer validate --no-check-all --strict; fi
