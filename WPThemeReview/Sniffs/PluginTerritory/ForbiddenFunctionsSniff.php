@@ -1,9 +1,9 @@
 <?php
 /**
- * WordPress Coding Standard.
+ * WPThemeReview Coding Standard.
  *
- * @package WPCS\WordPressCodingStandards
- * @link    https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards
+ * @package WPTRT\WPThemeReview
+ * @link    https://github.com/WPTRT/WPThemeReview
  * @license https://opensource.org/licenses/MIT MIT
  */
 
