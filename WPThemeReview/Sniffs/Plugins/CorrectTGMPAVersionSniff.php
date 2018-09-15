@@ -7,7 +7,7 @@
  * @license https://opensource.org/licenses/MIT MIT
  */
 
-namespace WordPress\Sniffs\Theme;
+namespace WPThemeReview\Sniffs\Plugins;
 
 use WordPress\Sniff;
 use PHP_CodeSniffer_Tokens as Tokens;

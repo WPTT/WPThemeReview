@@ -7,7 +7,7 @@
  * @license https://opensource.org/licenses/MIT MIT
  */
 
-namespace WordPress\Tests\Theme;
+namespace WPThemeReview\Tests\PluginTerritory;
 
 use PHP_CodeSniffer\Tests\Standards\AbstractSniffUnitTest;
 

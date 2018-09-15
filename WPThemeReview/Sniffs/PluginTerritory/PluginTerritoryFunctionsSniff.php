@@ -7,7 +7,7 @@
  * @license https://opensource.org/licenses/MIT MIT
  */
 
-namespace WordPress\Sniffs\Theme;
+namespace WPThemeReview\Sniffs\PluginTerritory;
 
 use WordPress\AbstractFunctionRestrictionsSniff;
 
