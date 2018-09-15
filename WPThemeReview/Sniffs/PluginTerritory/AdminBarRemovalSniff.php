@@ -10,7 +10,7 @@
 namespace WPThemeReview\Sniffs\PluginTerritory;
 
 use WordPress\AbstractFunctionParameterSniff;
-use PHP_CodeSniffer_Tokens as Tokens;
+use PHP_CodeSniffer\Util\Tokens;
 
 /**
  * Discourages removal of the admin bar.
@@ -98,17 +98,6 @@ class AdminBarRemovalSniff extends AbstractFunctionParameterSniff {
 	);
 
 	/**
-	 * String tokens within PHP files we want to deal with.
-	 *
-	 * Set from the register() method.
-	 *
-	 * @since 0.11.0
-	 *
-	 * @var array
-	 */
-	private $string_tokens = array();
-
-	/**
 	 * Regex template for use with the CSS selectors in combination with PHP text strings.
 	 *
 	 * @since WPCS 0.11.0
@@ -141,10 +130,7 @@ class AdminBarRemovalSniff extends AbstractFunctionParameterSniff {
 	 * @return array
 	 */
 	public function register() {
-		// Set up all string targets.
-		$this->string_tokens = Tokens::$textStringTokens;
-
-		$targets = $this->string_tokens;
+		$targets = Tokens::$textStringTokens;
 
 		// Add CSS style target.
 		$targets[] = \T_STYLE;
@@ -184,7 +170,7 @@ class AdminBarRemovalSniff extends AbstractFunctionParameterSniff {
 			if ( \T_STYLE === $this->tokens[ $stackPtr ]['code'] ) {
 				return $this->process_css_style( $stackPtr );
 			}
-		} elseif ( isset( $this->string_tokens[ $this->tokens[ $stackPtr ]['code'] ] ) ) {
+		} elseif ( isset( Tokens::$textStringTokens[ $this->tokens[ $stackPtr ]['code'] ] ) ) {
 			/*
 			 * Set $in_style && $in_target_selector to false if it is the first time
 			 * this sniff is run on a file.

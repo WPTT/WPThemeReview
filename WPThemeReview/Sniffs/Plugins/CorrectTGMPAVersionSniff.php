@@ -10,7 +10,7 @@
 namespace WPThemeReview\Sniffs\Plugins;
 
 use WordPress\Sniff;
-use PHP_CodeSniffer_Tokens as Tokens;
+use PHP_CodeSniffer\Util\Tokens;
 
 /**
  * WordPress_Sniffs_Theme_CorrectTGMPAVersionSniff.

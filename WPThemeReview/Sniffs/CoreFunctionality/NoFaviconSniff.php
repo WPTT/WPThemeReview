@@ -11,7 +11,7 @@ namespace WPThemeReview\Sniffs\CoreFunctionality;
 
 use PHP_CodeSniffer\Sniffs\Sniff;
 use PHP_CodeSniffer\Files\File;
-use PHP_CodeSniffer_Tokens as Tokens;
+use PHP_CodeSniffer\Util\Tokens;
 
 /**
  * Check for hardcoded favicons instead of using core implementation.
