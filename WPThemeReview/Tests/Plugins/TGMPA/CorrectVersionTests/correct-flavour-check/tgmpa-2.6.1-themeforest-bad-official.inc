@@ -1,4 +1,5 @@
-@codingStandardsChangeSetting WordPress.Theme.CorrectTGMPAVersion required_flavour themeforest
+
+phpcs:set WPThemeReview.Plugins.CorrectTGMPAVersion required_flavour themeforest
 
 <?php
 /**
@@ -3854,4 +3855,4 @@ if ( ! class_exists( 'TGMPA_Utils' ) ) {
 	} // End of class TGMPA_Utils
 } // End of class_exists wrapper
 
-// @codingStandardsChangeSetting WordPress.Theme.CorrectTGMPAVersion required_flavour -
+// phpcs:set WPThemeReview.Plugins.CorrectTGMPAVersion required_flavour -

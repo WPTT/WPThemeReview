@@ -41,7 +41,7 @@
 }
 
 
-/* @codingStandardsChangeSetting WordPress.VIP.AdminBarRemoval remove_only false */
+/* phpcs:set WPThemeReview.PluginTerritory.AdminBarRemoval remove_only false */
 #wpadminbar {
 	display: block; /* Bad. */
 	visibility: visible; /* Bad. */
@@ -52,4 +52,4 @@
 	visibility: hidden; /* OK. */
 	opacity: 0; /* OK. */
 }
-/* @codingStandardsChangeSetting WordPress.VIP.AdminBarRemoval remove_only true */
+/* phpcs:set WPThemeReview.PluginTerritory.AdminBarRemoval remove_only true */

@@ -8,10 +8,10 @@ show_admin_bar( true ); // Ok.
 
 add_filter( 'show_admin_bar', 'my_own_return_false' ); // Bad.
 
-// @codingStandardsChangeSetting WordPress.VIP.AdminBarRemoval remove_only false
+// phpcs:set WPThemeReview.PluginTerritory.AdminBarRemoval remove_only false
 add_filter( 'show_admin_bar', '__return_true' ); // Bad.
 show_admin_bar( true ); // Bad.
-// @codingStandardsChangeSetting WordPress.VIP.AdminBarRemoval remove_only true
+// phpcs:set WPThemeReview.PluginTerritory.AdminBarRemoval remove_only true
 
 // Testing T_CONSTANT_ENCAPSED_STRING.
 echo '<style type="text/css">
@@ -85,7 +85,7 @@ EOT;
 </style>
 
 <?php
-// @codingStandardsChangeSetting WordPress.VIP.AdminBarRemoval remove_only false
+// phpcs:set WPThemeReview.PluginTerritory.AdminBarRemoval remove_only false
 $style = <<<EOT
 <style type="text/css">
 	.show-admin-bar {
@@ -105,4 +105,4 @@ EOT;
 		opacity: 1; /* Bad. */
 	}
 </style>
-/* @codingStandardsChangeSetting WordPress.VIP.AdminBarRemoval remove_only true */
+/* phpcs:set WPThemeReview.PluginTerritory.AdminBarRemoval remove_only true */
