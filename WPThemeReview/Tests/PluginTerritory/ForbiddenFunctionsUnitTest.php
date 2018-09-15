@@ -12,12 +12,12 @@ namespace WPThemeReview\Tests\PluginTerritory;
 use PHP_CodeSniffer\Tests\Standards\AbstractSniffUnitTest;
 
 /**
- * Unit test class for the PluginTerritoryFunctions sniff.
+ * Unit test class for the PluginTerritory/ForbiddenFunctions sniff.
  *
  * @package WPCS\WordPressCodingStandards
  * @since   0.xx.0
  */
-class PluginTerritoryFunctionsUnitTest extends AbstractSniffUnitTest {
+class ForbiddenFunctionsUnitTest extends AbstractSniffUnitTest {
 
 	/**
 	 * Returns the lines where errors should occur.

@@ -20,7 +20,7 @@ use WordPress\AbstractFunctionRestrictionsSniff;
  *
  * @since   0.xx.0
  */
-class PluginTerritoryFunctionsSniff extends AbstractFunctionRestrictionsSniff {
+class ForbiddenFunctionsSniff extends AbstractFunctionRestrictionsSniff {
 
 	/**
 	 * Groups of functions to restrict.
