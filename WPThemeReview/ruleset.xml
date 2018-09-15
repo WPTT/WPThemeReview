@@ -16,18 +16,11 @@
 	<rule ref="Generic.PHP.DisallowAlternativePHPTags"/>
 
 	<!-- Files which start with a PHP open tag should have no whitespace preceding it. -->
-	<!-- Once PHPCS 3.x is the minimum, this block can be removed as errorcodes can then be included individually. -->
-	<rule ref="Squiz.WhiteSpace.SuperfluousWhitespace">
-		<exclude name="Squiz.WhiteSpace.SuperfluousWhitespace.EndFile"/>
-		<exclude name="Squiz.WhiteSpace.SuperfluousWhitespace.EndLine"/>
-		<exclude name="Squiz.WhiteSpace.SuperfluousWhitespace.EmptyLines"/>
-	</rule>
 	<rule ref="Squiz.WhiteSpace.SuperfluousWhitespace.StartFile">
 		<message>To help prevent PHP "headers already send" errors, whitespace before the PHP open tag should be removed.</message>
 	</rule>
 
 	<!-- Files should omit the closing PHP tag at the end of a file. -->
-	<rule ref="PSR2.Files.ClosingTag"/>
 	<rule ref="PSR2.Files.ClosingTag.NotAllowed">
 		<type>warning</type>
 		<message>To help prevent PHP "headers already send" errors the PHP closing tag at the end of the file should be removed.</message>
@@ -88,36 +81,12 @@
 	<rule ref="WordPress.DB.PreparedSQLPlaceholders"/>
 
 	<!-- Validate and/or sanitize untrusted data before entering into the database. -->
-	<!--
-		Revert to changing the type at the sniff level instead of the error code level
-		once the PR has been merged and the miminmum PHPCS version has been increased.
-		https://github.com/squizlabs/PHP_CodeSniffer/pull/1247
-	-->
-	<rule ref="WordPress.Security.ValidatedSanitizedInput"/>
-	<rule ref="WordPress.Security.ValidatedSanitizedInput.InputNotValidated">
-		<type>warning</type>
-	</rule>
-	<rule ref="WordPress.Security.ValidatedSanitizedInput.InputNotSanitized">
-		<type>warning</type>
-	</rule>
-	<rule ref="WordPress.Security.ValidatedSanitizedInput.InputNotValidatedNotSanitized">
-		<type>warning</type>
-	</rule>
-	<rule ref="WordPress.Security.ValidatedSanitizedInput.MissingUnslash">
+	<rule ref="WordPress.Security.ValidatedSanitizedInput">
 		<type>warning</type>
 	</rule>
 
 	<!-- All untrusted data should be escaped before output. -->
-	<!--
-		Revert to changing the type at the sniff level instead of the error code level
-		once the PR has been merged and the miminmum PHPCS version has been increased.
-		https://github.com/squizlabs/PHP_CodeSniffer/pull/1247
-	-->
-	<rule ref="WordPress.Security.EscapeOutput"/>
-	<rule ref="WordPress.Security.EscapeOutput.UnsafePrintingFunction">
-		<type>warning</type>
-	</rule>
-	<rule ref="WordPress.Security.EscapeOutput.OutputNotEscaped">
+	<rule ref="WordPress.Security.EscapeOutput">
 		<type>warning</type>
 	</rule>
 
@@ -128,17 +97,13 @@
 	<rule ref="WordPress.WP.GlobalVariablesOverride"/>
 
 	<!-- Prohibit the use of the eval() PHP language construct. -->
-	<rule ref="Squiz.PHP.Eval"/>
 	<rule ref="Squiz.PHP.Eval.Discouraged">
 		<type>error</type>
 		<message>eval() is a security risk so not allowed.</message>
 	</rule>
 
 	<!-- Prohibit the use of the `goto` PHP language construct. -->
-	<!-- Duplicate of upstream PHPCS sniff. Should defer to upstream version once minimum PHPCS
-		 requirement has gone up to PHPCS 3.2.0 or higher. -->
-	<rule ref="WordPress.PHP.DiscourageGoto"/>
-	<rule ref="WordPress.PHP.DiscourageGoto.Found">
+	<rule ref="Generic.PHP.DiscourageGoto.Found">
 		<type>error</type>
 		<message>The "goto" language construct should not be used.</message>
 	</rule>
@@ -149,16 +114,7 @@
 	<rule ref="WordPress.WP.DeprecatedParameters"/>
 
 	<!-- Check for deprecated WordPress constants. -->
-	<!--
-		Change the type at the sniff level instead of the error code level
-		once the PR has been merged and the miminmum PHPCS version has been increased.
-		https://github.com/squizlabs/PHP_CodeSniffer/pull/1247
-	-->
-	<rule ref="WordPress.WP.DiscouragedConstants"/>
-	<rule ref="WordPress.WP.DiscouragedConstants.UsageFound">
-		<type>error</type>
-	</rule>
-	<rule ref="WordPress.WP.DiscouragedConstants.DeclarationFound">
+	<rule ref="WordPress.WP.DiscouragedConstants">
 		<type>error</type>
 	</rule>
 
