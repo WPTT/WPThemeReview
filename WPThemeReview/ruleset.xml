@@ -8,6 +8,10 @@
 	<!-- Treat all files as UTF-8. -->
 	<config name="encoding" value="utf-8"/>
 
+	<!-- Themes should be compatible with PHP 5.2 and higher. -->
+	<config name="testVersion" value="5.2-"/>
+	<rule ref="PHPCompatibilityWP"/>
+
 	<!-- No PHP short open tags allowed. -->
 	<!-- Covers: https://github.com/Otto42/theme-check/blob/master/checks/phpshort.php -->
 	<rule ref="Generic.PHP.DisallowShortOpenTag"/>
