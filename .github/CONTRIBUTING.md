@@ -1,4 +1,4 @@
-Hi, thank you for your interest in contributing to the WordPress Theme Review Coding Standards! We look forward to working with you.
+Thank you for your interest in contributing to the WordPress Theme Review Coding Standards! We look forward to working with you.
 
 # Reporting Bugs
 
