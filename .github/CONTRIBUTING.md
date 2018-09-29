@@ -1,11 +1,18 @@
 Thank you for your interest in contributing to the WordPress Theme Review Coding Standards! We look forward to working with you.
 
+There are plenty of ways in which you can contribute: writing sniffs, or opening issues for sniffs, that don't exists, but which cover some [handbook rules](https://make.wordpress.org/themes/handbook/review/required/). Giving different code examples to [open issues](https://github.com/WPTRT/WPThemeReview/issues) is also an extremely valuable contribution that you can make.
+
 # Reporting Bugs
 
-Before reporting a bug, you should check what sniff an error is coming from.
-Running `phpcs` with the `-s` flag will show the name of the sniff with each error.
+When reporting a bug in an existing sniff it's good to differentiate on whether the sniff is reporting something which the sniff shouldn't report on (a _false positive_), or whether the sniff isn't reporting on a certain thing that it should report on (a _false negative_).
 
-Bug reports containing a minimal code sample which can be used to reproduce the issue are highly appreciated as those are most easily actionable.
+In the case you found something that a sniff shouldn't report on, you can check where it's coming from using the `-s` flag with the `phpcs` command.
+
+In case the sniff is not reporting on a certain thing it should, you won't be able to check it using the `-s` flag, but **in both** cases it's **mandatory** to provide code samples so that the issue could be easily remedied.
+
+## Upstream bugs
+
+In the case the sniff error code doesn't starts with `WPThemeReview`, and instead it starts with `WordPress`, `PHPCompatibility`, or something else, that means that it is and 'upstream' bug coming from either `WPCS`, `PHPCompatibility` or `PHPCS`. You can report the bug here, but the chances are high that you'll be asked to report it in the correct repository instead.
 
 # Contributing patches and new features
 
@@ -13,20 +20,15 @@ Bug reports containing a minimal code sample which can be used to reproduce the 
 
 Ongoing development will be done in the `develop` branch with merges done into `master` once considered stable.
 
-To contribute an improvement to this project, fork the repo and open a pull request to the `develop` branch. Alternatively, if you have push access to this repo, create a feature branch prefixed by `feature/` and then open an intra-repo PR from that branch to `develop`.
+If you want to pick an open issue, please mention that in the issue, and it will be assigned to you. This will prevent the possible double work by different people on the same issue.
 
-Once a commit is made to `develop`, a PR should be opened from `develop` into `master` and named "Next release". This PR will provide collaborators with a forum to discuss the upcoming stable release.
+If you want to contribute to this project, fork the repo and open a pull request to the `develop` branch. If you have push access to this repo, you can create a feature branch and then open an intra-repo PR from that branch to the `develop`.
 
 # Considerations when writing sniffs
 
-## Public properties
-
-When writing sniffs, always remember that any `public` sniff property can be overruled via a custom ruleset by the end-user.
-Only make a property `public` if that is the intended behaviour.
-
-When you introduce new `public` sniff properties, or your sniff extends a class from which you inherit a `public` property, please don't forget to update the [public properties wiki page](https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards/wiki/Customizable-sniff-properties) with the relevant details once your PR has been merged into the `develop` branch.
-
 # Unit Testing
+
+All PRs which affect sniffs, whether bug fixes to existing sniffs, or the addition of a new sniff, should be accompanied by unit tests.
 
 ## Pre-requisites
 
@@ -44,7 +46,7 @@ Use Composer to install all the necessary dependencies to write and run unit tes
 composer install
 ```
 
-will install PHP_CodeSniffer, WordPress Coding Standards, PHPUnit, PHPCompatibility and security advisories which ensures that your application doesn't have installed dependencies with known security vulnerabilities.
+from the root of the cloned repository, will install `PHP_CodeSniffer`, `WordPress Coding Standards`, `PHPUnit`, `PHPCompatibility` and `security advisories` which ensures that your application doesn't have installed dependencies with known security vulnerabilities.
 
 ### Other setups
 
@@ -52,16 +54,18 @@ If you have PHP_CodeSniffer (PHPCS) and/or WordPress Coding Standards (WordPress
 
 First, make sure you also have PHPCompatibility and make sure the `installed_paths` for PHP_CodeSniffer is setup correctly.
 
+You can see how this can be done by reading the official PHPCS [documentation](https://github.com/squizlabs/PHP_CodeSniffer/wiki/Configuration-Options#setting-the-installed-standard-paths).
+
 #### Method 1
 
-Set up environment variables to point to PHP_CodeSniffer and WordPress Coding Standards:
+Set up global environment variables to point to PHP_CodeSniffer and WordPress Coding Standards:
 
 ```sh
-PHPCS_DIR: I:/000_GitHub/PHPCS/PHP_CodeSniffer/
-WPCS_DIR: I:/000_GitHub/PHPCS/WordPressCS/
+PHPCS_DIR: I:/path/to/PHP_CodeSniffer/
+WPCS_DIR: I:/path/to/WordPressCS/
 ```
 
-If you do that, everything should work as expected.
+If you do that, the unit tests should be able to work correctly.
 
 #### Method 2
 
@@ -82,7 +86,7 @@ Now add the following to that file, adjusting the paths to reflect those on your
 
 ## Writing and running unit tests
 
-The most iportant thing when writing sniffs intended for the theme review, is to have an ample of examples. This makes writing sniffs a lot easier, because you can test agains the give nexamples.
+The most important thing when writing sniffs intended for the theme review, is to have ample example code. This makes writing sniffs a lot easier, because you can test against the given examples.
 
 If you want to run unit tests, and if you ran `composer install`, you can now run `composer run-tests` (or `composer run-script run-tests`), which will run the test suite.
 
@@ -103,12 +107,25 @@ Time: 13.55 seconds, Memory: 64.00MB
 OK (12 tests, 0 assertions)
 ```
 
+If you didn't install PHPCS/WPCS/PHPUnit using Composer, you will need to type the above command in to run the unit tests. Make sure you replace the path to PHPUnit and the path to PHPCS when you do.
+
 ## Unit Testing conventions
+
+### Public properties
+
+When writing sniffs, always remember that any `public` sniff property can be overruled via a custom ruleset by the end-user.
+Only make a property `public` if that is the intended behaviour.
+
+When you introduce new `public` sniff properties, or your sniff extends a class from which you inherit a `public` property, please don't forget to update the [public properties wiki page](https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards/wiki/Customizable-sniff-properties) with the relevant details once your PR has been merged into the `develop` branch.
+
+### File organization and naming
 
 The tests folder located inside the `WPThemeReview/Tests` folder correspond to the `WPThemeReview/Sniffs` folder. For example the `WPThemeReview/Sniffs/CoreFunctionality/FileIncludeSniff.php` sniff has the unit test class defined in `WPThemeReview/Tests/CoreFunctionality/FileIncludeSniff.php` which checks the `WPThemeReview/Tests/CoreFunctionality/FileIncludeSniff.inc` test case file.
 
 Lets take a look at what's inside `FileIncludeSniff.php`:
 
+<details>
+<summary>View `FileIncludeSniff.php`</summary>
 ```php
 <?php
 /**
@@ -157,6 +174,7 @@ class FileIncludeUnitTest extends AbstractSniffUnitTest {
 
 }
 ```
+</details>
 
 Also note the class name convention. The method `getWarningList()` MUST return an array of line numbers indicating warnings (when running `phpcs`) found in `WPThemeReview/Tests/CoreFunctionality/FileIncludeSniff.inc`.
 If you run:
@@ -203,4 +221,6 @@ composer check-cs -- --standard=WPThemeReview -s WPThemeReview/Tests/CoreFunctio
 
 ## Code Standards for this project
 
-The sniffs and test files - not test _case_ files! - for WPCS should be written such that they pass the `WordPress-Extra` and the `WordPress-Docs` code standards using the custom ruleset as found in `/.phpcs.xml.dist`.
+The WPTRTCS sniffs and test files (excluding test _case_ files) are written in a way that they pass the rules set by the custom ruleset found in `/.phpcs.xml.dist`. They should pass some of the `WordPress-Extra` standards and the `WordPress-Docs` code standards.
+
+You can check the custom written sniff using the `composer check-cs` command from the project root.
