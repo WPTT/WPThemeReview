@@ -126,7 +126,7 @@ Lets take a look at what's inside `FileIncludeSniff.php`:
 
 <details>
   <summary>View `FileIncludeSniff.php`</summary>
-  <code style="white-space:nowrap;">
+  ```
     <?php
     /**
      * Unit test class for WPThemeReview Coding Standard.
@@ -173,7 +173,7 @@ Lets take a look at what's inside `FileIncludeSniff.php`:
       }
 
     }
-  </code>
+  ```
 </details>
 
 Also note the class name convention. The method `getWarningList()` MUST return an array of line numbers indicating warnings (when running `phpcs`) found in `WPThemeReview/Tests/CoreFunctionality/FileIncludeSniff.inc`.
