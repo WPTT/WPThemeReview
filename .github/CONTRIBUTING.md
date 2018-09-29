@@ -42,7 +42,7 @@ All PRs which affect sniffs, whether bug fixes to existing sniffs, or the additi
 
 Use Composer to install all the necessary dependencies to write and run unit tests. Running
 
-```sh
+```bash
 composer install
 ```
 
@@ -60,7 +60,7 @@ You can see how this can be done by reading the official PHPCS [documentation](h
 
 Set up global environment variables to point to PHP_CodeSniffer and WordPress Coding Standards:
 
-```sh
+```bash
 PHPCS_DIR: I:/path/to/PHP_CodeSniffer/
 WPCS_DIR: I:/path/to/WordPressCS/
 ```
@@ -126,55 +126,58 @@ Lets take a look at what's inside `FileIncludeSniff.php`:
 
 <details>
   <summary>View `FileIncludeSniff.php`</summary>
-  ```
-    <?php
+  
+  ```php
+  <?php
+  /**
+   * Unit test class for WPThemeReview Coding Standard.
+   *
+   * @package WPTRT\WPThemeReview
+   * @link    https://github.com/WPTRT/WPThemeReview
+   * @license https://opensource.org/licenses/MIT MIT
+   */
+
+  namespace WPThemeReview\Tests\CoreFunctionality;
+
+  use PHP_CodeSniffer\Tests\Standards\AbstractSniffUnitTest;
+
+  /**
+   * Unit test class for the Theme_FileInclude sniff.
+   *
+   * @since 0.1.0
+   */
+  class FileIncludeUnitTest extends AbstractSniffUnitTest {
+
     /**
-     * Unit test class for WPThemeReview Coding Standard.
+     * Returns the lines where errors should occur.
      *
-     * @package WPTRT\WPThemeReview
-     * @link    https://github.com/WPTRT/WPThemeReview
-     * @license https://opensource.org/licenses/MIT MIT
+     * @return array <int line number> => <int number of errors>
      */
-
-    namespace WPThemeReview\Tests\CoreFunctionality;
-
-    use PHP_CodeSniffer\Tests\Standards\AbstractSniffUnitTest;
-
-    /**
-     * Unit test class for the Theme_FileInclude sniff.
-     *
-     * @since 0.1.0
-     */
-    class FileIncludeUnitTest extends AbstractSniffUnitTest {
-
-      /**
-       * Returns the lines where errors should occur.
-       *
-       * @return array <int line number> => <int number of errors>
-       */
-      public function getErrorList() {
-        return array();
-      }
-
-      /**
-       * Returns the lines where warnings should occur.
-       *
-       * @return array <int line number> => <int number of warnings>
-       */
-      public function getWarningList() {
-        return array(
-          3 => 1,
-          4 => 1,
-          5 => 1,
-          6 => 1,
-          7 => 1,
-          8 => 1,
-        );
-      }
-
+    public function getErrorList() {
+      return array();
     }
+
+    /**
+     * Returns the lines where warnings should occur.
+     *
+     * @return array <int line number> => <int number of warnings>
+     */
+    public function getWarningList() {
+      return array(
+        3 => 1,
+        4 => 1,
+        5 => 1,
+        6 => 1,
+        7 => 1,
+        8 => 1,
+      );
+    }
+
+  }
   ```
+  
 </details>
+
 
 Also note the class name convention. The method `getWarningList()` MUST return an array of line numbers indicating warnings (when running `phpcs`) found in `WPThemeReview/Tests/CoreFunctionality/FileIncludeSniff.inc`.
 If you run:
@@ -209,6 +212,7 @@ FOUND 0 ERRORS AND 6 WARNINGS AFFECTING 6 LINES
 
 Time: 45ms; Memory: 6Mb
 ```
+
 You'll see the line number and number of WARNINGs we need to return in the `getWarningList()` method.
 
 The `--sniffs=...` directive limits the output to the sniff you are testing.
