@@ -127,52 +127,52 @@ Lets take a look at what's inside `FileIncludeSniff.php`:
 <details>
   <summary>View `FileIncludeSniff.php`</summary>
   <code style="white-space:nowrap;">
-  <?php
-  /**
-   * Unit test class for WPThemeReview Coding Standard.
-   *
-   * @package WPTRT\WPThemeReview
-   * @link    https://github.com/WPTRT/WPThemeReview
-   * @license https://opensource.org/licenses/MIT MIT
-   */
+    <?php
+    /**
+     * Unit test class for WPThemeReview Coding Standard.
+     *
+     * @package WPTRT\WPThemeReview
+     * @link    https://github.com/WPTRT/WPThemeReview
+     * @license https://opensource.org/licenses/MIT MIT
+     */
 
-  namespace WPThemeReview\Tests\CoreFunctionality;
+    namespace WPThemeReview\Tests\CoreFunctionality;
 
-  use PHP_CodeSniffer\Tests\Standards\AbstractSniffUnitTest;
-
-  /**
-   * Unit test class for the Theme_FileInclude sniff.
-   *
-   * @since 0.1.0
-   */
-  class FileIncludeUnitTest extends AbstractSniffUnitTest {
+    use PHP_CodeSniffer\Tests\Standards\AbstractSniffUnitTest;
 
     /**
-     * Returns the lines where errors should occur.
+     * Unit test class for the Theme_FileInclude sniff.
      *
-     * @return array <int line number> => <int number of errors>
+     * @since 0.1.0
      */
-    public function getErrorList() {
-      return array();
-    }
+    class FileIncludeUnitTest extends AbstractSniffUnitTest {
 
-    /**
-     * Returns the lines where warnings should occur.
-     *
-     * @return array <int line number> => <int number of warnings>
-     */
-    public function getWarningList() {
-      return array(
-        3 => 1,
-        4 => 1,
-        5 => 1,
-        6 => 1,
-        7 => 1,
-        8 => 1,
-      );
-    }
+      /**
+       * Returns the lines where errors should occur.
+       *
+       * @return array <int line number> => <int number of errors>
+       */
+      public function getErrorList() {
+        return array();
+      }
 
-  }
+      /**
+       * Returns the lines where warnings should occur.
+       *
+       * @return array <int line number> => <int number of warnings>
+       */
+      public function getWarningList() {
+        return array(
+          3 => 1,
+          4 => 1,
+          5 => 1,
+          6 => 1,
+          7 => 1,
+          8 => 1,
+        );
+      }
+
+    }
   </code>
 </details>
 
