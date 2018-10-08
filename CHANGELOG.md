@@ -32,8 +32,8 @@ _No documentation available about unreleased changes as of yet._
 - `Generic.PHP.DisallowAlternativePHPTags`: disallows the usage of alternative PHP open tags (`<%` and similar).
 - `Squiz.WhiteSpace.SuperfluousWhitespace.StartFile`: files starting with a PHP open tag shouldn't have a whitespace preceding it, to prevent possible `headers already sent` errors.
 - `PSR2.Files.ClosingTag.NotAllowed`: files should omit the closing PHP tag at the end of a file, to prevent possible `headers already sent` errors.
-- `Internal.LineEndings.Mixed`: mixed line endings are not allowed.
-- `Internal.Tokenizer.Exception`: minified scripts or files should have original files included.
+- `Internal.LineEndings.Mixed`: mixed line endings are not allowed. [Handbook rule](https://make.wordpress.org/themes/handbook/review/required/theme-check-plugin/#line-endings).
+- `Internal.Tokenizer.Exception`: minified scripts or files should have original files included. [Handbook rule](https://make.wordpress.org/themes/handbook/review/required/#stylesheets-and-scripts).
 - `Generic.Files.ByteOrderMark`: no ByteOrderMark allowed - important to prevent issues with content being sent before headers
 - `Generic.CodeAnalysis.EmptyStatement`: PHP tags without anything between them is just sloppy
 - `WordPress.WP.I18n`: check that the I18N functions are used correctly. This sniff can also check the text domain, provided it's passed to `PHPCS`.
@@ -54,8 +54,8 @@ _No documentation available about unreleased changes as of yet._
 - `WordPress.WP.DeprecatedFunctions`: check for use of deprecated WordPress functions.
 - `WordPress.WP.DeprecatedParameters`: check for use of deprecated WordPress function parameters.
 - `WordPress.WP.DiscouragedConstants`: check for deprecated WordPress constants.
-- `WordPress.NamingConventions.PrefixAllGlobals`: verify that everything in the global namespace is prefixed.
-- `WordPress.WP.CapitalPDangit`: check for correct spelling of WordPress.
+- `WordPress.NamingConventions.PrefixAllGlobals`: verify that everything in the global namespace is prefixed. [Handbook rule](https://make.wordpress.org/themes/handbook/review/required/#code).
+- `WordPress.WP.CapitalPDangit`: check for correct spelling of WordPress. [Handbook rule](https://make.wordpress.org/themes/handbook/review/required/#naming)
 - `WordPress.WP.TimezoneChange`: themes should never touch the timezone.
 
 [Unreleased]: https://github.com/WPTRT/WPThemeReview/compare/master...HEAD
