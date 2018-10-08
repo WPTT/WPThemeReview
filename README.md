@@ -42,7 +42,7 @@ The WPThemeReview Standard requires:
 * PHP 5.4 or higher.
 * [PHP_CodeSniffer](https://github.com/squizlabs/PHP_CodeSniffer) version **3.3.0** or higher.
 * [WordPress Coding Standards](https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards) version **1.0.0** or higher.
-* [PHPCompatibilityWP](https://github.com/PHPCompatibility/PHPCompatibilityWP) version **1.0.0** or higher.
+* [PHPCompatibilityWP](https://github.com/PHPCompatibility/PHPCompatibilityWP) version **2.0.0** or higher.
 
 
 ## Installation
@@ -87,7 +87,7 @@ $ vendor/bin/phpcs -i
 
 If everything went well, the output should look something like this:
 ```
-The installed coding standards are MySource, PEAR, PSR1, PSR12, PSR2, Squiz, Zend, PHPCompatibility, PHPCompatibilityWP, WordPress, WordPress-Core, WordPress-Docs, WordPress-Extra, WordPress-VIP and WPThemeReview
+The installed coding standards are MySource, PEAR, PSR1, PSR12, PSR2, Squiz, Zend, PHPCompatibility, PHPCompatibilityParagonieRandomCompat, PHPCompatibilityParagonieSodiumCompat, PHPCompatibilityWP, WordPress, WordPress-Core, WordPress-Docs, WordPress-Extra, WordPress-VIP and WPThemeReview
 ```
 
 
