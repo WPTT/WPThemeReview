@@ -45,8 +45,11 @@
 	<!-- No ByteOrderMark allowed - important to prevent issues with content being sent before headers. -->
 	<rule ref="Generic.Files.ByteOrderMark"/>
 
-	<!-- PHP tags without anything between them is just sloppy. -->
+	<!-- Control structures which don't do anything are not very useful. -->
 	<rule ref="Generic.CodeAnalysis.EmptyStatement"/>
+
+	<!-- PHP tags without anything between them is just sloppy. -->
+	<rule ref="WordPress.CodeAnalysis.EmptyPHPStatement"/>
 
 	<!-- No removal of the admin bar allowed -->
 	<!-- Covers: https://github.com/wordpress/theme-check/blob/master/checks/adminbar.php -->
