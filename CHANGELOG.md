@@ -14,7 +14,7 @@ _No documentation available about unreleased changes as of yet._
 
 #### Native sniffs
 - `WPThemeReview.CoreFunctionality.FileInclude`: checks if a theme uses `include(_once)` or `require(_once)` when `get_template_part()` should be used. [Handbook rule](https://make.wordpress.org/themes/handbook/review/required/#core-functionality-and-features).
-- `WPThemeReview.CoreFunctionality.NoDeregisterCoreScript`: checks if a theme dderegisters core scripts (javascript). [Handbook rule](https://make.wordpress.org/themes/handbook/review/required/#stylesheets-and-scripts).
+- `WPThemeReview.CoreFunctionality.NoDeregisterCoreScript`: checks if a theme deregisters core scripts (javascript). [Handbook rule](https://make.wordpress.org/themes/handbook/review/required/#stylesheets-and-scripts).
 - `WPThemeReview.CoreFunctionality.NoFavicon`: checks if a theme is hard coding favicons instead of using core implementation. [Handbook rule](https://make.wordpress.org/themes/handbook/review/required/#core-functionality-and-features).
 - `WPThemeReview.CoreFunctionality.NoTitleTag`: checks if a theme is using a `<title>` tag instead of `add_theme_support( 'title-tag' )`. `<svg>` tag can use a `<title>` tag. [Handbook rule](https://make.wordpress.org/themes/handbook/review/required/#core-functionality-and-features).
 - `WPThemeReview.PluginTerritory.AdminBarRemoval`: checks if a theme is removing the WP admin bar. This sniff was originally part of `WordPressCS`. [Handbook rule](https://make.wordpress.org/themes/handbook/review/required/#core-functionality-and-features).
@@ -36,7 +36,7 @@ _No documentation available about unreleased changes as of yet._
 - `Internal.Tokenizer.Exception`: minified scripts or files should have original files included. [Handbook rule](https://make.wordpress.org/themes/handbook/review/required/#stylesheets-and-scripts).
 - `Generic.Files.ByteOrderMark`: no ByteOrderMark allowed - important to prevent issues with content being sent before headers.
 - `Generic.CodeAnalysis.EmptyStatement`: prohibits empty statements in the code (empty conditionals for instance).
-- `WordPress.CodeAnalysis.EmptyPHPStatement`: prohibits the empty PHP statements (empty PHP tags with no content or only comments in them, or double semi-colons).
+- `WordPress.CodeAnalysis.EmptyPHPStatement`: prohibits empty PHP statements (empty PHP tags with no content or double semi-colons).
 - `WordPress.WP.I18n`: check that the I18N functions are used correctly. This sniff can also check the text domain, provided it's passed to `PHPCS`. See the [documentation](https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards/wiki/Customizable-sniff-properties#internationalization-setting-your-text-domain) for more details.
 - `WordPress.WP.EnqueuedResources`: hard coding of scripts and styles is prohibited. They should be enqueued.
 - `WordPress.Security.PluginMenuSlug`: prevent path disclosure when using add_theme_page().
@@ -59,4 +59,4 @@ _No documentation available about unreleased changes as of yet._
 - `WordPress.WP.CapitalPDangit`: check for correct spelling of WordPress. [Handbook rule](https://make.wordpress.org/themes/handbook/review/required/#naming)
 - `WordPress.WP.TimezoneChange`: themes should never touch the timezone.
 
-[Unreleased]: https://github.com/WPTRT/WPThemeReview/compare/master...HEAD
+[Unreleased]: https://github.com/WPTRT/WPThemeReview/compare/0.1.0...HEAD
