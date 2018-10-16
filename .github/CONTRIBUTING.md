@@ -180,8 +180,7 @@ Lets take a look at what's inside `FileIncludeSniff.php`:
   }
   ```
   
-</details>
-
+</details>  
 
 Also note the class name convention. The method `getWarningList()` MUST return an array of line numbers indicating warnings (when running `phpcs`) found in `WPThemeReview/Tests/CoreFunctionality/FileIncludeSniff.inc`.
 If you run
