@@ -1,6 +1,6 @@
 Thank you for your interest in contributing to the WordPress Theme Review Coding Standards! We look forward to working with you.
 
-There are plenty of ways in which you can contribute: writing sniffs, or opening issues for sniffs, that don't exists, but which cover some [handbook rules](https://make.wordpress.org/themes/handbook/review/required/). Giving different code examples to [open issues](https://github.com/WPTRT/WPThemeReview/issues) is also an extremely valuable contribution that you can make.
+There are plenty of ways in which you can contribute: writing sniffs, or opening issues for sniffs, that don't exists, but which cover some [handbook rules](https://make.wordpress.org/themes/handbook/review/required/). Giving different code examples to [open issues](https://github.com/WPTRT/WPThemeReview/issues) that will reproduce the issue is also an extremely valuable contribution that you can make.
 
 # Reporting Bugs
 
@@ -20,17 +20,21 @@ In the case the sniff error code doesn't starts with `WPThemeReview`, and instea
 
 Ongoing development will be done in the `develop` branch with merges done into `master` once considered stable.
 
+## Picking an open issue
+
 If you want to pick an open issue, please mention that in the issue, and it will be assigned to you. This will prevent the possible double work by different people on the same issue.
+
+## Contributing to the project
 
 If you want to contribute to this project, fork the repo and open a pull request to the `develop` branch. If you have push access to this repo, you can create a feature branch and then open an intra-repo PR from that branch to the `develop`.
 
 # Considerations when writing sniffs
 
-# Unit Testing
+## Unit Testing
 
 All PRs which affect sniffs, whether bug fixes to existing sniffs, or the addition of a new sniff, should be accompanied by unit tests.
 
-## Pre-requisites
+### Pre-requisites
 
 * PHP 5.4 or higher
 * WordPress-Coding-Standards 1.0.0 or higher
@@ -122,7 +126,7 @@ When you introduce new `public` sniff properties, or your sniff extends a class 
 
 The tests folder located inside the `WPThemeReview/Tests` folder correspond to the `WPThemeReview/Sniffs` folder. For example the `WPThemeReview/Sniffs/CoreFunctionality/FileIncludeSniff.php` sniff has the unit test class defined in `WPThemeReview/Tests/CoreFunctionality/FileIncludeSniff.php` which checks the `WPThemeReview/Tests/CoreFunctionality/FileIncludeSniff.inc` test case file.
 
-Lets take a look at what's inside `FileIncludeSniff.php`:
+Lets take a look at what's inside `FileIncludeSniff.php`:  
 
 <details>
   <summary>View `FileIncludeSniff.php`</summary>
@@ -180,11 +184,16 @@ Lets take a look at what's inside `FileIncludeSniff.php`:
 
 
 Also note the class name convention. The method `getWarningList()` MUST return an array of line numbers indicating warnings (when running `phpcs`) found in `WPThemeReview/Tests/CoreFunctionality/FileIncludeSniff.inc`.
-If you run:
+If you run
 
 ```bash
 $ cd /path-to-cloned/WPThemeReview
 $ vendor/bin/phpcs --standard=WPThemeReview -s WPThemeReview/Tests/CoreFunctionality/FileIncludeUnitTest.inc --sniffs=WPThemeReview.CoreFunctionality.FileInclude
+```
+
+The results will be
+
+```bash
 ...
 FILE: /Users/infinum-denis/Projects/Personal/WPThemeReview/WPThemeReview/Tests/CoreFunctionality/FileIncludeUnitTest.inc
 --------------------------------------------------------------------------------
