@@ -36,7 +36,7 @@ _No documentation available about unreleased changes as of yet._
 - `Internal.Tokenizer.Exception`: minified scripts or files should have original files included. [Handbook rule](https://make.wordpress.org/themes/handbook/review/required/#stylesheets-and-scripts).
 - `Generic.Files.ByteOrderMark`: no ByteOrderMark allowed - important to prevent issues with content being sent before headers.
 - `Generic.CodeAnalysis.EmptyStatement`: prohibits empty statements in the code (empty conditionals for instance).
-- `WordPress.CodeAnalysis.EmptyPHPStatement`: prohibits empty PHP statements (empty PHP tags with no content or double semi-colons).
+- `WordPress.CodeAnalysis.EmptyStatement`: prohibits empty PHP statements (empty PHP tags with no content or double semi-colons).
 - `WordPress.WP.I18n`: check that the I18N functions are used correctly. This sniff can also check the text domain, provided it's passed to `PHPCS`. See the [documentation](https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards/wiki/Customizable-sniff-properties#internationalization-setting-your-text-domain) for more details.
 - `WordPress.WP.EnqueuedResources`: hard coding of scripts and styles is prohibited. They should be enqueued.
 - `WordPress.Security.PluginMenuSlug`: prevent path disclosure when using add_theme_page().
