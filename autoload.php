@@ -23,12 +23,16 @@ $projectRoot = __DIR__ . $ds;
  * Load the WPCS autoload file.
  */
 // Get the WPCS dir from an environment variable.
-$wpcsDir          = getenv( 'WPCS_DIR' );
-$composerWPCSPath = $projectRoot . 'vendor' . $ds . 'wp-coding-standards' . $ds . 'wpcs';
+$wpcsDir                 = getenv( 'WPCS_DIR' );
+$composerWPCSPath        = $projectRoot . 'vendor' . $ds . 'wp-coding-standards' . $ds . 'wpcs';
+$composerWPCSPathProject = $projectRoot . '..' . $ds . '..' . $ds . 'wp-coding-standards' . $ds . 'wpcs';
 
 if ( false === $wpcsDir && is_dir( $composerWPCSPath ) ) {
 	// WPCS installed via Composer.
 	$wpcsDir = $composerWPCSPath;
+} elseif ( false === $wpcsDir && is_dir( $composerWPCSPathProject ) ) {
+	// TRTCS + WPCS installed via Composer.
+	$wpcsDir = $composerWPCSPathProject;
 } elseif ( false !== $wpcsDir ) {
 	/*
 	 * WPCS in a custom directory [1].
@@ -66,4 +70,4 @@ pointing to the WPCS directory.
 }
 
 // Clean up.
-unset( $ds, $projectRoot, $wpcsDir, $composerWPCSPath, $wpcsPath );
+unset( $ds, $projectRoot, $wpcsDir, $composerWPCSPath, $composerWPCSPathProject, $wpcsPath );
