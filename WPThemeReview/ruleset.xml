@@ -49,7 +49,7 @@
 	<rule ref="Generic.CodeAnalysis.EmptyStatement"/>
 
 	<!-- PHP tags without anything between them is just sloppy. -->
-	<rule ref="WordPress.CodeAnalysis.EmptyPHPStatement"/>
+	<rule ref="WordPress.CodeAnalysis.EmptyStatement"/>
 
 	<!-- No removal of the admin bar allowed -->
 	<!-- Covers: https://github.com/wordpress/theme-check/blob/master/checks/adminbar.php -->
