@@ -2,6 +2,27 @@ Thank you for your interest in contributing to the WordPress Theme Review Coding
 
 There are plenty of ways in which you can contribute: writing sniffs, or opening issues for sniffs, that don't exists, but which cover some [handbook rules](https://make.wordpress.org/themes/handbook/review/required/). Giving different code examples to [open issues](https://github.com/WPTRT/WPThemeReview/issues) that will reproduce the issue is also an extremely valuable contribution that you can make.
 
+# Table of Contents
+
+- [Reporting Bugs](#reporting-bugs)
+  * [Upstream bugs](#upstream-bugs)
+- [Contributing patches and new features](#contributing-patches-and-new-features)
+  * [Branches](#branches)
+  * [Picking an open issue](#picking-an-open-issue)
+  * [Contributing to the project](#contributing-to-the-project)
+- [Considerations when writing sniffs](#considerations-when-writing-sniffs)
+  * [Unit Testing](#unit-testing)
+    + [Pre-requisites](#pre-requisites)
+    + [Composer setup](#composer-setup)
+    + [Other setups](#other-setups)
+      - [Method 1](#method-1)
+      - [Method 2](#method-2)
+  * [Writing and running unit tests](#writing-and-running-unit-tests)
+  * [Unit Testing conventions](#unit-testing-conventions)
+    + [Public properties](#public-properties)
+    + [File organization and naming](#file-organization-and-naming)
+  * [Code Standards for this project](#code-standards-for-this-project)
+
 # Reporting Bugs
 
 When reporting a bug in an existing sniff it's good to differentiate on whether the sniff is reporting something which the sniff shouldn't report on (a _false positive_), or whether the sniff isn't reporting on a certain thing that it should report on (a _false negative_).
