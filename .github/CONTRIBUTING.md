@@ -256,6 +256,6 @@ composer check-cs -- --standard=WPThemeReview -s WPThemeReview/Tests/CoreFunctio
 
 ## Code Standards for this project
 
-The WPTRTCS sniffs and test files (excluding test _case_ files) are written in a way that they pass the rules set by the custom ruleset found in `/.phpcs.xml.dist`. They should pass some of the `WordPress-Extra` standards and the `WordPress-Docs` code standards.
+The WPTRTCS sniffs and test files (excluding test _case_ files) are written in a way that they pass the rules set by the custom ruleset found in [`/.phpcs.xml.dist`](https://github.com/WPTRT/WPThemeReview/blob/develop/.phpcs.xml.dist). They should pass some of the `WordPress-Extra` standards and the `WordPress-Docs` code standards.
 
 You can check the custom written sniff using the `composer check-cs` command from the project root.
