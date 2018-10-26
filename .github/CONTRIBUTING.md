@@ -25,7 +25,7 @@ There are plenty of ways in which you can contribute: writing sniffs, or opening
 
 # Reporting Bugs
 
-When reporting a bug in an existing sniff it's good to differentiate on whether the sniff is reporting something which the sniff shouldn't report on (a _false positive_), or whether the sniff isn't reporting on a certain thing that it should report on (a _false negative_).
+When reporting a bug in an existing sniff it's good to differentiate between whether the sniff is reporting something which the sniff shouldn't report on (a _false positive_), or whether the sniff isn't reporting on something that it should report on (a _false negative_).
 
 In the case you found something that a sniff shouldn't report on, you can check where it's coming from using the `-s` flag with the `phpcs` command.
 
