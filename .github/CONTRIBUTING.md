@@ -47,7 +47,7 @@ Ongoing development will be done in the `develop` branch with merges done into `
 
 If you start work on an open issue, please mention that in the issue, and it will be assigned to you. This will prevent possible double work by different people on the same issue.
 
-## Contributing to the project
+## Contributing with code
 
 If you want to contribute to this project, fork the repo, create a new branch for your work and, once finished, open a pull request to the `develop` branch. If you have push access to this repo, you don't need to fork the repo, but can push your feature branch directly to this repo and you can then open an intra-repo PR from that branch to the `develop` branch.
 
