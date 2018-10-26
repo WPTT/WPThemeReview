@@ -29,7 +29,7 @@ When reporting a bug in an existing sniff it's good to differentiate between whe
 
 If you've found a false positive, please check which sniff the error or warning is coming from using the `-s` flag with the `phpcs` command.
 
-In case the sniff is not reporting on a certain thing it should, you won't be able to check it using the `-s` flag, but **in both** cases it's **mandatory** to provide code samples so that the issue could be easily remedied.
+In case of a false negative, you won't be able to check for a sniff code using the `-s` flag, but **in both** cases it's **mandatory** to provide code samples so that the issue can be easily reproduced and remedied.
 
 ## Upstream bugs
 
