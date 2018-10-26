@@ -79,7 +79,7 @@ from the root of the cloned repository, will install `PHP_CodeSniffer`, `WordPre
 
 If you have PHP_CodeSniffer (PHPCS) and/or WordPress Coding Standards (WordPressCS) already installed, for instance as git clones, because you either contribute to these libraries as well or you want to develop for or test WPThemeReview with bleeding edge versions of either PHP_CodeSniffer or WordPress Coding Standards, you need to take some additional steps to make it all work.
 
-First, make sure you also have PHPCompatibility and make sure the `installed_paths` for PHP_CodeSniffer is setup correctly.
+First, make sure you also have PHPCompatibility installed and make sure the `installed_paths` for PHP_CodeSniffer is setup correctly.
 
 You can see how this can be done by reading the official PHPCS [documentation](https://github.com/squizlabs/PHP_CodeSniffer/wiki/Configuration-Options#setting-the-installed-standard-paths).
 
