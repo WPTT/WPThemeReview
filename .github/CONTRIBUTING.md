@@ -119,7 +119,7 @@ If you want to run the unit tests, and you installed the dependencies using `com
 
 The WordPress Theme Review Coding Standards use the PHP_CodeSniffer native unit test suite for unit testing the sniffs.
 
-Once you've started the tests you will see a similar output to this:
+Once you've started the tests you will see output similar to this:
 
 ```bash
 > @php ./vendor/phpunit/phpunit/phpunit --filter WPThemeReview ./vendor/squizlabs/php_codesniffer/tests/AllTests.php
