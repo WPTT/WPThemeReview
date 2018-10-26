@@ -63,7 +63,7 @@ All PRs which affect sniffs, whether bug fixes to existing sniffs, or the additi
 * WordPress-Coding-Standards 1.0.0 or higher
 * PHP_CodeSniffer 3.3.0 or higher
 * PHPUnit 4.x, 5.x, 6.x or 7.x
-* PHPCompatibility 8.0 or higher
+* PHPCompatibility 9.0 or higher
 
 ### Composer setup
 
