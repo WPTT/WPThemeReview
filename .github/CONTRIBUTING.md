@@ -113,7 +113,7 @@ Now add the following to that file, adjusting the paths to reflect those on your
 
 The most important thing when writing sniffs intended for the theme review, is to have ample example code. This makes writing sniffs a lot easier, because you can test against the given examples.
 
-If you want to run unit tests, and if you ran `composer install`, you can now run `composer run-tests` (or `composer run-script run-tests`), which will run the test suite.
+If you want to run the unit tests, and you installed the dependencies using `composer`, you can now run `composer run-tests` (or `composer run-script run-tests`), which will run the test suite.
 
 The WordPress Theme Review Coding Standards use the PHP_CodeSniffer native unit test suite for unit testing the sniffs.
 
