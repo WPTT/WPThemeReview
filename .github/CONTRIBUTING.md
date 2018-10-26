@@ -45,7 +45,7 @@ Ongoing development will be done in the `develop` branch with merges done into `
 
 ## Picking an open issue
 
-If you want to pick an open issue, please mention that in the issue, and it will be assigned to you. This will prevent the possible double work by different people on the same issue.
+If you start work on an open issue, please mention that in the issue, and it will be assigned to you. This will prevent possible double work by different people on the same issue.
 
 ## Contributing to the project
 
