@@ -73,7 +73,7 @@ Use Composer to install all the necessary dependencies to write and run unit tes
 composer install
 ```
 
-from the root of the cloned repository, will install `PHP_CodeSniffer`, `WordPress Coding Standards`, `PHPUnit`, `PHPCompatibility` and `security advisories` which ensures that your application doesn't have installed dependencies with known security vulnerabilities.
+from the root of the cloned repository, will install `PHP_CodeSniffer`, `WordPress Coding Standards`, `PHPUnit`, `PHPCompatibility` and `security advisories`, which ensures that you won't install dependencies with known security vulnerabilities.
 
 ### Other setups
 
