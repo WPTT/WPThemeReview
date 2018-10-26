@@ -92,7 +92,7 @@ PHPCS_DIR: I:/path/to/PHP_CodeSniffer/
 WPCS_DIR: I:/path/to/WordPressCS/
 ```
 
-If you do that, the unit tests should be able to work correctly.
+If you do that, both the sniffs as well as the unit tests should be able to work correctly.
 
 #### Method 2
 
