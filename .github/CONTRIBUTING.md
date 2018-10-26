@@ -213,7 +213,7 @@ $ cd /path-to-cloned/WPThemeReview
 $ vendor/bin/phpcs --standard=WPThemeReview -s WPThemeReview/Tests/CoreFunctionality/FileIncludeUnitTest.inc --sniffs=WPThemeReview.CoreFunctionality.FileInclude
 ```
 
-The results will be
+The results should be:
 
 ```bash
 ...
