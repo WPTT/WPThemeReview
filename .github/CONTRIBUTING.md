@@ -27,7 +27,7 @@ There are plenty of ways in which you can contribute: writing sniffs, or opening
 
 When reporting a bug in an existing sniff it's good to differentiate between whether the sniff is reporting something which the sniff shouldn't report on (a _false positive_), or whether the sniff isn't reporting on something that it should report on (a _false negative_).
 
-In the case you found something that a sniff shouldn't report on, you can check where it's coming from using the `-s` flag with the `phpcs` command.
+If you've found a false positive, please check which sniff the error or warning is coming from using the `-s` flag with the `phpcs` command.
 
 In case the sniff is not reporting on a certain thing it should, you won't be able to check it using the `-s` flag, but **in both** cases it's **mandatory** to provide code samples so that the issue could be easily remedied.
 
