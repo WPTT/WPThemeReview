@@ -205,7 +205,7 @@ Lets take a look at what's inside `FileIncludeSniff.php`:
   
 </details><br>  
 
-Also note the class name convention. The method `getWarningList()` MUST return an array of line numbers indicating warnings (when running `phpcs`) found in `WPThemeReview/Tests/CoreFunctionality/FileIncludeSniff.inc`.
+Also note the class and function name conventions. The methods `getErrorList()` and `getWarningList()` MUST return either an empty array (no errors/warnings) or an array of line numbers indicating errors/warnings (when running `phpcs`) found in the test case file for the sniff.
 If you run
 
 ```bash
