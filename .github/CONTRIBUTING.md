@@ -217,7 +217,7 @@ The results should be:
 
 ```bash
 ...
-FILE: /Users/infinum-denis/Projects/Personal/WPThemeReview/WPThemeReview/Tests/CoreFunctionality/FileIncludeUnitTest.inc
+FILE: /path-to-cloned/WPThemeReview/WPThemeReview/Tests/CoreFunctionality/FileIncludeUnitTest.inc
 --------------------------------------------------------------------------------
 FOUND 0 ERRORS AND 6 WARNINGS AFFECTING 6 LINES
 --------------------------------------------------------------------------------
