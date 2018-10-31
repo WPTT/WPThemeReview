@@ -10,6 +10,7 @@ There are plenty of ways in which you can contribute: writing sniffs, or opening
   * [Branches](#branches)
   * [Contributing with code](#contributing-with-code)
   * [Picking an open issue](#picking-an-open-issue)
+  * [Sniff categorization](#sniff-categorization)
   * [Public properties](#public-properties)
   * [Code Standards for this project](#code-standards-for-this-project)
 - [Considerations when writing sniffs](#considerations-when-writing-sniffs)
@@ -49,12 +50,21 @@ If you want to contribute to this project, fork the repo, create a new branch fo
 
 If you start work on an open issue, please mention that in the issue, and it will be assigned to you. This will prevent possible double work by different people on the same issue.
 
+## Sniff categorization
+
+Every sniff should be categorized. Currently sniffs are placed in the following categories:
+
+* __`CoreFunctionality`__ - sniffs checking whether a theme uses WordPress core functionality (correctly)
+* __`Plugins`__ - sniff that checks if the correct version of TGMPA is included in the theme (if included)
+* __`PluginTerritory`__ - sniffs related to how themes interact with plugins and how plugins are recommended
+* __`ThouShallNotUse`__ - sniffs that check for code that shoulnd't be used in a theme
+
+If you think a new sniff doesn't fall into any of these four categories, suggest a new category. Category names should be descriptive and written in CamelCaps without underscores. The proposed category should be somewhat connected to the requirements in the theme review handbook.
+
 ## Public properties
 
 When writing sniffs, always remember that any `public` sniff property can be overruled via a custom ruleset by the end-user.
 Only make a property `public` if that is the intended behaviour.
-
-When you introduce new `public` sniff properties, or your sniff extends a class from which you inherit a `public` property, please don't forget to update the [public properties wiki page](https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards/wiki/Customizable-sniff-properties) with the relevant details once your PR has been merged into the `develop` branch.
 
 ## Code Standards for this project
 
@@ -64,7 +74,7 @@ You can check whether your code complies with the coding standard using the `com
 
 # Considerations when writing sniffs
 
-## Unit Testing
+## Unit testing
 
 All PRs which affect sniffs, whether bug fixes to existing sniffs, or the addition of a new sniff, should be accompanied by unit tests.
 
@@ -86,7 +96,7 @@ from the root of the cloned repository, will install `PHP_CodeSniffer`, `WordPre
 
 If you have PHP_CodeSniffer (PHPCS) and/or WordPress Coding Standards (WordPressCS) already installed, for instance as git clones, because you either contribute to these libraries as well or you want to develop for or test WPThemeReview with bleeding edge versions of either PHP_CodeSniffer or WordPress Coding Standards, you need to take some additional steps to make it all work.
 
-First, make sure you also have PHPCompatibility installed and make sure the `installed_paths` for PHP_CodeSniffer is setup correctly.
+First, make sure you also have PHPCompatibility installed and make sure the `installed_paths` for PHP_CodeSniffer is set up correctly.
 
 You can see how this can be done by reading the official PHPCS [documentation](https://github.com/squizlabs/PHP_CodeSniffer/wiki/Configuration-Options#setting-the-installed-standard-paths).
 
@@ -122,7 +132,7 @@ Once you've done that, both running the sniffs as well as the unit tests should 
 
 ## Writing and running unit tests
 
-The most important thing when writing sniffs intended for the theme review, is to have ample example code. This makes writing sniffs a lot easier, because you can test against the given examples.
+The most important thing when writing sniffs intended for the theme review standard, is to have ample example code. This makes writing sniffs a lot easier, because you can test against the given examples.
 
 If you want to run the unit tests, and you installed the dependencies using `composer`, you can now run `composer run-tests` (or `composer run-script run-tests`), which will run the test suite.
 
