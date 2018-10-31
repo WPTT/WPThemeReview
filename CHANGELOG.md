@@ -60,4 +60,4 @@ _No documentation available about unreleased changes as of yet._
 - `WordPress.WP.TimezoneChange`: themes should never touch the timezone.
 
 [Unreleased]: https://github.com/WPTRT/WPThemeReview/compare/develop...HEAD
-[0.1.0]: https://github.com/WPTRT/WPThemeReview/compare/develop...0.1.0
+[0.1.0]: https://github.com/WPTRT/WPThemeReview/compare/1dabb9876caf78209849a01381c0b863ce583d07...0.1.0
