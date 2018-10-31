@@ -8,7 +8,7 @@ This projects adheres to [Semantic Versioning](https://semver.org/) and [Keep a 
 
 _No documentation available about unreleased changes as of yet._
 
-## [0.1.0]
+## [0.1.0] - 2018-10-31
 
 ### Added
 
@@ -59,4 +59,5 @@ _No documentation available about unreleased changes as of yet._
 - `WordPress.WP.CapitalPDangit`: check for correct spelling of WordPress. [Handbook rule](https://make.wordpress.org/themes/handbook/review/required/#naming)
 - `WordPress.WP.TimezoneChange`: themes should never touch the timezone.
 
-[Unreleased]: https://github.com/WPTRT/WPThemeReview/compare/0.1.0...HEAD
+[Unreleased]: https://github.com/WPTRT/WPThemeReview/compare/develop...HEAD
+[0.1.0]: https://github.com/WPTRT/WPThemeReview/compare/develop...0.1.0
