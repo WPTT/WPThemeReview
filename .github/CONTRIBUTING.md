@@ -8,20 +8,18 @@ There are plenty of ways in which you can contribute: writing sniffs, or opening
   * [Upstream bugs](#upstream-bugs)
 - [Contributing patches and new features](#contributing-patches-and-new-features)
   * [Branches](#branches)
+  * [Contributing with code](#contributing-with-code)
   * [Picking an open issue](#picking-an-open-issue)
-  * [Contributing to the project](#contributing-to-the-project)
+  * [Public properties](#public-properties)
+  * [Code Standards for this project](#code-standards-for-this-project)
 - [Considerations when writing sniffs](#considerations-when-writing-sniffs)
   * [Unit Testing](#unit-testing)
     + [Pre-requisites](#pre-requisites)
     + [Composer setup](#composer-setup)
     + [Other setups](#other-setups)
-      - [Method 1](#method-1)
-      - [Method 2](#method-2)
   * [Writing and running unit tests](#writing-and-running-unit-tests)
   * [Unit Testing conventions](#unit-testing-conventions)
-    + [Public properties](#public-properties)
     + [File organization and naming](#file-organization-and-naming)
-  * [Code Standards for this project](#code-standards-for-this-project)
 
 # Reporting Bugs
 
@@ -43,13 +41,26 @@ You can report the bug here, but the chances are high that you'll be asked to re
 
 Ongoing development will be done in the `develop` branch with merges done into `master` once considered stable.
 
+## Contributing with code
+
+If you want to contribute to this project, fork the repo, create a new branch for your work and, once finished, open a pull request to the `develop` branch. If you have push access to this repo, you don't need to fork the repo, but can push your feature branch directly to this repo and you can then open an intra-repo PR from that branch to the `develop` branch.
+
 ## Picking an open issue
 
 If you start work on an open issue, please mention that in the issue, and it will be assigned to you. This will prevent possible double work by different people on the same issue.
 
-## Contributing with code
+## Public properties
 
-If you want to contribute to this project, fork the repo, create a new branch for your work and, once finished, open a pull request to the `develop` branch. If you have push access to this repo, you don't need to fork the repo, but can push your feature branch directly to this repo and you can then open an intra-repo PR from that branch to the `develop` branch.
+When writing sniffs, always remember that any `public` sniff property can be overruled via a custom ruleset by the end-user.
+Only make a property `public` if that is the intended behaviour.
+
+When you introduce new `public` sniff properties, or your sniff extends a class from which you inherit a `public` property, please don't forget to update the [public properties wiki page](https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards/wiki/Customizable-sniff-properties) with the relevant details once your PR has been merged into the `develop` branch.
+
+## Code Standards for this project
+
+The WPTRTCS sniffs and test files (excluding test _case_ files) are written in a way that they pass the rules set by the custom ruleset found in [`/.phpcs.xml.dist`](https://github.com/WPTRT/WPThemeReview/blob/develop/.phpcs.xml.dist). They should pass some of the `WordPress-Extra` standards and the `WordPress-Docs` code standards.
+
+You can check whether your code complies with the coding standard using the `composer check-cs` command from the project root.
 
 # Considerations when writing sniffs
 
@@ -60,10 +71,6 @@ All PRs which affect sniffs, whether bug fixes to existing sniffs, or the additi
 ### Pre-requisites
 
 * PHP 5.4 or higher
-* WordPress-Coding-Standards 1.0.0 or higher
-* PHP_CodeSniffer 3.3.0 or higher
-* PHPUnit 4.x, 5.x, 6.x or 7.x
-* PHPCompatibility 9.0 or higher
 
 ### Composer setup
 
@@ -111,6 +118,8 @@ Now add the following to that file, adjusting the paths to reflect those on your
 
 (and don't remove the existing line within the `<php>` block.)
 
+Once you've done that, both running the sniffs as well as the unit tests should work correctly.
+
 ## Writing and running unit tests
 
 The most important thing when writing sniffs intended for the theme review, is to have ample example code. This makes writing sniffs a lot easier, because you can test against the given examples.
@@ -137,13 +146,6 @@ OK (12 tests, 0 assertions)
 If you didn't install PHPCS/WPCS/PHPUnit using Composer, you will need to type the above command in to run the unit tests. Make sure you replace the path to PHPUnit and the path to PHPCS when you do.
 
 ## Unit Testing conventions
-
-### Public properties
-
-When writing sniffs, always remember that any `public` sniff property can be overruled via a custom ruleset by the end-user.
-Only make a property `public` if that is the intended behaviour.
-
-When you introduce new `public` sniff properties, or your sniff extends a class from which you inherit a `public` property, please don't forget to update the [public properties wiki page](https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards/wiki/Customizable-sniff-properties) with the relevant details once your PR has been merged into the `develop` branch.
 
 ### File organization and naming
 
@@ -253,9 +255,3 @@ You can also run the same command using composer scripts
 ```bash
 composer check-cs -- --standard=WPThemeReview -s WPThemeReview/Tests/CoreFunctionality/FileIncludeUnitTest.inc --sniffs=WPThemeReview.CoreFunctionality.FileInclude
 ```
-
-## Code Standards for this project
-
-The WPTRTCS sniffs and test files (excluding test _case_ files) are written in a way that they pass the rules set by the custom ruleset found in [`/.phpcs.xml.dist`](https://github.com/WPTRT/WPThemeReview/blob/develop/.phpcs.xml.dist). They should pass some of the `WordPress-Extra` standards and the `WordPress-Docs` code standards.
-
-You can check whether your code complies with the coding standard using the `composer check-cs` command from the project root.
