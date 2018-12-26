@@ -128,6 +128,8 @@ Now add the following to that file, adjusting the paths to reflect those on your
 
 (and don't remove the existing line within the `<php>` block.)
 
+Secondly, you'll need to adjust the `bootstrap` line `bootstrap="./vendor/squizlabs/php_codesniffer/tests/bootstrap.php"` in your own `phpunit.xml` file to point to the location where you have PHPUnit installed.
+
 Once you've done that, both running the sniffs as well as the unit tests should work correctly.
 
 ## Writing and running unit tests
