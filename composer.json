@@ -52,11 +52,21 @@
 		"dealerdirect/phpcodesniffer-composer-installer": "^0.4.3 || This Composer plugin will sort out the PHPCS 'installed_paths' automatically."
 	},
 	"scripts"    : {
-		"install-standards"    : "@php ./vendor/squizlabs/php_codesniffer/bin/phpcs --config-set installed_paths ../../..,../../wp-coding-standards/wpcs,../../phpcompatibility/phpcompatibility-wp,../../phpcompatibility/phpcompatibility-paragonie",
-		"run-tests"            : "@php ./vendor/phpunit/phpunit/phpunit --filter WPThemeReview ./vendor/squizlabs/php_codesniffer/tests/AllTests.php",
-		"phpcs-i"              : "@php ./vendor/squizlabs/php_codesniffer/bin/phpcs -i",
-		"check-cs"             : "@php ./vendor/squizlabs/php_codesniffer/bin/phpcs",
-		"fix-cs"               : "@php ./vendor/squizlabs/php_codesniffer/bin/phpcbf"
+		"install-standards": [
+			"@php ./vendor/squizlabs/php_codesniffer/bin/phpcs --config-set installed_paths ../../..,../../wp-coding-standards/wpcs,../../phpcompatibility/phpcompatibility-wp,../../phpcompatibility/phpcompatibility-paragonie"
+		],
+		"run-tests": [
+			"@php ./vendor/phpunit/phpunit/phpunit --filter WPThemeReview ./vendor/squizlabs/php_codesniffer/tests/AllTests.php"
+		],
+		"phpcs-i": [
+			"@php ./vendor/squizlabs/php_codesniffer/bin/phpcs -i"
+		],
+		"check-cs": [
+			"@php ./vendor/squizlabs/php_codesniffer/bin/phpcs"
+		],
+		"fix-cs": [
+			"@php ./vendor/squizlabs/php_codesniffer/bin/phpcbf"
+		]
 	},
 	"support"    : {
 		"issues": "https://github.com/WPTRT/WPThemeReview/issues",
