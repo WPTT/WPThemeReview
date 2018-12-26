@@ -9,7 +9,7 @@
 
 namespace WPThemeReview\Sniffs\PluginTerritory;
 
-use WordPress\AbstractFunctionRestrictionsSniff;
+use WordPressCS\WordPress\AbstractFunctionRestrictionsSniff;
 
 /**
  * Forbids the use of add_..._page() functions within Themes with the exception of `add_theme_page()`.
