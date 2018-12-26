@@ -7,7 +7,9 @@
 
 	<!-- Themes should be compatible with PHP 5.2 and higher. -->
 	<config name="testVersion" value="5.2-"/>
-	<rule ref="PHPCompatibilityWP"/>
+	<rule ref="PHPCompatibilityWP">
+		<include-pattern>*\.(php|inc)$</include-pattern>
+	</rule>
 
 	<!-- No PHP short open tags allowed. -->
 	<!-- Covers: https://github.com/Otto42/theme-check/blob/master/checks/phpshort.php -->
