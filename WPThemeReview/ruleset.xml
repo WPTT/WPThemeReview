@@ -5,9 +5,6 @@
 
 	<autoload>../autoload.php</autoload>
 
-	<!-- Treat all files as UTF-8. -->
-	<config name="encoding" value="utf-8"/>
-
 	<!-- Themes should be compatible with PHP 5.2 and higher. -->
 	<config name="testVersion" value="5.2-"/>
 	<rule ref="PHPCompatibilityWP"/>
