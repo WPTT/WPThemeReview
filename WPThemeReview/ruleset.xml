@@ -48,6 +48,8 @@
 	<rule ref="Generic.CodeAnalysis.EmptyStatement"/>
 
 	<!-- PHP tags without anything between them is just sloppy. -->
+	<!-- Internal: this should be replaced with the PHPCS native version of the same sniff
+		 `Generic.CodeAnalysis.EmptyPHPStatement`, once the minimum required PHPCS version has gone up to 3.4.0. -->
 	<rule ref="WordPress.CodeAnalysis.EmptyStatement"/>
 
 	<!-- No removal of the admin bar allowed -->
