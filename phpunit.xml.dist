@@ -3,7 +3,7 @@
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/6.3/phpunit.xsd"
 	backupGlobals="true"
-	bootstrap="./Test/bootstrap.php"
+	bootstrap="./vendor/squizlabs/php_codesniffer/tests/bootstrap.php"
 	beStrictAboutTestsThatDoNotTestAnything="false"
 	colors="true">
 

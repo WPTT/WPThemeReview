@@ -9,7 +9,7 @@
 
 namespace WPThemeReview\Sniffs\Plugins;
 
-use WordPress\Sniff;
+use WordPressCS\WordPress\Sniff;
 use PHP_CodeSniffer\Util\Tokens;
 
 /**
@@ -25,7 +25,7 @@ use PHP_CodeSniffer\Util\Tokens;
  *
  * @since 0.1.0
  *
- * {@internal This sniff currently has not (yet) been detached from the WordPress\Sniff class
+ * {@internal This sniff currently has not (yet) been detached from the WordPressCS\WordPress\Sniff class
  * as the `detect_manual_editing()` method uses the WPCS `get_function_call_parameter()` and
  * `strip_quotes()` methods.
  * If/when WPCS re-organizes the generic methods into traits as is being discussed in

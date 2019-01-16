@@ -68,7 +68,7 @@ Only make a property `public` if that is the intended behaviour.
 
 ## Code Standards for this project
 
-The WPTRTCS sniffs and test files (excluding test _case_ files) are written in a way that they pass the rules set by the custom ruleset found in [`/.phpcs.xml.dist`](https://github.com/WPTRT/WPThemeReview/blob/develop/.phpcs.xml.dist). They should pass some of the `WordPress-Extra` standards and the `WordPress-Docs` code standards.
+The WPTRTCS sniffs and test files (excluding test _case_ files) are written in a way that they pass the rules set by the custom ruleset found in [`/.phpcs.xml.dist`](https://github.com/WPTRT/WPThemeReview/blob/develop/.phpcs.xml.dist). They should pass most of the `WordPress-Extra` standards and the `WordPress-Docs` code standards.
 
 You can check whether your code complies with the coding standard using the `composer check-cs` command from the project root.
 
@@ -128,6 +128,8 @@ Now add the following to that file, adjusting the paths to reflect those on your
 
 (and don't remove the existing line within the `<php>` block.)
 
+Secondly, you'll need to adjust the `bootstrap` line `bootstrap="./vendor/squizlabs/php_codesniffer/tests/bootstrap.php"` in your own `phpunit.xml` file to point to the location where you have PHPUnit installed.
+
 Once you've done that, both running the sniffs as well as the unit tests should work correctly.
 
 ## Writing and running unit tests
@@ -142,13 +144,16 @@ Once you've started the tests you will see output similar to this:
 
 ```bash
 > @php ./vendor/phpunit/phpunit/phpunit --filter WPThemeReview ./vendor/squizlabs/php_codesniffer/tests/AllTests.php
-PHPUnit 7.3.5 by Sebastian Bergmann and contributors.
+PHPUnit 7.5.0 by Sebastian Bergmann and contributors.
+
+Runtime:       PHP 7.2.13
+Configuration: /TRTCS/phpunit.xml
 
 ............                                                      12 / 12 (100%)
 
-Tests generated 57 unique error codes; 0 were fixable (0%)
+54 sniff test files generated 57 unique error codes; 0 were fixable (0%)
 
-Time: 13.55 seconds, Memory: 64.00MB
+Time: 16.46 seconds, Memory: 48.00MB
 
 OK (12 tests, 0 assertions)
 ```

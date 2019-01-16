@@ -9,7 +9,7 @@
 
 namespace WPThemeReview\Sniffs\PluginTerritory;
 
-use WordPress\AbstractFunctionRestrictionsSniff;
+use WordPressCS\WordPress\AbstractFunctionRestrictionsSniff;
 
 /**
  * Restricts the use of various functions that are plugin territory.
