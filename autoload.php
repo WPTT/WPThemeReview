@@ -11,6 +11,7 @@
  * @package WPTRT\WPThemeReview
  * @link    https://github.com/WPTRT/WPThemeReview
  * @license https://opensource.org/licenses/MIT MIT
+ * @since   0.2.0 Removed PHPCSAliases block require
  * @since   0.1.0
  */
 
@@ -53,20 +54,6 @@ if ( false === $wpcsDir && is_dir( $composerWPCSPath ) ) {
 			$wpcsDir = realpath( $wpcsPath );
 		}
 	}
-}
-
-// Try and load the WPCS class aliases file.
-if ( false !== $wpcsDir && file_exists( $wpcsDir . $ds . 'WordPress' . $ds . 'PHPCSAliases.php' ) ) {
-	require_once $wpcsDir . $ds . 'WordPress' . $ds . 'PHPCSAliases.php';
-} else {
-	echo 'Uh oh... can\'t find WPCS.
-
-If you use Composer, please run `composer install`.
-Otherwise, make sure you set a `WPCS_DIR` environment variable
-pointing to the WPCS directory.
-';
-
-	die( 1 );
 }
 
 // Clean up.
