@@ -14,12 +14,11 @@ There are plenty of ways in which you can contribute: writing sniffs, or opening
   * [Public properties](#public-properties)
   * [Code Standards for this project](#code-standards-for-this-project)
 - [Considerations when writing sniffs](#considerations-when-writing-sniffs)
-  * [Unit Testing](#unit-testing)
+  * [Unit testing](#unit-testing)
     + [Pre-requisites](#pre-requisites)
     + [Composer setup](#composer-setup)
-    + [Other setups](#other-setups)
   * [Writing and running unit tests](#writing-and-running-unit-tests)
-  * [Unit Testing conventions](#unit-testing-conventions)
+  * [Unit testing conventions](#unit-testing-conventions)
     + [File organization and naming](#file-organization-and-naming)
 
 # Reporting Bugs
@@ -92,46 +91,6 @@ composer install
 
 from the root of the cloned repository, will install `PHP_CodeSniffer`, `WordPress Coding Standards`, `PHPUnit`, `PHPCompatibility` and `security advisories`, which ensures that you won't install dependencies with known security vulnerabilities.
 
-### Other setups
-
-If you have PHP_CodeSniffer (PHPCS) and/or WordPress Coding Standards (WordPressCS) already installed, for instance as git clones, because you either contribute to these libraries as well or you want to develop for or test WPThemeReview with bleeding edge versions of either PHP_CodeSniffer or WordPress Coding Standards, you need to take some additional steps to make it all work.
-
-First, make sure you also have PHPCompatibility installed and make sure the `installed_paths` for PHP_CodeSniffer is set up correctly.
-
-You can see how this can be done by reading the official PHPCS [documentation](https://github.com/squizlabs/PHP_CodeSniffer/wiki/Configuration-Options#setting-the-installed-standard-paths).
-
-#### Method 1
-
-Set up global environment variables to point to PHP_CodeSniffer and WordPress Coding Standards:
-
-```bash
-PHPCS_DIR: I:/path/to/PHP_CodeSniffer/
-WPCS_DIR: I:/path/to/WordPressCS/
-```
-
-If you do that, both the sniffs as well as the unit tests should be able to work correctly.
-
-#### Method 2
-
-If you do not want to set up environment variables on your system
-
-* Add a file called `.pathtowpcs` to the project root. The only content in that file should be the full absolute path to your WordPressCS install.
-* Copy the `phpunit.xml.dist` file, rename the copied file `phpunit.xml` and make sure it's in the project root.
-Now add the following to that file, adjusting the paths to reflect those on your system:
-
-```xml
-  <php>
-    <env name="PHPCS_DIR" value="path/to/PHP_CodeSniffer/"/>
-    <env name="WPCS_DIR" value="path/to/WordPressCS/"/>
-  </php>
-```
-
-(and don't remove the existing line within the `<php>` block.)
-
-Secondly, you'll need to adjust the `bootstrap` line `bootstrap="./vendor/squizlabs/php_codesniffer/tests/bootstrap.php"` in your own `phpunit.xml` file to point to the location where you have PHPUnit installed.
-
-Once you've done that, both running the sniffs as well as the unit tests should work correctly.
-
 ## Writing and running unit tests
 
 The most important thing when writing sniffs intended for the theme review standard, is to have ample example code. This makes writing sniffs a lot easier, because you can test against the given examples.
@@ -160,7 +119,7 @@ OK (12 tests, 0 assertions)
 
 If you didn't install PHPCS/WPCS/PHPUnit using Composer, you will need to type the above command in to run the unit tests. Make sure you replace the path to PHPUnit and the path to PHPCS when you do.
 
-## Unit Testing conventions
+## Unit testing conventions
 
 ### File organization and naming
 
