@@ -3,8 +3,6 @@
 	<!-- For more information: https://make.wordpress.org/themes/handbook/review/ -->
 	<description>Standards any Theme to be published on wordpress.org should comply with.</description>
 
-	<autoload>../autoload.php</autoload>
-
 	<!-- Themes should be compatible with PHP 5.2 and higher. -->
 	<config name="testVersion" value="5.2-"/>
 	<rule ref="PHPCompatibilityWP">

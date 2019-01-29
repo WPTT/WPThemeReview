@@ -14,12 +14,12 @@ There are plenty of ways in which you can contribute: writing sniffs, or opening
   * [Public properties](#public-properties)
   * [Code Standards for this project](#code-standards-for-this-project)
 - [Considerations when writing sniffs](#considerations-when-writing-sniffs)
-  * [Unit Testing](#unit-testing)
+  * [Unit testing](#unit-testing)
     + [Pre-requisites](#pre-requisites)
     + [Composer setup](#composer-setup)
     + [Other setups](#other-setups)
   * [Writing and running unit tests](#writing-and-running-unit-tests)
-  * [Unit Testing conventions](#unit-testing-conventions)
+  * [Unit testing conventions](#unit-testing-conventions)
     + [File organization and naming](#file-organization-and-naming)
 
 # Reporting Bugs
@@ -100,35 +100,11 @@ First, make sure you also have PHPCompatibility installed and make sure the `ins
 
 You can see how this can be done by reading the official PHPCS [documentation](https://github.com/squizlabs/PHP_CodeSniffer/wiki/Configuration-Options#setting-the-installed-standard-paths).
 
-#### Method 1
+Next, you need to make sure that PHPUnit can find the PHPCS unit test bootstrap file.  
+There are two ways to do this:
 
-Set up global environment variables to point to PHP_CodeSniffer and WordPress Coding Standards:
-
-```bash
-PHPCS_DIR: I:/path/to/PHP_CodeSniffer/
-WPCS_DIR: I:/path/to/WordPressCS/
-```
-
-If you do that, both the sniffs as well as the unit tests should be able to work correctly.
-
-#### Method 2
-
-If you do not want to set up environment variables on your system
-
-* Add a file called `.pathtowpcs` to the project root. The only content in that file should be the full absolute path to your WordPressCS install.
-* Copy the `phpunit.xml.dist` file, rename the copied file `phpunit.xml` and make sure it's in the project root.
-Now add the following to that file, adjusting the paths to reflect those on your system:
-
-```xml
-  <php>
-    <env name="PHPCS_DIR" value="path/to/PHP_CodeSniffer/"/>
-    <env name="WPCS_DIR" value="path/to/WordPressCS/"/>
-  </php>
-```
-
-(and don't remove the existing line within the `<php>` block.)
-
-Secondly, you'll need to adjust the `bootstrap` line `bootstrap="./vendor/squizlabs/php_codesniffer/tests/bootstrap.php"` in your own `phpunit.xml` file to point to the location where you have PHPUnit installed.
+1. You can copy the `phpunit.xml.dist` file, rename it to `phpunit.xml` and adjust the bootstrap line to point to where PHPCS is installed on your system.
+2. Alternatively, you can add `--bootstrap="/path/to/PHPCS/tests/bootstrap.php"` to the phpunit command when you invoke it on the command line.
 
 Once you've done that, both running the sniffs as well as the unit tests should work correctly.
 
@@ -158,9 +134,9 @@ Time: 16.46 seconds, Memory: 48.00MB
 OK (12 tests, 0 assertions)
 ```
 
-If you didn't install PHPCS/WPCS/PHPUnit using Composer, you will need to type the above command in to run the unit tests. Make sure you replace the path to PHPUnit and the path to PHPCS when you do.
+If you didn't install PHPCS/WPCS/PHPUnit using Composer, you will need to type the above command in to run the unit tests. Make sure you replace the path to PHPUnit and the path to PHPCS when you do and, if you didn't setup your own `phpunit.xml` file, add `--bootstrap="/path/to/PHPCS/tests/bootstrap.php"`.
 
-## Unit Testing conventions
+## Unit testing conventions
 
 ### File organization and naming
 
