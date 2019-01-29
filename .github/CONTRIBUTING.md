@@ -17,6 +17,7 @@ There are plenty of ways in which you can contribute: writing sniffs, or opening
   * [Unit testing](#unit-testing)
     + [Pre-requisites](#pre-requisites)
     + [Composer setup](#composer-setup)
+    + [Other setups](#other-setups)
   * [Writing and running unit tests](#writing-and-running-unit-tests)
   * [Unit testing conventions](#unit-testing-conventions)
     + [File organization and naming](#file-organization-and-naming)
@@ -99,9 +100,11 @@ First, make sure you also have PHPCompatibility installed and make sure the `ins
 
 You can see how this can be done by reading the official PHPCS [documentation](https://github.com/squizlabs/PHP_CodeSniffer/wiki/Configuration-Options#setting-the-installed-standard-paths).
 
-You can copy the `phpunit.xml.dist` file, rename it to `phpunit.xml` and adjust the bootstrap line to point to where PHPCS is installed.
+Next, you need to make sure that PHPUnit can find the PHPCS unit test bootstrap file.  
+There are two ways to do this:
 
-Alternatively, you can add `--bootstrap="/path/to/PHPCS/tests/bootstrap.php"` to the `phpunit` command, if you use command line instead.
+1. You can copy the `phpunit.xml.dist` file, rename it to `phpunit.xml` and adjust the bootstrap line to point to where PHPCS is installed on your system.
+2. Alternatively, you can add `--bootstrap="/path/to/PHPCS/tests/bootstrap.php"` to the phpunit command when you invoke it on the command line.
 
 Once you've done that, both running the sniffs as well as the unit tests should work correctly.
 
@@ -131,7 +134,7 @@ Time: 16.46 seconds, Memory: 48.00MB
 OK (12 tests, 0 assertions)
 ```
 
-If you didn't install PHPCS/WPCS/PHPUnit using Composer, you will need to type the above command in to run the unit tests. Make sure you replace the path to PHPUnit and the path to PHPCS when you do, and add the `--bootstrap="/path/to/PHPCS/tests/bootstrap.php"` part when running the unit test.
+If you didn't install PHPCS/WPCS/PHPUnit using Composer, you will need to type the above command in to run the unit tests. Make sure you replace the path to PHPUnit and the path to PHPCS when you do and, if you didn't setup your own `phpunit.xml` file, add `--bootstrap="/path/to/PHPCS/tests/bootstrap.php"`.
 
 ## Unit testing conventions
 
