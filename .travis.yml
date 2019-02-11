@@ -21,7 +21,6 @@ php:
   - 7.1
   - 7.3
   - "7.4snapshot"
-  - nightly
 
 env:
   # Highest supported PHPCS version.
@@ -45,7 +44,6 @@ matrix:
   allow_failures:
     # Allow failures for unstable builds.
     - php: "7.4snapshot"
-    - php: nightly
     - php: 7.3
       env: PHPCS_BRANCH="3.3.1"
 
@@ -56,11 +54,10 @@ before_install:
   - composer require squizlabs/php_codesniffer:${PHPCS_BRANCH} --no-update --no-suggest --no-scripts
   - |
     if [[ "$SNIFF" == "1" ]]; then
-      # Use the Travis image PHPUnit version rather than installing via Composer.
-      composer remove --dev phpunit/phpunit --no-update --no-suggest --no-scripts
       composer install --dev --no-suggest
       # The post-install-cmd script takes care of the installed_paths.
     else
+      if [[ ${TRAVIS_PHP_VERSION:0:3} > "7.1" ]]; then composer require phpunit/phpunit:^7.0 --no-update --no-suggest --no-scripts;fi
       composer install --no-dev --no-suggest --no-scripts
       composer install-standards
     fi
@@ -69,7 +66,12 @@ script:
   # Lint the PHP files against parse errors.
   - if [[ "$LINT" == "1" ]]; then if find . -path ./vendor -prune -o -name "*.php" -exec php -l {} \; | grep "^[Parse error|Fatal error]"; then exit 1; fi; fi
   # Run the unit tests.
-  - phpunit --filter WPThemeReview $(pwd)/vendor/squizlabs/php_codesniffer/tests/AllTests.php
+  - |
+    if [[ ${TRAVIS_PHP_VERSION:0:3} > "7.1" ]]; then
+      vendor/bin/phpunit --filter WPThemeReview $(pwd)/vendor/squizlabs/php_codesniffer/tests/AllTests.php
+    else
+      phpunit --filter WPThemeReview $(pwd)/vendor/squizlabs/php_codesniffer/tests/AllTests.php
+    fi
   # Check the codestyle of the WPThemeReview codebase.
   - if [[ "$SNIFF" == "1" ]]; then $(pwd)/vendor/bin/phpcs; fi
   # Validate the xml files.
