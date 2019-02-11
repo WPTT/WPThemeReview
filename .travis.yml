@@ -20,6 +20,7 @@ php:
   - 7.0
   - 7.1
   - 7.3
+  - "7.4snapshot"
   - nightly
 
 env:
@@ -43,6 +44,7 @@ matrix:
 
   allow_failures:
     # Allow failures for unstable builds.
+    - php: "7.4snapshot"
     - php: nightly
     - php: 7.3
       env: PHPCS_BRANCH="3.3.1"
