@@ -18,13 +18,13 @@
 
 	<!-- Files which start with a PHP open tag should have no whitespace preceding it. -->
 	<rule ref="Squiz.WhiteSpace.SuperfluousWhitespace.StartFile">
-		<message>To help prevent PHP "headers already send" errors, whitespace before the PHP open tag should be removed.</message>
+		<message>To help prevent PHP "headers already sent" errors, whitespace before the PHP open tag should be removed.</message>
 	</rule>
 
 	<!-- Files should omit the closing PHP tag at the end of a file. -->
 	<rule ref="PSR2.Files.ClosingTag.NotAllowed">
 		<type>warning</type>
-		<message>To help prevent PHP "headers already send" errors the PHP closing tag at the end of the file should be removed.</message>
+		<message>To help prevent PHP "headers already sent" errors, the PHP closing tag at the end of the file should be removed.</message>
 	</rule>
 
 	<!-- Mixed line endings are not allowed. -->
