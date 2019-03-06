@@ -37,7 +37,7 @@ class NoAddAdminPagesSniff extends AbstractFunctionRestrictionsSniff {
 		return array(
 			'add_menu_pages' => array(
 				'type'      => 'error',
-				'message'   => 'Themes should use <strong>add_theme_page()</strong> for adding admin pages. Found %s.',
+				'message'   => 'Themes should use add_theme_page() for adding admin pages. Found %s.',
 				'functions' => array(
 					// Menu Pages.
 					'add_menu_page',
