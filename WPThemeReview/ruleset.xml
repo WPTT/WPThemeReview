@@ -16,6 +16,11 @@
 	<!-- Alternative PHP open tags not allowed. -->
 	<rule ref="Generic.PHP.DisallowAlternativePHPTags"/>
 
+	<!-- Restrict PHPCS' internal error message for short tag use/no code to PHP files only. -->
+	<rule ref="Internal.NoCodeFound">
+		<include-pattern>*\.(php|inc)$</include-pattern>
+	</rule>
+
 	<!-- Files which start with a PHP open tag should have no whitespace preceding it. -->
 	<rule ref="Squiz.WhiteSpace.SuperfluousWhitespace.StartFile">
 		<message>To help prevent PHP "headers already sent" errors, whitespace before the PHP open tag should be removed.</message>
