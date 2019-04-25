@@ -26,14 +26,14 @@ env:
   # Highest supported PHPCS + WPCS versions.
   - PHPCS_BRANCH="dev-master" WPCS_BRANCH="dev-master" LINT=1
   # Lowest supported PHPCS + WPCS versions.
-  - PHPCS_BRANCH="3.3.1" WPCS_BRANCH="2.0.0"
+  - PHPCS_BRANCH="3.3.1" WPCS_BRANCH="2.1.0"
 
 matrix:
   fast_finish: true
   include:
     # Seperate builds for PHP 7.2 with additional checks.
     - php: 7.2
-      env: PHPCS_BRANCH="dev-master" WPCS_BRANCH="2.0.0" LINT=1 SNIFF=1
+      env: PHPCS_BRANCH="dev-master" WPCS_BRANCH="2.1.0" LINT=1 SNIFF=1
       addons:
         apt:
           packages:
