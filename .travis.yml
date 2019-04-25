@@ -23,23 +23,23 @@ php:
   - "7.4snapshot"
 
 env:
-  # Highest supported PHPCS version.
-  - PHPCS_BRANCH="dev-master" LINT=1
-  # Lowest supported PHPCS version.
-  - PHPCS_BRANCH="3.3.1"
+  # Highest supported PHPCS + WPCS versions.
+  - PHPCS_BRANCH="dev-master" WPCS_BRANCH="dev-master" LINT=1
+  # Lowest supported PHPCS + WPCS versions.
+  - PHPCS_BRANCH="3.3.1" WPCS_BRANCH="2.0.0"
 
 matrix:
   fast_finish: true
   include:
     # Seperate builds for PHP 7.2 with additional checks.
     - php: 7.2
-      env: PHPCS_BRANCH="dev-master" LINT=1 SNIFF=1
+      env: PHPCS_BRANCH="dev-master" WPCS_BRANCH="2.0.0" LINT=1 SNIFF=1
       addons:
         apt:
           packages:
             - libxml2-utils
     - php: 7.2
-      env: PHPCS_BRANCH="3.3.1"
+      env: PHPCS_BRANCH="3.3.1" WPCS_BRANCH="dev-master"
 
   allow_failures:
     # Allow failures for unstable builds.
@@ -49,11 +49,11 @@ before_install:
   # Speed up build time by disabling Xdebug.
   - phpenv config-rm xdebug.ini || echo 'No xdebug config.'
   - export XMLLINT_INDENT="	"
-  - composer require squizlabs/php_codesniffer:${PHPCS_BRANCH} --no-update --no-suggest --no-scripts
+  - composer require squizlabs/php_codesniffer:${PHPCS_BRANCH} wp-coding-standards/wpcs:${WPCS_BRANCH} --no-update --no-suggest --no-scripts
   - |
     if [[ "$SNIFF" == "1" ]]; then
       composer install --dev --no-suggest
-      # The post-install-cmd script takes care of the installed_paths.
+      # The Composer PHPCS plugin takes care of the installed_paths.
     else
       if [[ ${TRAVIS_PHP_VERSION:0:3} > "7.1" ]]; then composer require phpunit/phpunit:^7.0 --no-update --no-suggest --no-scripts;fi
       composer install --no-dev --no-suggest --no-scripts
