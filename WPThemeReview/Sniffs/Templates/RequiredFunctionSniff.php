@@ -94,7 +94,8 @@ class RequiredFunctionSniff implements Sniff {
 
 		// Set tag class property.
 		foreach ( $this->tagsConfig as $tag => $settings ) {
-			// HTML case should be insensitive
+
+			// HTML case should be insensitive.
 			if ( false !== stripos( $content, '<' . $tag ) ) {
 				$this->tag[ $filename ]        = $this->tagsConfig[ $tag ];
 				$this->tag[ $filename ]['tag'] = $tag;
@@ -111,7 +112,7 @@ class RequiredFunctionSniff implements Sniff {
 		$tagName        = $this->tag[ $filename ]['tag'];
 		$tagFn          = $this->tag[ $filename ]['function'];
 		$tagAttr        = $this->tag[ $filename ]['attribute'];
-		$pascal         = str_replace( '_', '', ucwords( $tagFn, '_' ) );
+		$pascal         = str_replace( ' ', '', ucwords( str_replace( '_', ' ', $tagFn ) ) );
 		$nextPtr        = $stackPtr;
 		$foundFunction  = false;
 		$foundAttribute = false;
@@ -119,7 +120,7 @@ class RequiredFunctionSniff implements Sniff {
 
 		do {
 			$nextPtrContent = $this->clean_str( $tokens[ $nextPtr ]['content'] );
-			$nextPtrCode = $tokens[ $nextPtr ]['code'];
+			$nextPtrCode    = $tokens[ $nextPtr ]['code'];
 
 			// Check for attribute not allowed.
 			if (
@@ -127,7 +128,7 @@ class RequiredFunctionSniff implements Sniff {
 				in_array( $nextPtrCode, Tokens::$textStringTokens, true ) &&
 				false !== stripos( $nextPtrContent, $tagAttr . '=' )
 			) {
-				$foundAttribute =true;
+				$foundAttribute = true;
 			}
 
 			// Check for required function call.
@@ -149,7 +150,7 @@ class RequiredFunctionSniff implements Sniff {
 
 					// Skip over contents to closing parens in stack.
 					if ( isset( $tokens[ $next ]['parenthesis_closer'] ) ) {
-						$nextPtr = $tokens[ $next ]['parenthesis_closer'];
+						$nextPtr       = $tokens[ $next ]['parenthesis_closer'];
 						$foundFunction = true;
 					}
 				}
@@ -162,9 +163,8 @@ class RequiredFunctionSniff implements Sniff {
 				in_array( $nextPtrCode, Tokens::$textStringTokens, true ) &&
 				'>' === substr( $nextPtrContent, -1 )
 			) {
-
 				$this->tag[ $filename ] = false;
-				$foundEnd = true;
+				$foundEnd               = true;
 				break;
 			}
 
@@ -220,6 +220,8 @@ class RequiredFunctionSniff implements Sniff {
 	 * '\r'  : carriage return
 	 * '\0'  : NUL-byte
 	 * '\x0B': vertical tab
+	 *
+	 * @param string $str String to clean.
 	 *
 	 * @return string Cleaned string.
 	 */
