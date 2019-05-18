@@ -159,4 +159,8 @@
 	<!-- Themes should never touch the timezone. -->
 	<rule ref="WordPress.WP.TimezoneChange"/>
 
+	<!-- Downgrade posts per page rule into warning instead of error. -->
+	<rule ref="WordPress.WP.PostsPerPage">
+		<type>warning</type>
+	</rule>
 </ruleset>
