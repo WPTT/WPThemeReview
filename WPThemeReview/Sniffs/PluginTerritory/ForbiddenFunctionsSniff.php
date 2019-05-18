@@ -16,6 +16,7 @@ use WordPressCS\WordPress\AbstractFunctionRestrictionsSniff;
  *
  * @link  https://make.wordpress.org/themes/handbook/review/required/#presentation-vs-functionality
  *
+ * @since 0.2.0 Updated the list of forbidden functions.
  * @since 0.1.0
  */
 class ForbiddenFunctionsSniff extends AbstractFunctionRestrictionsSniff {
