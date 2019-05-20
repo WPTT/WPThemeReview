@@ -74,7 +74,7 @@ script:
   - if [[ "$SNIFF" == "1" ]]; then $(pwd)/vendor/bin/phpcs; fi
   # Validate the xml files.
   # @link http://xmlsoft.org/xmllint.html
-  - if [[ "$SNIFF" == "1" ]]; then xmllint --noout ./*/ruleset.xml; fi
+  - if [[ "$SNIFF" == "1" ]]; then xmllint --noout --schema ./vendor/squizlabs/php_codesniffer/phpcs.xsd ./*/ruleset.xml; fi
   # Check the code-style consistency of the xml files.
   - if [[ "$SNIFF" == "1" ]]; then diff -B --tabsize=4 ./WPThemeReview/ruleset.xml <(xmllint --format "./WPThemeReview/ruleset.xml"); fi
   # Validate the composer.json file.
