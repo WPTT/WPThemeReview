@@ -18,6 +18,7 @@ use WordPressCS\WordPress\AbstractFunctionRestrictionsSniff;
  *
  * @since 0.1.0
  * @since 0.2.0 Added the `editor-blocks` group.
+ *              Added the `cron-functionality` group.
  */
 class ForbiddenFunctionsSniff extends AbstractFunctionRestrictionsSniff {
 
@@ -54,6 +55,18 @@ class ForbiddenFunctionsSniff extends AbstractFunctionRestrictionsSniff {
 				'functions' => array(
 					'register_block_*',
 					'unregister_block_*',
+				),
+			),
+
+			'cron-functionality' => array(
+				'type'      => 'error',
+				'message'   => 'Themes should not be running regular (Cron) tasks. Found %s().',
+				'functions' => array(
+					'wp_clear_scheduled_hook',
+					'wp_cron',
+					'wp_reschedule_event',
+					'wp_schedule_*',
+					'wp_unschedule_*',
 				),
 			),
 		);

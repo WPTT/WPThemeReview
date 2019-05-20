@@ -33,3 +33,13 @@ register_block_core_latest_posts();
 xyz_add_shortcode(); // OK.
 My_Plugin_Class::add_shortcode(); // OK.
 $my_plugin_object->add_shortcode(); // OK.
+
+wp_schedule_event( time(), 'hourly', 'my_schedule_hook', $args );
+wp_unschedule_hook( 'cron_name' );
+wp_reschedule_event( time(), 'hourly', 'my_schedule_hook', $args );
+wp_unschedule_event( time(), 'hourly', 'my_schedule_hook', $args );
+wp_clear_scheduled_hook( 'cron_name', $args );
+wp_schedule_single_event( time(), 'my_schedule_hook', $args );
+wp_schedule_update_checks();
+wp_schedule_update_network_counts();
+wp_cron();
