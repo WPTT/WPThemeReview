@@ -16,8 +16,8 @@ use WordPressCS\WordPress\AbstractFunctionRestrictionsSniff;
  *
  * @link  https://make.wordpress.org/themes/handbook/review/required/#presentation-vs-functionality
  *
- * @since 0.2.0 Updated the list of forbidden functions.
  * @since 0.1.0
+ * @since 0.2.0 Updated the list of forbidden functions.
  */
 class ForbiddenFunctionsSniff extends AbstractFunctionRestrictionsSniff {
 
@@ -45,16 +45,15 @@ class ForbiddenFunctionsSniff extends AbstractFunctionRestrictionsSniff {
 					'add_shortcode',
 					'register_taxonomy_for_object_type',
 					'flush_rewrite_rules',
-					'register_block_type',
-					'unregister_block_type',
-					'register_block_core_rss',
-					'register_block_core_search',
-					'register_block_core_archives',
-					'register_block_core_calendar',
-					'register_block_core_shortcode',
-					'register_block_core_tag_cloud',
-					'register_block_core_categories',
-					'register_block_core_latest_posts',
+				),
+			),
+
+			'editor-blocks' => array(
+				'type'      => 'error',
+				'message'   => 'Registering and deregistering editor blocks should be done in a plugin, not in the theme. Found %s().',
+				'functions' => array(
+					'register_block_*',
+					'unregister_block_*',
 				),
 			),
 		);
