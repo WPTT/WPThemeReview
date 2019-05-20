@@ -56,6 +56,18 @@ class ForbiddenFunctionsSniff extends AbstractFunctionRestrictionsSniff {
 					'unregister_block_*',
 				),
 			),
+
+			'cron-functionality' => array(
+				'type'      => 'error',
+				'message'   => 'Themes should not be running regular (Cron) tasks. Found %s().',
+				'functions' => array(
+					'wp_clear_scheduled_hook',
+					'wp_cron',
+					'wp_reschedule_event',
+					'wp_schedule_*',
+					'wp_unschedule_*',
+				),
+			),
 		);
 	}
 
