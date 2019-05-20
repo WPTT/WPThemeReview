@@ -125,6 +125,9 @@
 		<type>error</type>
 	</rule>
 
+	<!-- Check for usage of deprecated parameter values in WP functions and provide alternative based on the parameter passed. -->
+	<rule ref="WordPress.WP.DeprecatedParameterValues"/>
+
 	<!-- Verify that everything in the global namespace is prefixed. -->
 	<!-- Covers: https://make.wordpress.org/themes/handbook/review/required/#code - last bullet. -->
 	<!-- NOTE: this sniff needs a custom property to be set for it to be activated. -->
