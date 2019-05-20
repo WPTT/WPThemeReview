@@ -18,6 +18,7 @@ use WordPressCS\WordPress\AbstractFunctionRestrictionsSniff;
  *
  * @since 0.1.0
  * @since 0.2.0 Added the `editor-blocks` group.
+ *              Added the `cron-functionality` group.
  */
 class ForbiddenFunctionsSniff extends AbstractFunctionRestrictionsSniff {
 
