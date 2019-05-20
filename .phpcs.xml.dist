@@ -1,5 +1,6 @@
 <?xml version="1.0"?>
-<ruleset name="WPThemeReview Coding Standards">
+<ruleset xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" name="WPThemeReview Coding Standards" xsi:noNamespaceSchemaLocation="https://raw.githubusercontent.com/squizlabs/PHP_CodeSniffer/master/phpcs.xsd">
+
 	<description>The Coding standard for the WPThemeReview Standards itself.</description>
 
 	<file>.</file>
