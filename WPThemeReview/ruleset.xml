@@ -159,4 +159,10 @@
 	<!-- Themes should never touch the timezone. -->
 	<rule ref="WordPress.WP.TimezoneChange"/>
 
+	<!-- Themes shouldn't change ini configuration during runtime. -->
+	<rule ref="WordPress.PHP.IniSet">
+		<type>error</type>
+	</rule>
+
+
 </ruleset>
