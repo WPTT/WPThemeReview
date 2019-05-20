@@ -14,7 +14,7 @@ use PHP_CodeSniffer\Tests\Standards\AbstractSniffUnitTest;
 /**
  * Unit test class for the NoUrlShorteners sniff.
  *
- * @since 0.1.0
+ * @since 0.2.0
  */
 class NoUrlShortenersUnitTest extends AbstractSniffUnitTest {
 

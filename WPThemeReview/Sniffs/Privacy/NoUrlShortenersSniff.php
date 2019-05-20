@@ -23,6 +23,8 @@ class NoUrlShortenersSniff implements Sniff {
 	/**
 	 * Error message template.
 	 *
+	 * @since 0.2.0
+	 *
 	 * @var string
 	 */
 	const ERROR_MSG = 'No URL shorteners should used in the theme. Found: "%s".';
@@ -30,32 +32,16 @@ class NoUrlShortenersSniff implements Sniff {
 	/**
 	 * Found used shortener in a file
 	 *
+	 * @since 0.2.0
+	 *
 	 * @var string
 	 */
 	protected $shortener;
 
 	/**
-	 * List of url shorteners.
+	 * Supported Tokenizers
 	 *
 	 * @since 0.2.0
-	 *
-	 * @var array
-	 */
-	protected $url_shorteners = [
-		'goo.gl',
-		'bitly.com',
-		'polrproject.org',
-		'www.rebrandly.com',
-		'tinyurl.com',
-		'hootsuite.com/pages/owl',
-		'is.gd',
-		'buffer.com',
-		'df.ly',
-		'bit.do',
-	];
-
-	/**
-	 * Supported Tokenizers
 	 *
 	 * @var array
 	 */
@@ -66,7 +52,27 @@ class NoUrlShortenersSniff implements Sniff {
 	);
 
 	/**
+	 * List of url shorteners.
+	 *
+	 * @since 0.2.0
+	 *
+	 * @var array
+	 */
+	protected $url_shorteners = [
+		'bit.do',
+		'bit.ly',
+		'df.ly',
+		'goo.gl',
+		'is.gd',
+		'ow.ly',
+		'polr.me',
+		'tinyurl.com',
+	];
+
+	/**
 	 * Returns an array of tokens this test wants to listen for.
+	 *
+	 * @since 0.2.0
 	 *
 	 * @return array
 	 */
@@ -90,6 +96,8 @@ class NoUrlShortenersSniff implements Sniff {
 
 	/**
 	 * Processes this test, when one of its tokens is encountered.
+	 *
+	 * @since 0.2.0
 	 *
 	 * @param \PHP_CodeSniffer\Files\File $phpcsFile The PHP_CodeSniffer file where the
 	 *                                               token was found.
