@@ -14,11 +14,13 @@ use PHP_CodeSniffer\Files\File;
 use PHP_CodeSniffer\Util\Tokens;
 
 /**
- * Ensures that body_class() is called if theme adds a <body> tag.
+ * Ensures functions are called within HTML tags.
+ *
+ * Ex: <body <?php body_class(); ?>>
  *
  * @link  https://make.wordpress.org/themes/handbook/review/required/#templates
  *
- * @since 0.1.0
+ * @since 0.2.0
  */
 class RequiredFunctionSniff implements Sniff {
 
@@ -125,7 +127,7 @@ class RequiredFunctionSniff implements Sniff {
 			// Check for attribute not allowed.
 			if (
 				false === $foundAttribute &&
-				in_array( $nextPtrCode, Tokens::$textStringTokens, true ) &&
+				isset( Tokens::$textStringTokens[ $nextPtrCode ] ) &&
 				false !== stripos( $nextPtrContent, $tagAttr . '=' )
 			) {
 				$foundAttribute = true;
@@ -134,7 +136,7 @@ class RequiredFunctionSniff implements Sniff {
 			// Check for required function call.
 			if (
 				false === $foundFunction &&
-				in_array( $nextPtrCode, Tokens::$functionNameTokens, true ) &&
+				isset( Tokens::$functionNameTokens[ $nextPtrCode ] ) &&
 				false !== strpos( $nextPtrContent, $tagFn )
 			) {
 
@@ -160,7 +162,7 @@ class RequiredFunctionSniff implements Sniff {
 
 			// Check for searched tag matched closing bracket.
 			if (
-				in_array( $nextPtrCode, Tokens::$textStringTokens, true ) &&
+				isset( Tokens::$textStringTokens[ $nextPtrCode ] ) &&
 				'>' === substr( $nextPtrContent, -1 )
 			) {
 				$this->tag[ $filename ] = false;
