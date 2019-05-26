@@ -1,5 +1,3 @@
-sudo: false
-
 dist: trusty
 
 cache:
@@ -28,16 +26,35 @@ env:
   # Lowest supported PHPCS + WPCS versions.
   - PHPCS_BRANCH="3.3.1" WPCS_BRANCH="2.1.0"
 
-matrix:
+stages:
+  - sniff
+  - test
+
+jobs:
   fast_finish: true
   include:
-    # Seperate builds for PHP 7.2 with additional checks.
-    - php: 7.2
-      env: PHPCS_BRANCH="dev-master" WPCS_BRANCH="2.1.0" LINT=1 SNIFF=1
+    - stage: sniff
+      php: 7.3
+      env: PHPCS_BRANCH="dev-master" WPCS_BRANCH="dev-master"
       addons:
         apt:
           packages:
             - libxml2-utils
+      script:
+        # Check the codestyle of the WPThemeReview codebase.
+        - $(pwd)/vendor/bin/phpcs
+
+        # Validate the xml files.
+        # @link http://xmlsoft.org/xmllint.html
+        - xmllint --noout --schema ./vendor/squizlabs/php_codesniffer/phpcs.xsd ./*/ruleset.xml
+
+        # Check the code-style consistency of the xml files.
+        - diff -B --tabsize=4 ./WPThemeReview/ruleset.xml <(xmllint --format "./WPThemeReview/ruleset.xml")
+
+    # Seperate test builds for PHP 7.2 with reversed PHPCS vs WPCS branches.
+    - stage: test
+      php: 7.2
+      env: PHPCS_BRANCH="dev-master" WPCS_BRANCH="2.1.0" LINT=1
     - php: 7.2
       env: PHPCS_BRANCH="3.3.1" WPCS_BRANCH="dev-master"
 
@@ -51,7 +68,7 @@ before_install:
   - export XMLLINT_INDENT="	"
   - composer require squizlabs/php_codesniffer:${PHPCS_BRANCH} wp-coding-standards/wpcs:${WPCS_BRANCH} --no-update --no-suggest --no-scripts
   - |
-    if [[ "$SNIFF" == "1" ]]; then
+    if [[ "$TRAVIS_BUILD_STAGE_NAME" == "Sniff" ]]; then
       composer install --dev --no-suggest
       # The Composer PHPCS plugin takes care of the installed_paths.
     else
@@ -63,6 +80,11 @@ before_install:
 script:
   # Lint the PHP files against parse errors.
   - if [[ "$LINT" == "1" ]]; then if find . -path ./vendor -prune -o -name "*.php" -exec php -l {} \; | grep "^[Parse error|Fatal error]"; then exit 1; fi; fi
+
+  # Validate the composer.json file.
+  # @link https://getcomposer.org/doc/03-cli.md#validate
+  - if [[ "$LINT" == "1" ]]; then composer validate --no-check-all --strict; fi
+
   # Run the unit tests.
   - |
     if [[ ${TRAVIS_PHP_VERSION:0:3} > "7.1" ]]; then
@@ -70,13 +92,3 @@ script:
     else
       phpunit --filter WPThemeReview $(pwd)/vendor/squizlabs/php_codesniffer/tests/AllTests.php
     fi
-  # Check the codestyle of the WPThemeReview codebase.
-  - if [[ "$SNIFF" == "1" ]]; then $(pwd)/vendor/bin/phpcs; fi
-  # Validate the xml files.
-  # @link http://xmlsoft.org/xmllint.html
-  - if [[ "$SNIFF" == "1" ]]; then xmllint --noout ./*/ruleset.xml; fi
-  # Check the code-style consistency of the xml files.
-  - if [[ "$SNIFF" == "1" ]]; then diff -B --tabsize=4 ./WPThemeReview/ruleset.xml <(xmllint --format "./WPThemeReview/ruleset.xml"); fi
-  # Validate the composer.json file.
-  # @link https://getcomposer.org/doc/03-cli.md#validate
-  - if [[ "$LINT" == "1" ]]; then composer validate --no-check-all --strict; fi
