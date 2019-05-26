@@ -21,15 +21,42 @@ class NoUrlShortenersUnitTest extends AbstractSniffUnitTest {
 	/**
 	 * Returns the lines where errors should occur.
 	 *
+	 * @param string $testFile The name of the file being tested.
 	 * @return array <int line number> => <int number of errors>
 	 */
-	public function getErrorList() {
-		return array(
-			6  => 1,
-			9  => 1,
-			10 => 1,
-			11 => 1,
-		);
+	public function getErrorList( $testFile = '' ) {
+
+		switch ( $testFile ) {
+			case 'ShortenedURLsUnitTest.inc':
+				return array(
+					6  => 1,
+					9  => 1,
+					10 => 1,
+					11 => 1,
+					14 => 1,
+					16 => 1,
+					21 => 1,
+					35 => 1,
+					41 => 1,
+					48 => 1,
+				);
+
+			case 'ShortenedURLsUnitTest.js':
+				return array(
+					2  => 1,
+					6  => 1,
+					14 => 1,
+				);
+
+			case 'ShortenedURLsUnitTest.css':
+				return array(
+					1 => 1,
+					2 => 1,
+				);
+
+			default:
+				return array();
+		}
 	}
 
 	/**

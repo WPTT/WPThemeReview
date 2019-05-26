@@ -14,11 +14,11 @@ use PHP_CodeSniffer\Files\File;
 use PHP_CodeSniffer\Util\Tokens;
 
 /**
- * Check if the file contains a URL shortener.
+ * Check if the file contains a shortened URL from the list of banned URL shortener services.
  *
  * @since 0.2.0
  */
-class NoUrlShortenersSniff implements Sniff {
+class ShortenedURLsSniff implements Sniff {
 
 	/**
 	 * Error message template.
@@ -27,7 +27,7 @@ class NoUrlShortenersSniff implements Sniff {
 	 *
 	 * @var string
 	 */
-	const ERROR_MSG = 'No URL shorteners should used in the theme. Found: "%s".';
+	const ERROR_MSG = 'Shortened URLs are not allowed in the theme. Found: "%s".';
 
 	/**
 	 * Found used shortener in a file
@@ -64,8 +64,12 @@ class NoUrlShortenersSniff implements Sniff {
 		'df.ly',
 		'goo.gl',
 		'is.gd',
+		'lc.chat',
 		'ow.ly',
 		'polr.me',
+		's2r.co',
+		'soo.gd',
+		'tiny.cc',
 		'tinyurl.com',
 	];
 
@@ -77,20 +81,10 @@ class NoUrlShortenersSniff implements Sniff {
 	 * @return array
 	 */
 	public function register() {
-		return array(
-			\T_CONSTANT_ENCAPSED_STRING,
-			\T_DOUBLE_QUOTED_STRING,
-			\T_INLINE_HTML,
-			\T_HEREDOC,
-			\T_NOWDOC,
-			\T_COMMENT,
-			\T_DOC_COMMENT,
-			\T_DOC_COMMENT_STAR,
-			\T_DOC_COMMENT_WHITESPACE,
-			\T_DOC_COMMENT_TAG,
-			\T_DOC_COMMENT_OPEN_TAG,
-			\T_DOC_COMMENT_CLOSE_TAG,
-			\T_DOC_COMMENT_STRING,
+		return Tokens::$textStringTokens + array(
+			T_COMMENT,
+			T_DOC_COMMENT_STRING,
+			T_DOC_COMMENT,
 		);
 	}
 
@@ -104,19 +98,22 @@ class NoUrlShortenersSniff implements Sniff {
 	 * @param int                         $stackPtr  The position of the current token
 	 *                                               in the stack.
 	 *
-	 * @return void|int Optionally returns an integer stack pointer or void to continue
-	 *                  normal file processing.
+	 * @return void
 	 */
 	public function process( File $phpcsFile, $stackPtr ) {
 		$tokens  = $phpcsFile->getTokens();
 		$content = $tokens[ $stackPtr ]['content'];
+error_log( print_r( $content, true ) );
+		if ( strpos( $content, '.' ) === false ) {
+			return;
+		}
 
 		foreach ( $this->url_shorteners as $url_shortener ) {
 			if ( strpos( $content, $url_shortener ) !== false ) {
 				$phpcsFile->addError(
 					self::ERROR_MSG,
 					$stackPtr,
-					'URLShorternerFound',
+					'Found',
 					array( $url_shortener )
 				);
 			}
