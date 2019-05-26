@@ -103,7 +103,7 @@ class ShortenedURLsSniff implements Sniff {
 	public function process( File $phpcsFile, $stackPtr ) {
 		$tokens  = $phpcsFile->getTokens();
 		$content = $tokens[ $stackPtr ]['content'];
-error_log( print_r( $content, true ) );
+
 		if ( strpos( $content, '.' ) === false ) {
 			return;
 		}
