@@ -14,7 +14,11 @@ use PHP_CodeSniffer\Files\File;
 use PHP_CodeSniffer\Util\Tokens;
 
 /**
- * Check if the file contains a shortened URL from the list of banned URL shortener services.
+ * Detect the use of shortened URLs.
+ *
+ * Detection is based on a list of banned URL shortener services.
+ *
+ * @link https://make.wordpress.org/themes/handbook/review/required/#privacy
  *
  * @since 0.2.0
  */
@@ -30,7 +34,25 @@ class ShortenedURLsSniff implements Sniff {
 	const ERROR_MSG = 'Shortened URLs are not allowed in the theme. Found: "%s".';
 
 	/**
-	 * Found used shortener in a file
+	 * Regex template.
+	 *
+	 * Will be parsed together with the url_shorteners blacklist in the register() method.
+	 *
+	 * @var string
+	 */
+	const REGEX_TEMPLATE = '`%s/[^\s"]+`i';
+
+	/**
+	 * Regex pattern.
+	 *
+	 * @since 0.2.0
+	 *
+	 * @var string
+	 */
+	private $regex = '';
+
+	/**
+	 * Found used shortener in a file.
 	 *
 	 * @since 0.2.0
 	 *
@@ -39,7 +61,7 @@ class ShortenedURLsSniff implements Sniff {
 	protected $shortener;
 
 	/**
-	 * Supported Tokenizers
+	 * Supported Tokenizers.
 	 *
 	 * @since 0.2.0
 	 *
@@ -81,6 +103,19 @@ class ShortenedURLsSniff implements Sniff {
 	 * @return array
 	 */
 	public function register() {
+
+		// Create the regex only once.
+		$urls = array_map(
+			'preg_quote',
+			$this->url_shorteners,
+			array_fill( 0, count( $this->url_shorteners ), '`' )
+		);
+
+		$this->regex = sprintf(
+			self::REGEX_TEMPLATE,
+			implode( '/|', $urls )
+		);
+
 		return Tokens::$textStringTokens + array(
 			T_COMMENT,
 			T_DOC_COMMENT_STRING,
@@ -104,19 +139,17 @@ class ShortenedURLsSniff implements Sniff {
 		$tokens  = $phpcsFile->getTokens();
 		$content = $tokens[ $stackPtr ]['content'];
 
-		if ( strpos( $content, '.' ) === false ) {
+		if ( stripos( $content, '.' ) === false ) {
 			return;
 		}
 
-		foreach ( $this->url_shorteners as $url_shortener ) {
-			if ( strpos( $content, $url_shortener ) !== false ) {
-				$phpcsFile->addError(
-					self::ERROR_MSG,
-					$stackPtr,
-					'Found',
-					array( $url_shortener )
-				);
-			}
+		if ( preg_match( $this->regex, $content, $matches ) > 0 ) {
+			$phpcsFile->addError(
+				self::ERROR_MSG,
+				$stackPtr,
+				'Found',
+				array( $matches[0] )
+			);
 		}
 	}
 }

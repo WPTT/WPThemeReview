@@ -12,11 +12,11 @@ namespace WPThemeReview\Tests\Privacy;
 use PHP_CodeSniffer\Tests\Standards\AbstractSniffUnitTest;
 
 /**
- * Unit test class for the NoUrlShorteners sniff.
+ * Unit test class for the ShortenedURLs sniff.
  *
  * @since 0.2.0
  */
-class NoUrlShortenersUnitTest extends AbstractSniffUnitTest {
+class ShortenedURLsUnitTest extends AbstractSniffUnitTest {
 
 	/**
 	 * Returns the lines where errors should occur.
@@ -29,23 +29,27 @@ class NoUrlShortenersUnitTest extends AbstractSniffUnitTest {
 		switch ( $testFile ) {
 			case 'ShortenedURLsUnitTest.inc':
 				return array(
-					6  => 1,
-					9  => 1,
-					10 => 1,
-					11 => 1,
+					2  => 1,
+					3  => 1,
+					12 => 1,
+					13 => 1,
 					14 => 1,
-					16 => 1,
-					21 => 1,
+					17 => 1,
+					19 => 1,
+					24 => 1,
+					30 => 1,
 					35 => 1,
-					41 => 1,
-					48 => 1,
+					42 => 1,
+					47 => 1,
+					52 => 1,
 				);
 
 			case 'ShortenedURLsUnitTest.js':
 				return array(
 					2  => 1,
 					6  => 1,
-					14 => 1,
+					8  => 1,
+					15 => 1,
 				);
 
 			case 'ShortenedURLsUnitTest.css':
