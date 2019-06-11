@@ -40,7 +40,7 @@ class ShortenedURLsSniff implements Sniff {
 	 *
 	 * @var string
 	 */
-	const REGEX_TEMPLATE = '`%s/[^\s"]+`i';
+	const REGEX_TEMPLATE = '`(?:%s)/[^\s\'"]+`i';
 
 	/**
 	 * Regex pattern.
@@ -113,7 +113,7 @@ class ShortenedURLsSniff implements Sniff {
 
 		$this->regex = sprintf(
 			self::REGEX_TEMPLATE,
-			implode( '/|', $urls )
+			implode( '|', $urls )
 		);
 
 		return Tokens::$textStringTokens + array(
