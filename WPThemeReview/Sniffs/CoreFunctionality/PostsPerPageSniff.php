@@ -15,8 +15,9 @@ use WordPressCS\WordPress\Sniffs\WP\PostsPerPageSniff as WPCSPostsPerPageSniff;
  * Flag returning high or infinite posts_per_page.
  *
  * This sniff extends the upstream WPCS PostsPerPageSniff. The difference is that this
- * sniff will warn against using -1 as posts_per_page setting while querying posts,
- * due to detrimental effects it has on query speed.
+ * sniff will not only warn against a high pagination limit, but will also warn against
+ * using -1 as posts_per_page setting while querying posts, due to detrimental effects
+ * it has on query speed.
  *
  * @link https://github.com/WPTRT/WPThemeReview/issues/147
  *
