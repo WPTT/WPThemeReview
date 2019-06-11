@@ -29,19 +29,20 @@ class ShortenedURLsUnitTest extends AbstractSniffUnitTest {
 		switch ( $testFile ) {
 			case 'ShortenedURLsUnitTest.inc':
 				return array(
-					2  => 1,
-					3  => 1,
+					10 => 1,
 					12 => 1,
-					13 => 1,
 					14 => 1,
+					15 => 1,
 					17 => 1,
-					19 => 1,
-					24 => 1,
-					30 => 1,
-					35 => 1,
-					42 => 1,
-					47 => 1,
-					52 => 1,
+					21 => 1,
+					28 => 1,
+					33 => 1,
+					38 => 1,
+					43 => 1,
+					48 => 1,
+					55 => 1,
+					56 => 1,
+					57 => 1,
 				);
 
 			case 'ShortenedURLsUnitTest.js':
