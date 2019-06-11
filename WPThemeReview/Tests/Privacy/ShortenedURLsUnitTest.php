@@ -43,6 +43,7 @@ class ShortenedURLsUnitTest extends AbstractSniffUnitTest {
 					55 => 1,
 					56 => 1,
 					57 => 1,
+					60 => 2,
 				);
 
 			case 'ShortenedURLsUnitTest.js':
@@ -51,6 +52,7 @@ class ShortenedURLsUnitTest extends AbstractSniffUnitTest {
 					6  => 1,
 					8  => 1,
 					15 => 1,
+					19 => 2,
 				);
 
 			case 'ShortenedURLsUnitTest.css':

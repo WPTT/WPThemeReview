@@ -55,3 +55,7 @@ EOF;
 <!-- HTML Comment with shortlink ow.ly/685GYHU --><!-- Error. -->
 <div class="copyright"><?php printf( wp_kses_post( __( 'Powered by <a href="%s">WordPress</a>', 'theme-slug' ) ), 'https://bit.do/wp0rG' ); ?></div><!-- Error. -->
 <p>Shortened URL in inline HTML is bad s2r.co/Ba4Lin4</p><!-- Error. -->
+
+<?php
+echo esc_html__( 'Use this bit.ly link', 'hestia' ) . '<a href="https://bit.ly/asj876" class="href">link to stuff</a>' . esc_html__( 'or this lc.chat link', 'hestia' ) . '<a href="https://lc.chat/asj8L4a" class="href">link to stuff</a>'; // Error.
+

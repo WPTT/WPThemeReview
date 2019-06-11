@@ -38,27 +38,11 @@ class ShortenedURLsSniff implements Sniff {
 	 *
 	 * Will be parsed together with the url_shorteners blacklist in the register() method.
 	 *
+	 * @since 0.2.0
+	 *
 	 * @var string
 	 */
 	const REGEX_TEMPLATE = '`(?:%s)/[^\s\'"]+`i';
-
-	/**
-	 * Regex pattern.
-	 *
-	 * @since 0.2.0
-	 *
-	 * @var string
-	 */
-	private $regex = '';
-
-	/**
-	 * Found used shortener in a file.
-	 *
-	 * @since 0.2.0
-	 *
-	 * @var string
-	 */
-	protected $shortener;
 
 	/**
 	 * Supported Tokenizers.
@@ -72,6 +56,15 @@ class ShortenedURLsSniff implements Sniff {
 		'CSS',
 		'JS',
 	);
+
+	/**
+	 * Regex pattern.
+	 *
+	 * @since 0.2.0
+	 *
+	 * @var string
+	 */
+	private $regex = '';
 
 	/**
 	 * List of url shorteners.
@@ -143,13 +136,15 @@ class ShortenedURLsSniff implements Sniff {
 			return;
 		}
 
-		if ( preg_match( $this->regex, $content, $matches ) > 0 ) {
-			$phpcsFile->addError(
-				self::ERROR_MSG,
-				$stackPtr,
-				'Found',
-				array( $matches[0] )
-			);
+		if ( preg_match_all( $this->regex, $content, $matches ) > 0 ) {
+			foreach ( $matches[0] as $matched_url ) {
+				$phpcsFile->addError(
+					self::ERROR_MSG,
+					$stackPtr,
+					'Found',
+					array( $matched_url )
+				);
+			}
 		}
 	}
 }

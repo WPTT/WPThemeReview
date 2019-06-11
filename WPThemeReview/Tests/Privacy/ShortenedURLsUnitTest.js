@@ -15,3 +15,5 @@ tests['cssanimations'] = function() {
  * Short link: http://tinyurl.com/executeFunctionByName // BAD
  **/
  const okLink = 'https://www.google.com/';
+
+ // You can see the info here: soo.gd/09ujGt43 or here: df.ly/Lok487a // BAD
