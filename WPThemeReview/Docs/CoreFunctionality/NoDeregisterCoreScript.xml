@@ -1,0 +1,19 @@
+<documentation title="Deregistering Core Script">
+    <standard>
+    <![CDATA[
+      Themes shouldn't deregister core scripts.
+    ]]>
+    </standard>
+    <code_comparison>
+        <code title="Valid: Using wp_deregister_script to deregister a plugin script.">
+        <![CDATA[
+wp_deregister_script ( 'plugin-script' );
+        ]]>
+        </code>
+        <code title="Invalid: Using wp_deregister_script to deregister a core script is forbidden.">
+        <![CDATA[
+wp_deregister_script ( 'jquery' );
+        ]]>
+        </code>
+    </code_comparison>
+</documentation>
