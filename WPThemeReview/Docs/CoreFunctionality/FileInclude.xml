@@ -1,0 +1,19 @@
+<documentation title="File Include">
+    <standard>
+    <![CDATA[
+      Custom template files should be called using get_template_part() or locate_template() and not using include(_once) or require(_once).
+    ]]>
+    </standard>
+    <code_comparison>
+        <code title="Valid: Using get_template_part() to include the template file.">
+        <![CDATA[
+get_template_part( 'partials/content', 'page' );
+        ]]>
+        </code>
+        <code title="Invalid: Using require_once to include the template file.">
+        <![CDATA[
+require_once( 'partials/content-page.php' );
+        ]]>
+        </code>
+    </code_comparison>
+</documentation>
