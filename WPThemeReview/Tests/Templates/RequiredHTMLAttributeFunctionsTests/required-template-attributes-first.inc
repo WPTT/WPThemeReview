@@ -10,14 +10,14 @@ echo '<body>'; // Bad.
 <html> <!-- Bad. -->
 <html <?php language_attributes(); ?> lang="en-US"> <!-- Bad. -->
 <?php
-	echo '<html lang="en-US" '; // Bad.
-	language_attributes();
-	echo '>';
+  echo '<html lang="en-US" '; // Bad.
+  language_attributes();
+  echo '>';
 ?>
 <?php
-	echo '<html '; // Ok.
-	language_attributes();
-	echo '>';
+  echo '<html '; // Ok.
+  language_attributes();
+  echo '>';
 ?>
 <html <?php language_attributes(); ?> lang="en-US"> <!-- Bad. -->
 <?php echo '<body class="body-test" ', body_class(), '>'; // Bad. ?>
@@ -35,9 +35,9 @@ echo '<body>'; // Bad.
 // Test common invalid heredoc style.
 $html = <<<EOT
 <!-- Bad. -->
-	<body>
-		...
-	</body>
+  <body>
+    ...
+  </body>
 EOT;
 
 // Test weird but valid heredoc style.
@@ -48,6 +48,5 @@ EOT;
 body_class();
 $html = <<<EOT
 >
-		...
+    ...
 EOT;
-?>
