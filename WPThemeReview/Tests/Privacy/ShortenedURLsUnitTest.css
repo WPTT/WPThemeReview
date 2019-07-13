@@ -1,0 +1,4 @@
+/* Better font-rendering - http://goo.gl/GLuNVb */ /* BAD */
+#menu-top li a[href*="https://goo.gl/maps/"]::before { /* BAD */
+    content: '\f041';
+}

@@ -1,5 +1,6 @@
 <?xml version="1.0"?>
-<ruleset name="WPThemeReview">
+<ruleset xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" name="WPThemeReview" xsi:noNamespaceSchemaLocation="https://raw.githubusercontent.com/squizlabs/PHP_CodeSniffer/master/phpcs.xsd">
+
 	<!-- For more information: https://make.wordpress.org/themes/handbook/review/ -->
 	<description>Standards any Theme to be published on wordpress.org should comply with.</description>
 
@@ -124,6 +125,9 @@
 		<type>error</type>
 	</rule>
 
+	<!-- Check for usage of deprecated parameter values in WP functions and provide alternative based on the parameter passed. -->
+	<rule ref="WordPress.WP.DeprecatedParameterValues"/>
+
 	<!-- Verify that everything in the global namespace is prefixed. -->
 	<!-- Covers: https://make.wordpress.org/themes/handbook/review/required/#code - last bullet. -->
 	<!-- NOTE: this sniff needs a custom property to be set for it to be activated. -->
@@ -158,5 +162,11 @@
 
 	<!-- Themes should never touch the timezone. -->
 	<rule ref="WordPress.WP.TimezoneChange"/>
+
+	<!-- Themes shouldn't change ini configuration during runtime. -->
+	<rule ref="WordPress.PHP.IniSet">
+		<type>error</type>
+	</rule>
+
 
 </ruleset>
