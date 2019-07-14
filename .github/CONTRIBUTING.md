@@ -32,7 +32,7 @@ In case of a false negative, you won't be able to check for a sniff code using t
 
 ## Upstream bugs
 
-If the sniff error code doesn't starts with `WPThemeReview`, but instead it starts with `WordPress`, `PHPCompatibility`, or something else, that means that it is an 'upstream' bug coming from either [`WordPressCS`](https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards), [`PHPCompatibility`](https://github.com/PHPCompatibility/PHPCompatibility) or [`PHP_CodeSniffer`](https://github.com/squizlabs/PHP_CodeSniffer).
+If the sniff error code doesn't starts with `WPThemeReview`, but instead it starts with `WordPress`, `PHPCompatibility`, or something else, that means that it is an 'upstream' bug coming from either [`WordPressCS`](https://github.com/WordPress/WordPress-Coding-Standards), [`PHPCompatibility`](https://github.com/PHPCompatibility/PHPCompatibility) or [`PHP_CodeSniffer`](https://github.com/squizlabs/PHP_CodeSniffer).
 
 You can report the bug here, but the chances are high that you'll be asked to report it in the correct repository instead.
 
