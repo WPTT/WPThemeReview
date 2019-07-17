@@ -8,26 +8,21 @@ This projects adheres to [Semantic Versioning](https://semver.org/) and [Keep a 
 
 _No documentation available about unreleased changes as of yet._
 
-## [0.2.0] - 2019-07-14
+## [0.2.0] - 2019-07-17
 
 ### Added
 
-- New `WPThemeReview.Templates.ReservedFileNamePrefix` sniff: checks if the template file is using a prefix which would cause WP to interpret it as a specialised template, meant to apply to only one page on the site.
-  You can check the documentation of each of the functions used in determining the template hierarchy: [get_category_template()](https://developer.wordpress.org/reference/functions/get_category_template), [get_author_template()](https://developer.wordpress.org/reference/functions/get_author_template), [get_page_template()](https://developer.wordpress.org/reference/functions/get_page_template), [get_tag_template()](https://developer.wordpress.org/reference/functions/get_tag_template).
-  Or you can check the in depth documentation about the [template hierarchy](https://developer.wordpress.org/themes/basics/template-hierarchy).
+- New `WPThemeReview.Templates.ReservedFileNamePrefix` sniff: checks if the template file is using a prefix which would cause WP to interpret it as a specialized template, meant to apply to only one page on the site.
 - New `WPThemeReview.Privacy.ShortenedURLs` sniff: detects the usage of shortened URLs. [Handbook rule](https://make.wordpress.org/themes/handbook/review/required/#privacy).
-- New `WPThemeReview.CoreFunctionality.PostsPerPage` sniff: adds a warning if `-1` is used in `posts_per_page` setting while querying posts, due to detrimental effects it has on the query speed.
-- The `WordPress.PHP.IniSet` rule was added to the ruleset about setting ini configuration during runtime.
-- The `WordPress.WP.DeprecatedParameterValues` rule was added to the ruleset about usage of deprecated parameter values in WP functions. The sniff will provide alternative based on the parameter passed.
-- New `WPThemeReview.CoreFunctionality.PrefixAllGlobals` sniff, which extends the `WordPress.NamingConventions.PrefixAllGlobals`.
-  The new WPTRCS native version of the sniff overloads the prefix check for variables only and will bow out if the file being scanned has a typical theme template file name.
-  For all other files, it will fall through to the WPCS native sniff.
-  For all other constructs in theme template files, i.e. namespaces, classes, functions etc, the checks from the WPCS native sniff will still be run.
+- New `WPThemeReview.CoreFunctionality.PostsPerPage` sniff: adds a warning when a high pagination limit is detected, or if `-1` is used in `posts_per_page` setting while querying posts, due to detrimental effects it has on the query speed.
+- The `WordPress.PHP.IniSet` rule was added to the ruleset to check against themes setting ini configuration during runtime.
+- The `WordPress.WP.DeprecatedParameterValues` rule was added to the ruleset about usage of deprecated parameter values in WP functions. The sniff will suggest an alternative based on the parameter passed.
+- Added two new groups to the restricted functions group: `editor-blocks` and `cron-functionality` in the `WPThemeReview.PluginTerritory.ForbiddenFunctions` sniff, which will check against core editor blocks being registered in the themes, and against the usage of cron functions in the theme respectively.
+- New `WPThemeReview.CoreFunctionality.PrefixAllGlobals` sniff, which extends the `WordPress.NamingConventions.PrefixAllGlobals`. The new sniff overloads the prefix check for variables only and will bow out if the file being scanned has a typical theme template file name. For all other files, it will fall through to the WPCS native sniff.
   Notes:
     * The new sniff adds a public `$allowed_folders` property to whitelist files in specific folders of a theme as template files.
     The `ruleset.xml` file sets this property to a limited set of folders whitelisted by default.
-    The default property value can be overruled and/or extended from a custom ruleset.
-    * Similar to the WPCS FileNameSniff, this sniff does not currently allow for mimetype sublevel only theme template file names, such as `plain.php`.
+    * Similar to the WPCS `FileNameSniff`, this sniff does not currently allow for mimetype sublevel only theme template file names, such as `plain.php`.
 
 ### Changed
 
@@ -35,19 +30,13 @@ _No documentation available about unreleased changes as of yet._
   - Run the code style related and ruleset checks in separate stages.
   - Removed `sudo: false` setting.
   - Test agains high/low WPCS versions due to sniffs that are extending the WPCS native sniffs.
-- Update forbidden functionality with cron functions in the `WPThemeReview.PluginTerritory.ForbiddenFunctions` sniff.
+  - Unit tests are now also run against PHP 7.4 (dev)
 - Added XSD schema tags and validated the ruleset against schema (PHPCS 3.2+/3.3.2+).
-- Update forbidden functionality with (un)register editor blocks functions in the `WPThemeReview.PluginTerritory.ForbiddenFunctions` sniff.
-- Updated the WPCS to 2.1.0 version.
-- Updated the suggested installer version.
+- Updated the minimum version requirement for the [WordPress Coding Standards](https://github.com/WordPress/WordPress-Coding-Standards/blob/develop/CHANGELOG.md) dependency to version 2.1.0.
+- Updated the suggested dealerdirect/phpcodesniffer-composer-installer version.
 - Composer tweaks: improve readability of script section
 - Ruleset tweaks: limit PHPCompatibility to PHP files
-- Update the WPCS namespace to `WordPressCS`
-
-### Fixed
-
-- Removal of HTML from error message about adding menu pages in `WPThemeReview.PluginTerritory.NoAddAdminPages` sniff.
-- Minor grammar changed in ruleset.
+- Updated the `WPThemeReview` codebase, where relevant, for compatibility with WPCS 2.0+.
 
 ### Removed
 
@@ -55,6 +44,12 @@ _No documentation available about unreleased changes as of yet._
 - Remove `encoding` from the ruleset. The default `encoding` as of PHPCS 3.0.0 is `utf-8`, so we don't actually need to set this.
 - Remove `bootstrap.php` file and make some related adjustments.
   As WPCS 2.0.0 has dropped the `PHPCSAliases` file, there is now only one (external) bootstrap file which needs to be loaded to run the unit tests: the PHPCS native bootstrap which provided cross-version support for various PHPUnit versions. With only one bootstrap file to load, we can just let PHPUnit handle this.
+
+### Fixed
+
+- Removal of HTML from error message about adding menu pages in `WPThemeReview.PluginTerritory.NoAddAdminPages` sniff.
+- Minor grammar changes in the ruleset.
+
 
 ## [0.1.0] - 2018-10-31
 
