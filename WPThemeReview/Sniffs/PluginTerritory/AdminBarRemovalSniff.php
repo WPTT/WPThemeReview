@@ -9,7 +9,7 @@
 
 namespace WPThemeReview\Sniffs\PluginTerritory;
 
-use WordPress\AbstractFunctionParameterSniff;
+use WordPressCS\WordPress\AbstractFunctionParameterSniff;
 use PHP_CodeSniffer\Util\Tokens;
 
 /**
@@ -18,7 +18,7 @@ use PHP_CodeSniffer\Util\Tokens;
  * @link  https://make.wordpress.org/themes/handbook/review/required/#core-functionality-and-features
  *
  * @since WPCS 0.3.0
- * @since WPCS 0.11.0 - Extends the WordPress_AbstractFunctionParameterSniff class.
+ * @since WPCS 0.11.0 - Extends the WPCS native `AbstractFunctionParameterSniff` class.
  *                    - Added the $remove_only property.
  *                    - Now also sniffs for manipulation of the admin bar visibility through CSS.
  * @since WPCS 0.13.0 Class name changed: this class is now namespaced.

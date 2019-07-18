@@ -40,8 +40,8 @@ This project attempts to automate the code analysis part of the [Theme Review Pr
 
 The WPThemeReview Standard requires:
 * PHP 5.4 or higher.
-* [PHP_CodeSniffer](https://github.com/squizlabs/PHP_CodeSniffer) version **3.3.0** or higher.
-* [WordPress Coding Standards](https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards) version **1.0.0** or higher.
+* [PHP_CodeSniffer](https://github.com/squizlabs/PHP_CodeSniffer) version **3.3.1** or higher.
+* [WordPress Coding Standards](https://github.com/WordPress/WordPress-Coding-Standards) version **2.1.0** or higher.
 * [PHPCompatibilityWP](https://github.com/PHPCompatibility/PHPCompatibilityWP) version **2.0.0** or higher.
 
 
@@ -68,7 +68,7 @@ If you use Composer to manage dependencies from your project anyway or are consi
 From the command-line, run the following command from the root directory of your project:
 
 ```bash
-$ php composer.phar require --dev wptrt/wpthemereview:* dealerdirect/phpcodesniffer-composer-installer:^0.4.4
+$ php composer.phar require --dev wptrt/wpthemereview:* dealerdirect/phpcodesniffer-composer-installer:^0.5.0
 ```
 
 > Note:
@@ -87,7 +87,9 @@ $ vendor/bin/phpcs -i
 
 If everything went well, the output should look something like this:
 ```
-The installed coding standards are MySource, PEAR, PSR1, PSR12, PSR2, Squiz, Zend, PHPCompatibility, PHPCompatibilityParagonieRandomCompat, PHPCompatibilityParagonieSodiumCompat, PHPCompatibilityWP, WordPress, WordPress-Core, WordPress-Docs, WordPress-Extra, WordPress-VIP and WPThemeReview
+The installed coding standards are MySource, PEAR, PSR1, PSR12, PSR2, Squiz, Zend, PHPCompatibility,
+PHPCompatibilityParagonieRandomCompat, PHPCompatibilityParagonieSodiumCompat, PHPCompatibilityWP,
+WordPress, WordPress-Core, WordPress-Docs, WordPress-Extra and WPThemeReview
 ```
 
 

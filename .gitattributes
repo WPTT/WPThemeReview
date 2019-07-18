@@ -10,7 +10,6 @@
 /.travis.yml export-ignore
 /.github export-ignore
 /phpunit.xml.dist export-ignore
-/Test export-ignore
 /WPThemeReview/Tests export-ignore
 
 #
