@@ -29,7 +29,7 @@ use PHP_CodeSniffer\Util\Tokens;
  * as the `detect_manual_editing()` method uses the WPCS `get_function_call_parameter()` and
  * `strip_quotes()` methods.
  * If/when WPCS re-organizes the generic methods into traits as is being discussed in
- * {@link https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards/issues/1465},
+ * {@link https://github.com/WordPress/WordPress-Coding-Standards/issues/1465},
  * this sniff could be decoupled and use the trait(s) instead.}}
  */
 class CorrectTGMPAVersionSniff extends Sniff {

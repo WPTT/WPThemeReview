@@ -32,7 +32,7 @@ In case of a false negative, you won't be able to check for a sniff code using t
 
 ## Upstream bugs
 
-If the sniff error code doesn't starts with `WPThemeReview`, but instead it starts with `WordPress`, `PHPCompatibility`, or something else, that means that it is an 'upstream' bug coming from either [`WordPressCS`](https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards), [`PHPCompatibility`](https://github.com/PHPCompatibility/PHPCompatibility) or [`PHP_CodeSniffer`](https://github.com/squizlabs/PHP_CodeSniffer).
+If the sniff error code doesn't starts with `WPThemeReview`, but instead it starts with `WordPress`, `PHPCompatibility`, or something else, that means that it is an 'upstream' bug coming from either [`WordPressCS`](https://github.com/WordPress/WordPress-Coding-Standards), [`PHPCompatibility`](https://github.com/PHPCompatibility/PHPCompatibility) or [`PHP_CodeSniffer`](https://github.com/squizlabs/PHP_CodeSniffer).
 
 You can report the bug here, but the chances are high that you'll be asked to report it in the correct repository instead.
 
@@ -120,18 +120,15 @@ Once you've started the tests you will see output similar to this:
 
 ```bash
 > @php ./vendor/phpunit/phpunit/phpunit --filter WPThemeReview ./vendor/squizlabs/php_codesniffer/tests/AllTests.php
-PHPUnit 7.5.0 by Sebastian Bergmann and contributors.
+PHPUnit 7.5.8 by Sebastian Bergmann and contributors.
 
-Runtime:       PHP 7.2.13
-Configuration: /TRTCS/phpunit.xml
+................                                                  16 / 16 (100%)
 
-............                                                      12 / 12 (100%)
+73 sniff test files generated 79 unique error codes; 0 were fixable (0%)
 
-54 sniff test files generated 57 unique error codes; 0 were fixable (0%)
+Time: 13.15 seconds, Memory: 66.00 MB
 
-Time: 16.46 seconds, Memory: 48.00MB
-
-OK (12 tests, 0 assertions)
+OK (16 tests, 0 assertions)
 ```
 
 If you didn't install PHPCS/WPCS/PHPUnit using Composer, you will need to type the above command in to run the unit tests. Make sure you replace the path to PHPUnit and the path to PHPCS when you do and, if you didn't setup your own `phpunit.xml` file, add `--bootstrap="/path/to/PHPCS/tests/bootstrap.php"`.
