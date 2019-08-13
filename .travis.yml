@@ -51,6 +51,11 @@ jobs:
         # Check the code-style consistency of the xml files.
         - diff -B --tabsize=4 ./WPThemeReview/ruleset.xml <(xmllint --format "./WPThemeReview/ruleset.xml")
 
+        # Check that the sniffs available are feature complete.
+        # For now, just check that all sniffs have unit tests.
+        # At a later stage the documentation check can be activated.
+        - composer check-complete
+
     # Seperate test builds for PHP 7.2 with reversed PHPCS vs WPCS branches.
     - stage: test
       php: 7.2
