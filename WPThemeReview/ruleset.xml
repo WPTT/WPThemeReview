@@ -161,12 +161,11 @@
 	<!-- Covered by the WPThemeReview.PluginTerritory.SessionFunctionsUsage and WPThemeReview.PluginTerritory.SessionVariableUsage sniffs. -->
 
 	<!-- Themes should never touch the timezone. -->
-	<rule ref="WordPress.WP.TimezoneChange"/>
+	<rule ref="WordPress.DateTime.RestrictedFunctions.timezone_change_date_default_timezone_set"/>
 
 	<!-- Themes shouldn't change ini configuration during runtime. -->
 	<rule ref="WordPress.PHP.IniSet">
 		<type>error</type>
 	</rule>
-
 
 </ruleset>
