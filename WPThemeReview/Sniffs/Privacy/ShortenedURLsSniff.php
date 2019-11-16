@@ -73,7 +73,7 @@ class ShortenedURLsSniff implements Sniff {
 	 *
 	 * @var array
 	 */
-	protected $url_shorteners = [
+	protected $url_shorteners = array(
 		'bit.do',
 		'bit.ly',
 		'df.ly',
@@ -86,7 +86,7 @@ class ShortenedURLsSniff implements Sniff {
 		'soo.gd',
 		'tiny.cc',
 		'tinyurl.com',
-	];
+	);
 
 	/**
 	 * Returns an array of tokens this test wants to listen for.
@@ -121,10 +121,8 @@ class ShortenedURLsSniff implements Sniff {
 	 *
 	 * @since 0.2.0
 	 *
-	 * @param \PHP_CodeSniffer\Files\File $phpcsFile The PHP_CodeSniffer file where the
-	 *                                               token was found.
-	 * @param int                         $stackPtr  The position of the current token
-	 *                                               in the stack.
+	 * @param File $phpcsFile The PHP_CodeSniffer file where the token was found.
+	 * @param int  $stackPtr  The position of the current token in the stack.
 	 *
 	 * @return void
 	 */
@@ -132,7 +130,7 @@ class ShortenedURLsSniff implements Sniff {
 		$tokens  = $phpcsFile->getTokens();
 		$content = $tokens[ $stackPtr ]['content'];
 
-		if ( stripos( $content, '.' ) === false ) {
+		if ( strpos( $content, '.' ) === false ) {
 			return;
 		}
 

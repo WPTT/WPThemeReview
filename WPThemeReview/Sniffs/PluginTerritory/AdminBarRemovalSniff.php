@@ -23,8 +23,8 @@ use PHP_CodeSniffer\Util\Tokens;
  *                    - Now also sniffs for manipulation of the admin bar visibility through CSS.
  * @since WPCS 0.13.0 Class name changed: this class is now namespaced.
  *
- * @since TRTCS 0.1.0 As this sniff will be removed from WPCS in version 2.0, the
- *                    sniff has been cherry-picked into the WPThemeReview standard.
+ * @since WPTRCS 0.1.0 As this sniff will be removed from WPCS in version 2.0, the
+ *                     sniff has been cherry-picked into the WPThemeReview standard.
  */
 class AdminBarRemovalSniff extends AbstractFunctionParameterSniff {
 
@@ -139,7 +139,7 @@ class AdminBarRemovalSniff extends AbstractFunctionParameterSniff {
 		$selectors = array_map(
 			'preg_quote',
 			$this->target_css_selectors,
-			array_fill( 0, \count( $this->target_css_selectors ), '`' )
+			array_fill( 0, count( $this->target_css_selectors ), '`' )
 		);
 		// Parse the selectors array into the regex string.
 		$this->target_css_selectors_regex = sprintf( $this->target_css_selectors_regex, implode( '|', $selectors ) );
@@ -168,7 +168,8 @@ class AdminBarRemovalSniff extends AbstractFunctionParameterSniff {
 
 		if ( 'css' === $file_extension ) {
 			if ( \T_STYLE === $this->tokens[ $stackPtr ]['code'] ) {
-				return $this->process_css_style( $stackPtr );
+				$this->process_css_style( $stackPtr );
+				return;
 			}
 		} elseif ( isset( Tokens::$textStringTokens[ $this->tokens[ $stackPtr ]['code'] ] ) ) {
 			/*
@@ -182,7 +183,8 @@ class AdminBarRemovalSniff extends AbstractFunctionParameterSniff {
 				$this->in_target_selector[ $file_name ] = false;
 			}
 
-			return $this->process_text_for_style( $stackPtr, $file_name );
+			$this->process_text_for_style( $stackPtr, $file_name );
+			return;
 
 		} else {
 			return parent::process_token( $stackPtr );

@@ -60,14 +60,14 @@ class PrefixAllGlobalsSniff extends WPCSPrefixAllGlobalsSniff {
 	/**
 	 * The list of allowed folders to check the file path against.
 	 *
-	 * The WPThemereview standards contains a base set for this property in the ruleset.xml.
+	 * The WPThemeReview standards contains a base set for this property in the ruleset.xml.
 	 * This array can be extended in a custom ruleset.
 	 *
 	 * @since 0.2.0
 	 *
 	 * @var array
 	 */
-	public $allowed_folders = [];
+	public $allowed_folders = array();
 
 	/**
 	 * List of plain template file names.
@@ -81,7 +81,7 @@ class PrefixAllGlobalsSniff extends WPCSPrefixAllGlobalsSniff {
 	 *
 	 * @var array
 	 */
-	protected $simple_theme_template_file_names = [
+	protected $simple_theme_template_file_names = array(
 		// Plain primary template file names.
 		'404.php'         => true,
 		'archive.php'     => true,
@@ -120,7 +120,7 @@ class PrefixAllGlobalsSniff extends WPCSPrefixAllGlobalsSniff {
 		'multipart.php'   => true,
 		'text.php'        => true,
 		'video.php'       => true,
-	];
+	);
 
 	/**
 	 * Check that defined global variables are prefixed.
@@ -146,7 +146,7 @@ class PrefixAllGlobalsSniff extends WPCSPrefixAllGlobalsSniff {
 
 		$fileName = basename( $file );
 
-		if ( \defined( '\PHP_CODESNIFFER_IN_TESTS' ) ) {
+		if ( defined( '\PHP_CODESNIFFER_IN_TESTS' ) ) {
 			$fileName = str_replace( '.inc', '.php', $fileName );
 		}
 

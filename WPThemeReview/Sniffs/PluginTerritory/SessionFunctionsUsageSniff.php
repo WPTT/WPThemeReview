@@ -14,15 +14,15 @@ use WordPressCS\WordPress\AbstractFunctionRestrictionsSniff;
 /**
  * Discourages the use of session functions.
  *
- * @link  https://make.wordpress.org/themes/handbook/review/...... @todo
+ * @link  https://make.wordpress.org/themes/handbook/review/required/#plugins
  *
  * @since WPCS 0.3.0
  * @since WPCS 0.11.0 Extends the WPCS native `AbstractFunctionRestrictionsSniff` class
  *                    instead of the upstream `Generic.PHP.ForbiddenFunctions` sniff.
  * @since WPCS 0.13.0 Class name changed: this class is now namespaced.
  *
- * @since TRTCS 0.1.0 As this sniff will be removed from WPCS in version 2.0, the
- *                    sniff has been cherry-picked into the WPThemeReview standard.
+ * @since WPTRCS 0.1.0 As this sniff will be removed from WPCS in version 2.0, the
+ *                     sniff has been cherry-picked into the WPThemeReview standard.
  */
 class SessionFunctionsUsageSniff extends AbstractFunctionRestrictionsSniff {
 

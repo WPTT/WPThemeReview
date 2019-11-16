@@ -16,7 +16,7 @@ use PHP_CodeSniffer\Files\File;
  * Discourages the use of the session variable.
  * Creating a session writes a file to the server and is unreliable in a multi-server environment.
  *
- * @link  https://make.wordpress.org/themes/handbook/review/...... @todo
+ * @link  https://make.wordpress.org/themes/handbook/review/required/#plugins
  *
  * @since WPCS 0.3.0
  * @since WPCS 0.10.0 The sniff no longer needlessly extends the Generic_Sniffs_PHP_ForbiddenFunctionsSniff
@@ -24,8 +24,8 @@ use PHP_CodeSniffer\Files\File;
  * @since WPCS 0.12.0 This class now extends WordPress_Sniff.
  * @since WPCS 0.13.0 Class name changed: this class is now namespaced.
  *
- * @since TRTCS 0.1.0 As this sniff will be removed from WPCS in version 2.0, the
- *                    sniff has been cherry-picked into the WPThemeReview standard.
+ * @since WPTRCS 0.1.0 As this sniff will be removed from WPCS in version 2.0, the
+ *                     sniff has been cherry-picked into the WPThemeReview standard.
  */
 class SessionVariableUsageSniff implements Sniff {
 
@@ -43,10 +43,8 @@ class SessionVariableUsageSniff implements Sniff {
 	/**
 	 * Processes this test, when one of its tokens is encountered.
 	 *
-	 * @param \PHP_CodeSniffer\Files\File $phpcsFile The PHP_CodeSniffer file where the
-	 *                                               token was found.
-	 * @param int                         $stackPtr  The position of the current token
-	 *                                               in the stack.
+	 * @param File $phpcsFile The PHP_CodeSniffer file where the token was found.
+	 * @param int  $stackPtr  The position of the current token in the stack.
 	 *
 	 * @return void
 	 */

@@ -70,12 +70,12 @@ class ReservedFileNamePrefixSniff implements Sniff {
 	 *
 	 * @var array
 	 */
-	protected $reserved_file_name_prefixes = [
+	protected $reserved_file_name_prefixes = array(
 		'author'   => true,
 		'category' => true,
 		'page'     => true,
 		'tag'      => true,
-	];
+	);
 
 	/**
 	 * Returns an array of tokens this test wants to listen for.
@@ -96,10 +96,8 @@ class ReservedFileNamePrefixSniff implements Sniff {
 	 *
 	 * @since 0.2.0
 	 *
-	 * @param \PHP_CodeSniffer\Files\File $phpcsFile The PHP_CodeSniffer file where the
-	 *                                               token was found.
-	 * @param int                         $stackPtr  The position of the current token
-	 *                                               in the stack.
+	 * @param File $phpcsFile The PHP_CodeSniffer file where the token was found.
+	 * @param int  $stackPtr  The position of the current token in the stack.
 	 *
 	 * @return int StackPtr to the end of the file, this sniff needs to only
 	 *             check each file once.
@@ -110,7 +108,7 @@ class ReservedFileNamePrefixSniff implements Sniff {
 		$file = $this->strip_quotes( $phpcsFile->getFileName() );
 
 		$fileName = basename( $file );
-		$fileName = str_replace( [ '.inc', '.php' ], '', $fileName );
+		$fileName = str_replace( array( '.inc', '.php' ), '', $fileName );
 
 		// Check if the current file has a prefix in the reserved list.
 		if ( ! $this->is_reserved_template_name_used( $fileName ) ) {

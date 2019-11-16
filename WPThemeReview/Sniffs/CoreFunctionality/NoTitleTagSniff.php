@@ -41,10 +41,8 @@ class NoTitleTagSniff implements Sniff {
 	/**
 	 * Processes this test, when one of its tokens is encountered.
 	 *
-	 * @param \PHP_CodeSniffer\Files\File $phpcsFile The PHP_CodeSniffer file where the
-	 *                                               token was found.
-	 * @param int                         $stackPtr  The position of the current token
-	 *                                               in the stack.
+	 * @param File $phpcsFile The PHP_CodeSniffer file where the token was found.
+	 * @param int  $stackPtr  The position of the current token in the stack.
 	 *
 	 * @return void
 	 */
@@ -68,11 +66,11 @@ class NoTitleTagSniff implements Sniff {
 		if ( true === $this->in_svg[ $filename ] ) {
 			if ( false === strpos( $content, '</svg>' ) ) {
 				return;
-			} else {
-				// Make sure we check any content on this line after the closing svg tag.
-				$this->in_svg[ $filename ] = false;
-				$content                   = trim( substr( $content, ( strpos( $content, '</svg>' ) + 6 ) ) );
 			}
+
+			// Make sure we check any content on this line after the closing svg tag.
+			$this->in_svg[ $filename ] = false;
+			$content                   = trim( substr( $content, ( strpos( $content, '</svg>' ) + 6 ) ) );
 		}
 
 		// We're not in svg, so check if it there's a <svg> open tag on this line.

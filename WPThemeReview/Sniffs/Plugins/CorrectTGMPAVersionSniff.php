@@ -62,7 +62,7 @@ class CorrectTGMPAVersionSniff extends Sniff {
 	 *
 	 * This is to prevent issues with rate limiting if a lot of requests are made from the same server.
 	 *
-	 * "Normal" users generaly won't need to set this, but if the sniffs are run for all themes
+	 * "Normal" users generally won't need to set this, but if the sniffs are run for all themes
 	 * uploaded to wordpress.org, that IP address might run into the rate limit of 60 calls per hour.
 	 * Setting a oauth token in the custom ruleset used will prevent this.
 	 *
@@ -182,7 +182,9 @@ class CorrectTGMPAVersionSniff extends Sniff {
 					if ( isset( $this->tgmpa_classes_functions[ $name ] ) ) {
 						$is_tgmpa = true;
 						break;
-					} elseif ( strpos( $name, '_Plugin_Activation' ) !== false ) {
+					}
+
+					if ( strpos( $name, '_Plugin_Activation' ) !== false ) {
 						// This may be TGMPA with renamed prefixes, so look for typical class comment.
 						$prev = $this->phpcsFile->findPrevious( T_WHITESPACE, ( $has_class_function - 1 ), null, true );
 						while ( false !== $prev && isset( Tokens::$commentTokens[ $this->tokens[ $prev ]['code'] ] ) ) {
@@ -328,7 +330,6 @@ class CorrectTGMPAVersionSniff extends Sniff {
 			$error = 'The TGM Plugin Activation library was detected, but the version could not be determined. Ensure you use the latest stable release of the TGM Plugin Activation library (%s). Download a fresh copy now using the Custom TGMPA Generator at http://tgmpluginactivation.com/download/';
 			$data  = array( $this->current_version );
 			$this->phpcsFile->addError( $error, 0, 'versionUndetermined', $data );
-			$has_error = true;
 		}
 
 		return $version;
@@ -367,10 +368,14 @@ class CorrectTGMPAVersionSniff extends Sniff {
 			if ( T_CLASS === $this->tokens[ $ptr ]['code'] && isset( $this->tokens[ $ptr ]['scope_closer'] ) ) {
 				$ptr = $this->tokens[ $ptr ]['scope_closer'];
 				continue;
-			} elseif ( T_OPEN_SHORT_ARRAY === $this->tokens[ $ptr ]['code'] && isset( $this->tokens[ $ptr ]['bracket_closer'] ) ) {
+			}
+
+			if ( T_OPEN_SHORT_ARRAY === $this->tokens[ $ptr ]['code'] && isset( $this->tokens[ $ptr ]['bracket_closer'] ) ) {
 				$ptr = $this->tokens[ $ptr ]['bracket_closer'];
 				continue;
-			} elseif ( T_ARRAY === $this->tokens[ $ptr ]['code'] && isset( $this->tokens[ $ptr ]['parenthesis_closer'] ) ) {
+			}
+
+			if ( T_ARRAY === $this->tokens[ $ptr ]['code'] && isset( $this->tokens[ $ptr ]['parenthesis_closer'] ) ) {
 				$ptr = $this->tokens[ $ptr ]['parenthesis_closer'];
 				continue;
 			}
@@ -434,8 +439,8 @@ class CorrectTGMPAVersionSniff extends Sniff {
 
 		$tag_count = count( $opener['comment_tags'] );
 
-		for ( $i = 0; $i < $tag_count; $i++ ) {
-			$tag_token = $opener['comment_tags'][ $i ];
+		foreach ( $opener['comment_tags'] as $i => $iValue ) {
+			$tag_token = $iValue;
 			$tag       = trim( $this->tokens[ $tag_token ]['content'], '@' );
 
 			$search_end = $closer;
@@ -511,7 +516,7 @@ class CorrectTGMPAVersionSniff extends Sniff {
 		}
 
 		// Ok, we have received a valid response.
-		$response = json_decode( $response );
+		$response = json_decode( $response, false );
 		if ( ! empty( $response->tag_name ) && ( ! isset( $response->prerelease ) || false === $response->prerelease ) ) {
 			// Should there be a check for `v` at the start of a version number ?
 			$this->current_version = $response->tag_name;
@@ -536,7 +541,7 @@ class CorrectTGMPAVersionSniff extends Sniff {
 			} else {
 				$head[] = $value;
 				if ( preg_match( '`HTTP/[0-9\.]+\s+([0-9]+)`', $value, $out ) ) {
-					$head['response_code'] = intval( $out[1] );
+					$head['response_code'] = (int) $out[1];
 				}
 			}
 		}

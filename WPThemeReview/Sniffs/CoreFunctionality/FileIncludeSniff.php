@@ -43,10 +43,8 @@ class FileIncludeSniff implements Sniff {
 	/**
 	 * Processes this test, when one of its tokens is encountered.
 	 *
-	 * @param \PHP_CodeSniffer\Files\File $phpcsFile The PHP_CodeSniffer file where the
-	 *                                               token was found.
-	 * @param int                         $stackPtr  The position of the current token
-	 *                                               in the stack.
+	 * @param File $phpcsFile The PHP_CodeSniffer file where the token was found.
+	 * @param int  $stackPtr  The position of the current token in the stack.
 	 *
 	 * @return void
 	 */
