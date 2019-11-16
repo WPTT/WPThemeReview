@@ -130,7 +130,7 @@ class PrefixAllGlobalsSniff extends WPCSPrefixAllGlobalsSniff {
 	 * local to that function.
 	 *
 	 * @since 0.2.0
-	 * @since 0.x.x  Added $in_list parameter as introduced in WPCS 2.2.0.
+	 * @since 0.2.1  Added $in_list parameter as introduced in WPCS 2.2.0.
 	 *
 	 * @param int  $stackPtr The position of the current token in the stack.
 	 * @param bool $in_list  Whether or not this is a variable in a list assignment.
