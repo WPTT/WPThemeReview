@@ -26,7 +26,7 @@ class PostsPerPageUnitTest extends AbstractSniffUnitTest {
 	 * @return array <int line number> => <int number of errors>
 	 */
 	public function getErrorList() {
-		return array();
+		return [];
 	}
 
 	/**
@@ -35,7 +35,7 @@ class PostsPerPageUnitTest extends AbstractSniffUnitTest {
 	 * @return array <int line number> => <int number of warnings>
 	 */
 	public function getWarningList() {
-		return array(
+		return [
 			3  => 1,
 			4  => 1,
 			7  => 1,
@@ -51,7 +51,7 @@ class PostsPerPageUnitTest extends AbstractSniffUnitTest {
 			23 => 1,
 			25 => 1,
 			29 => 1,
-		);
+		];
 	}
 
 }

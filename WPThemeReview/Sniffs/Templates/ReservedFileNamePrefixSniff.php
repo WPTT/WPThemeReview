@@ -85,10 +85,10 @@ class ReservedFileNamePrefixSniff implements Sniff {
 	 * @return array
 	 */
 	public function register() {
-		return array(
+		return [
 			\T_OPEN_TAG,
 			\T_OPEN_TAG_WITH_ECHO,
-		);
+		];
 	}
 
 	/**
@@ -121,7 +121,7 @@ class ReservedFileNamePrefixSniff implements Sniff {
 			self::ERROR_MSG,
 			0,
 			'ReservedTemplatePrefixFound',
-			array( $this->prefix, $this->slug )
+			[ $this->prefix, $this->slug ]
 		);
 
 		return ( $phpcsFile->numTokens + 1 );

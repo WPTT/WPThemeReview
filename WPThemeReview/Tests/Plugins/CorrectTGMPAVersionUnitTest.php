@@ -33,7 +33,7 @@ class CorrectTGMPAVersionUnitTest extends AbstractSniffUnitTest {
 			return $test_files;
 		}
 
-		return array( $testFileBase . 'inc' );
+		return [ $testFileBase . 'inc' ];
 	}
 
 	/**
@@ -51,17 +51,17 @@ class CorrectTGMPAVersionUnitTest extends AbstractSniffUnitTest {
 			case 'prefixed-tgm-plugin-activation.2.inc':
 			case 'manual-search-and-replace.inc':
 			case 'manual-search-and-replace.2.inc':
-				return array(
+				return [
 					1 => 1,
-				);
+				];
 
 			// Official versions.
 			case 'class-tgm-plugin-activation-2.0.0.inc':
 			case 'class-tgm-plugin-activation-2.3.4.inc':
 			case 'class-tgm-plugin-activation-2.5.2.inc':
-				return array(
+				return [
 					1 => 1,
-				);
+				];
 
 			// Renamed official versions.
 			case 'auto-install-1.0.0.inc':
@@ -86,12 +86,12 @@ class CorrectTGMPAVersionUnitTest extends AbstractSniffUnitTest {
 			case 'renamed-plugin-activation-2.5.1.inc':
 			case 'renamed-plugin-activation-2.5.2.inc':
 			case 'renamed-plugin-activation-2.6.0.inc':
-				return array(
+				return [
 					1 => 1,
-				);
+				];
 
 			default:
-				return array();
+				return [];
 		}
 	}
 
@@ -108,12 +108,12 @@ class CorrectTGMPAVersionUnitTest extends AbstractSniffUnitTest {
 			case 'tgmpa-2.6.1-themeforest-bad-wporg.inc':
 			case 'tgmpa-2.6.1-wporg-bad-official.inc':
 			case 'tgmpa-2.6.1-wporg-bad-themeforest.inc':
-				return array(
+				return [
 					1 => 1,
-				);
+				];
 
 			default:
-				return array();
+				return [];
 		}
 	}
 

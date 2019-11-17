@@ -28,7 +28,7 @@ class NoAutoGenerateUnitTest extends AbstractSniffUnitTest {
 	public function getErrorList( $testFile = '' ) {
 		switch ( $testFile ) {
 			case 'NoAutoGenerateUnitTest.inc':
-				return array(
+				return [
 					2  => 1,
 					3  => 1,
 					6  => 1,
@@ -41,10 +41,10 @@ class NoAutoGenerateUnitTest extends AbstractSniffUnitTest {
 					22 => 1,
 					39 => 2,
 					45 => 2,
-				);
+				];
 
 			case 'NoAutoGenerateUnitTest.css':
-				return array(
+				return [
 					3  => 1,
 					4  => 1,
 					5  => 1,
@@ -53,10 +53,10 @@ class NoAutoGenerateUnitTest extends AbstractSniffUnitTest {
 					13 => 1,
 					14 => 1,
 					15 => 1,
-				);
+				];
 
 			default:
-				return array();
+				return [];
 		}
 	}
 
@@ -66,7 +66,7 @@ class NoAutoGenerateUnitTest extends AbstractSniffUnitTest {
 	 * @return array <int line number> => <int number of warnings>
 	 */
 	public function getWarningList() {
-		return array();
+		return [];
 	}
 
 }

@@ -24,7 +24,7 @@ class FileIncludeUnitTest extends AbstractSniffUnitTest {
 	 * @return array <int line number> => <int number of errors>
 	 */
 	public function getErrorList() {
-		return array();
+		return [];
 	}
 
 	/**
@@ -33,14 +33,14 @@ class FileIncludeUnitTest extends AbstractSniffUnitTest {
 	 * @return array <int line number> => <int number of warnings>
 	 */
 	public function getWarningList() {
-		return array(
+		return [
 			3 => 1,
 			4 => 1,
 			5 => 1,
 			6 => 1,
 			7 => 1,
 			8 => 1,
-		);
+		];
 	}
 
 }

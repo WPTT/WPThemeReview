@@ -45,23 +45,23 @@ class NoFaviconSniff implements Sniff {
 	 *
 	 * @var array
 	 */
-	protected $attribute_blacklist = array(
-		'rel' => array(
+	protected $attribute_blacklist = [
+		'rel' => [
 			'icon',
 			'shortcut icon',
 			'bookmark icon',
 			'apple-touch-icon',
 			'apple-touch-icon-precomposed',
-		),
-		'name' => array(
+		],
+		'name' => [
 			'msapplication-config',
 			'msapplication-TileImage',
 			'msapplication-square70x70logo',
 			'msapplication-square150x150logo',
 			'msapplication-wide310x150logo',
 			'msapplication-square310x310logo',
-		),
-	);
+		],
+	];
 
 	/**
 	 * The regex to catch the blacklisted attributes.
@@ -77,7 +77,7 @@ class NoFaviconSniff implements Sniff {
 	 */
 	public function register() {
 		// Build the regex to be used only once.
-		$regex_parts = array();
+		$regex_parts = [];
 
 		foreach ( $this->attribute_blacklist as $key => $values ) {
 			$values        = array_map( 'preg_quote', $values, array_fill( 0, count( $values ), '`' ) );

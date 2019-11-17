@@ -24,13 +24,13 @@ class ForbiddenIframeUnitTest extends AbstractSniffUnitTest {
 	 * @return array <int line number> => <int number of errors>
 	 */
 	public function getErrorList() {
-		return array(
+		return [
 			5  => 1,
 			6  => 1,
 			12 => 1,
 			17 => 1,
 			18 => 1,
-		);
+		];
 	}
 
 	/**
@@ -39,7 +39,7 @@ class ForbiddenIframeUnitTest extends AbstractSniffUnitTest {
 	 * @return array <int line number> => <int number of warnings>
 	 */
 	public function getWarningList() {
-		return array();
+		return [];
 	}
 
 }

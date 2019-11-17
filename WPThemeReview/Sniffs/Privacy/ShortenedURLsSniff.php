@@ -51,11 +51,11 @@ class ShortenedURLsSniff implements Sniff {
 	 *
 	 * @var array
 	 */
-	public $supportedTokenizers = array(
+	public $supportedTokenizers = [
 		'PHP',
 		'CSS',
 		'JS',
-	);
+	];
 
 	/**
 	 * Regex pattern.
@@ -109,11 +109,11 @@ class ShortenedURLsSniff implements Sniff {
 			implode( '|', $urls )
 		);
 
-		return Tokens::$textStringTokens + array(
+		return Tokens::$textStringTokens + [
 			T_COMMENT,
 			T_DOC_COMMENT_STRING,
 			T_DOC_COMMENT,
-		);
+		];
 	}
 
 	/**
@@ -142,7 +142,7 @@ class ShortenedURLsSniff implements Sniff {
 					self::ERROR_MSG,
 					$stackPtr,
 					'Found',
-					array( $matched_url )
+					[ $matched_url ]
 				);
 			}
 		}

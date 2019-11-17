@@ -35,7 +35,7 @@ class PrefixAllGlobalsUnitTest extends AbstractSniffUnitTest {
 			return $test_files;
 		}
 
-		return array( $testFileBase . '.inc' );
+		return [ $testFileBase . '.inc' ];
 	}
 
 	/**
@@ -48,12 +48,12 @@ class PrefixAllGlobalsUnitTest extends AbstractSniffUnitTest {
 		switch ( $testFile ) {
 			case 'footer_widgets.inc':
 			case 'social-share.inc':
-				return array(
+				return [
 					5 => 1,
-				);
+				];
 
 			default:
-				return array();
+				return [];
 		}
 	}
 
@@ -63,7 +63,7 @@ class PrefixAllGlobalsUnitTest extends AbstractSniffUnitTest {
 	 * @return array <int line number> => <int number of warnings>
 	 */
 	public function getWarningList() {
-		return array();
+		return [];
 	}
 
 }

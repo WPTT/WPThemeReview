@@ -17,6 +17,7 @@
 		<exclude name="WordPress.NamingConventions.ValidVariableName"/>
 		<exclude name="WordPress.CodeAnalysis.AssignmentInCondition.FoundInWhileCondition"/>
 		<exclude name="WordPress.WP.AlternativeFunctions"/>
+		<exclude name="Generic.Arrays.DisallowShortArraySyntax"/>
 	</rule>
 
 	<rule ref="WordPress-Docs"/>
@@ -29,6 +30,9 @@
 			<property name="alignMultilineItems" value="!=100"/>
 		</properties>
 	</rule>
+
+	<!-- Enforce array short syntax. -->
+	<rule ref="Generic.Arrays.DisallowLongArraySyntax"/>
 
 	<rule ref="PSR2.Methods.FunctionClosingBrace"/>
 
