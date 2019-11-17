@@ -34,7 +34,7 @@ class ReservedFileNamePrefixUnitTest extends AbstractSniffUnitTest {
 		if ( ! empty( $test_files ) ) {
 			return $test_files;
 		}
-		return array( $testFileBase . '.inc' );
+		return [ $testFileBase . '.inc' ];
 	}
 
 	/**
@@ -48,11 +48,11 @@ class ReservedFileNamePrefixUnitTest extends AbstractSniffUnitTest {
 			case 'category-books.inc':
 			case 'page-contact-form.inc':
 			case 'Page-info.inc':
-				return array(
+				return [
 					1 => 1,
-				);
+				];
 			default:
-				return array();
+				return [];
 		}
 	}
 
@@ -62,6 +62,6 @@ class ReservedFileNamePrefixUnitTest extends AbstractSniffUnitTest {
 	 * @return array <int line number> => <int number of warnings>
 	 */
 	public function getWarningList() {
-		return array();
+		return [];
 	}
 }

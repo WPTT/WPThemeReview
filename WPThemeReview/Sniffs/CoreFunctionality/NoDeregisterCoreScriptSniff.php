@@ -42,8 +42,8 @@ class NoDeregisterCoreScriptSniff extends AbstractFunctionParameterSniff {
 	 *
 	 * @var array
 	 */
-	protected $target_functions = array(
-		'wp_deregister_script' => array(
+	protected $target_functions = [
+		'wp_deregister_script' => [
 			'jcrop'                    => true,
 			'swfobject'                => true,
 			'swfupload'                => true,
@@ -140,8 +140,8 @@ class NoDeregisterCoreScriptSniff extends AbstractFunctionParameterSniff {
 			'underscore'               => true,
 			'backbone'                 => true,
 			'imagesloaded'             => true,
-		),
-	);
+		],
+	];
 
 	/**
 	 * Process the parameters of a matched function.
@@ -170,7 +170,7 @@ class NoDeregisterCoreScriptSniff extends AbstractFunctionParameterSniff {
 		);
 
 		if ( isset( $this->target_functions[ $matched_content ][ $matched_parameter ] ) ) {
-			$this->throw_prohibited_error( $first_param_token, array( $matched_parameter ) );
+			$this->throw_prohibited_error( $first_param_token, [ $matched_parameter ] );
 			return;
 		}
 
@@ -193,12 +193,12 @@ class NoDeregisterCoreScriptSniff extends AbstractFunctionParameterSniff {
 		}
 
 		if ( isset( $this->target_functions[ $matched_content ][ $text ] ) ) {
-			$this->throw_prohibited_error( $first_param_token, array( $text ) );
+			$this->throw_prohibited_error( $first_param_token, [ $text ] );
 			return;
 		}
 
 		if ( true === $found_variable_token ) {
-			$this->throw_variable_handle_warning( $first_param_token, array( $matched_content, $matched_parameter ) );
+			$this->throw_variable_handle_warning( $first_param_token, [ $matched_content, $matched_parameter ] );
 		}
 	}
 
@@ -208,7 +208,7 @@ class NoDeregisterCoreScriptSniff extends AbstractFunctionParameterSniff {
 	 * @param int   $stackPtr The position of the first non-empty parameter token in the stack.
 	 * @param array $data     Optional input for the data replacements.
 	 */
-	public function throw_prohibited_error( $stackPtr, $data = array() ) {
+	public function throw_prohibited_error( $stackPtr, $data = [] ) {
 		$this->phpcsFile->addError(
 			'Deregistering core script "%s" is prohibited.',
 			$stackPtr,
@@ -223,7 +223,7 @@ class NoDeregisterCoreScriptSniff extends AbstractFunctionParameterSniff {
 	 * @param int   $stackPtr The position of the first non-empty parameter token in the stack.
 	 * @param array $data     Optional input for the data replacements.
 	 */
-	public function throw_variable_handle_warning( $stackPtr, $data = array() ) {
+	public function throw_variable_handle_warning( $stackPtr, $data = [] ) {
 		$this->phpcsFile->addWarning(
 			'Deregistering core scripts is prohibited. A variable script handle was found. Inspection of the %s() call needed. Found: %s',
 			$stackPtr,

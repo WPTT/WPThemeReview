@@ -24,7 +24,7 @@ class NoAddAdminPagesUnitTest extends AbstractSniffUnitTest {
 	 * @return array <int line number> => <int number of errors>
 	 */
 	public function getErrorList() {
-		return array(
+		return [
 			4  => 1,
 			5  => 1,
 			6  => 1,
@@ -39,7 +39,7 @@ class NoAddAdminPagesUnitTest extends AbstractSniffUnitTest {
 			19 => 1,
 			20 => 1,
 			21 => 1,
-		);
+		];
 	}
 
 	/**
@@ -48,7 +48,7 @@ class NoAddAdminPagesUnitTest extends AbstractSniffUnitTest {
 	 * @return array <int line number> => <int number of warnings>
 	 */
 	public function getWarningList() {
-		return array();
+		return [];
 	}
 
 }

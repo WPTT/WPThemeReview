@@ -27,9 +27,9 @@ class FileIncludeSniff implements Sniff {
 	 *
 	 * @var array
 	 */
-	protected $file_whitelist = array(
+	protected $file_whitelist = [
 		'functions.php' => true,
-	);
+	];
 
 	/**
 	 * Returns an array of tokens this test wants to listen for.
@@ -61,7 +61,7 @@ class FileIncludeSniff implements Sniff {
 				'Check that %s is not being used to load template files. "get_template_part()" should be used to load template files.',
 				$stackPtr,
 				'FileIncludeFound',
-				array( $token['content'] )
+				[ $token['content'] ]
 			);
 		}
 	}

@@ -59,7 +59,7 @@ class ForbiddenIframeSniff implements Sniff {
 				'Usage of the iframe HTML element is prohibited. Found: %s',
 				$stackPtr,
 				'Found',
-				array( $matches[1] )
+				[ $matches[1] ]
 			);
 		}
 	}
