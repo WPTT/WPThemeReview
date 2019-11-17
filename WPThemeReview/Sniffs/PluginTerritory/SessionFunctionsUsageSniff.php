@@ -29,22 +29,22 @@ class SessionFunctionsUsageSniff extends AbstractFunctionRestrictionsSniff {
 	/**
 	 * Groups of functions to restrict.
 	 *
-	 * Example: groups => array(
-	 *  'lambda' => array(
+	 * Example: groups => [
+	 *  'lambda' => [
 	 *      'type'      => 'error' | 'warning',
 	 *      'message'   => 'Use anonymous functions instead please!',
-	 *      'functions' => array( 'file_get_contents', 'create_function' ),
-	 *  )
-	 * )
+	 *      'functions' => [ 'file_get_contents', 'create_function' ],
+	 *  ]
+	 * ]
 	 *
 	 * @return array
 	 */
 	public function getGroups() {
-		return array(
-			'session' => array(
+		return [
+			'session' => [
 				'type'      => 'error',
 				'message'   => 'The use of PHP session function %s() is prohibited.',
-				'functions' => array(
+				'functions' => [
 					'session_abort',
 					'session_cache_expire',
 					'session_cache_limiter',
@@ -71,9 +71,9 @@ class SessionFunctionsUsageSniff extends AbstractFunctionRestrictionsSniff {
 					'session_unregister',
 					'session_unset',
 					'session_write_close',
-				),
-			),
-		);
+				],
+			],
+		];
 	}
 
 }

@@ -28,7 +28,7 @@ class ShortenedURLsUnitTest extends AbstractSniffUnitTest {
 
 		switch ( $testFile ) {
 			case 'ShortenedURLsUnitTest.inc':
-				return array(
+				return [
 					10 => 1,
 					12 => 1,
 					14 => 1,
@@ -44,25 +44,25 @@ class ShortenedURLsUnitTest extends AbstractSniffUnitTest {
 					56 => 1,
 					57 => 1,
 					60 => 2,
-				);
+				];
 
 			case 'ShortenedURLsUnitTest.js':
-				return array(
+				return [
 					2  => 1,
 					6  => 1,
 					8  => 1,
 					15 => 1,
 					19 => 2,
-				);
+				];
 
 			case 'ShortenedURLsUnitTest.css':
-				return array(
+				return [
 					1 => 1,
 					2 => 1,
-				);
+				];
 
 			default:
-				return array();
+				return [];
 		}
 	}
 
@@ -72,7 +72,7 @@ class ShortenedURLsUnitTest extends AbstractSniffUnitTest {
 	 * @return array <int line number> => <int number of warnings>
 	 */
 	public function getWarningList() {
-		return array();
+		return [];
 	}
 
 }

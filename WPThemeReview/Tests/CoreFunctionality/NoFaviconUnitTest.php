@@ -24,7 +24,7 @@ class NoFaviconUnitTest extends AbstractSniffUnitTest {
 	 * @return array <int line number> => <int number of errors>
 	 */
 	public function getErrorList() {
-		return array(
+		return [
 			8  => 1,
 			9  => 1,
 			10 => 1,
@@ -40,7 +40,7 @@ class NoFaviconUnitTest extends AbstractSniffUnitTest {
 			25 => 1,
 			29 => 1,
 			30 => 1,
-		);
+		];
 	}
 
 	/**
@@ -49,7 +49,7 @@ class NoFaviconUnitTest extends AbstractSniffUnitTest {
 	 * @return array <int line number> => <int number of warnings>
 	 */
 	public function getWarningList() {
-		return array();
+		return [];
 	}
 
 }

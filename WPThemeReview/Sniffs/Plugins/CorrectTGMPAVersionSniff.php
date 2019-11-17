@@ -95,7 +95,7 @@ class CorrectTGMPAVersionSniff extends Sniff {
 	 *
 	 * @var array
 	 */
-	private $tgmpa_classes_functions = array(
+	private $tgmpa_classes_functions = [
 		// Classes.
 		'TGM_Plugin_Activation'      => true,
 		'TGMPA_List_Table'           => true,
@@ -109,7 +109,7 @@ class CorrectTGMPAVersionSniff extends Sniff {
 		'tgmpa_initialize'           => true, // New in v 2.6.2.
 		'tgmpa'                      => true,
 		'tgmpa_load_bulk_installer'  => true,
-	);
+	];
 
 	/**
 	 * List of available TGMPA flavours - other than the default.
@@ -121,10 +121,10 @@ class CorrectTGMPAVersionSniff extends Sniff {
 	 *
 	 * @var array
 	 */
-	private $valid_flavours = array(
+	private $valid_flavours = [
 		'wporg'       => 'WordPress.org',
 		'themeforest' => 'ThemeForest',
-	);
+	];
 
 	/**
 	 * Returns an array of tokens this test wants to listen for.
@@ -132,9 +132,9 @@ class CorrectTGMPAVersionSniff extends Sniff {
 	 * @return array
 	 */
 	public function register() {
-		return array(
+		return [
 			T_OPEN_TAG,
-		);
+		];
 	}
 
 	/**
@@ -147,7 +147,7 @@ class CorrectTGMPAVersionSniff extends Sniff {
 	 */
 	public function process_token( $stackPtr ) {
 
-		$has_class_function = $this->phpcsFile->findNext( array( T_CLASS, T_FUNCTION ), ( $stackPtr + 1 ) );
+		$has_class_function = $this->phpcsFile->findNext( [ T_CLASS, T_FUNCTION ], ( $stackPtr + 1 ) );
 		if ( false === $has_class_function ) {
 			// No class, function or constant declaration found, definitely not TGMPA file.
 			// Skip this file from further checks.
@@ -208,7 +208,7 @@ class CorrectTGMPAVersionSniff extends Sniff {
 					$start = $this->tokens[ $stackPtr ]['scope_closer'];
 				}
 
-				$has_class_function = $this->phpcsFile->findNext( array( T_CLASS, T_FUNCTION ), $start );
+				$has_class_function = $this->phpcsFile->findNext( [ T_CLASS, T_FUNCTION ], $start );
 			}
 		}
 
@@ -273,18 +273,18 @@ class CorrectTGMPAVersionSniff extends Sniff {
 
 				if ( true === version_compare( $this->current_version, $version, '>' ) ) {
 					$error = 'Upgrade of the included TGM plugin activation library required. Current version: %s. Found version: %s';
-					$data  = array(
+					$data  = [
 						$this->current_version,
 						$version,
-					);
+					];
 					$this->phpcsFile->addError( $error, 0, 'upgradeRequired', $data );
 
 				} elseif ( true === version_compare( $this->current_version, $version, '<' ) ) {
 					$error = 'Non-stable version of the TGM plugin activation library found. The current version is %s. Found version: %s';
-					$data  = array(
+					$data  = [
 						$this->current_version,
 						$version,
-					);
+					];
 					$this->phpcsFile->addError( $error, 0, 'unstableVersion', $data );
 				}
 				unset( $matches, $error, $data );
@@ -311,7 +311,7 @@ class CorrectTGMPAVersionSniff extends Sniff {
 							$warning,
 							0,
 							'wrongVersion',
-							array( $this->valid_flavours[ $this->required_flavour ] )
+							[ $this->valid_flavours[ $this->required_flavour ] ]
 						);
 					}
 				}
@@ -326,7 +326,7 @@ class CorrectTGMPAVersionSniff extends Sniff {
 			$this->phpcsFile->recordMetric( 0, 'Version', 'unknown' );
 
 			$error = 'The TGM Plugin Activation library was detected, but the version could not be determined. Ensure you use the latest stable release of the TGM Plugin Activation library (%s). Download a fresh copy now using the Custom TGMPA Generator at http://tgmpluginactivation.com/download/';
-			$data  = array( $this->current_version );
+			$data  = [ $this->current_version ];
 			$this->phpcsFile->addError( $error, 0, 'versionUndetermined', $data );
 			$has_error = true;
 		}
@@ -349,14 +349,14 @@ class CorrectTGMPAVersionSniff extends Sniff {
 			return;
 		}
 
-		$checkTokens = array(
+		$checkTokens = [
 			// This is what we're looking for.
 			T_FUNCTION         => true,
 			// These are just here to be able to skip as much as we can.
 			T_CLASS            => true,
 			T_ARRAY            => true,
 			T_OPEN_SHORT_ARRAY => true,
-		);
+		];
 
 		for ( $ptr = 0; $ptr < $this->phpcsFile->numTokens; $ptr++ ) {
 			if ( ! isset( $checkTokens[ $this->tokens[ $ptr ]['code'] ] ) ) {
@@ -401,7 +401,7 @@ class CorrectTGMPAVersionSniff extends Sniff {
 						'Manual editing of the TGM Plugin Activation file detected. Your edit will cause fatal errors for end-users. Download an official copy using the Custom TGMPA Generator. http://tgmpluginactivation.com/download/',
 						0,
 						'ManualEditDetected',
-						array(),
+						[],
 						9
 					);
 				} else {
@@ -420,7 +420,7 @@ class CorrectTGMPAVersionSniff extends Sniff {
 	 * @return array
 	 */
 	protected function get_docblock_tags( $comment_opener ) {
-		$tags   = array();
+		$tags   = [];
 		$opener = $this->tokens[ $comment_opener ];
 
 		if ( ! isset( $opener['comment_tags'] ) ) {
@@ -471,13 +471,13 @@ class CorrectTGMPAVersionSniff extends Sniff {
 			$api_url .= sprintf( self::GITHUB_API_OAUTH_QUERY, $oauth_token );
 		}
 
-		$stream_options = array(
-			'http' => array(
+		$stream_options = [
+			'http' => [
 				'method'           => 'GET',
 				'user_agent'       => 'WordPress-Coding-Standards/Theme-Review-Sniffs',
 				'protocol_version' => 1.1,
-			),
-		);
+			],
+		];
 		$stream_context = stream_context_create( $stream_options );
 		$response       = file_get_contents( $api_url, false, $stream_context );
 		$headers        = $this->parse_response_headers( $http_response_header );
@@ -528,7 +528,7 @@ class CorrectTGMPAVersionSniff extends Sniff {
 	 * @return array
 	 */
 	private function parse_response_headers( $headers ) {
-		$head = array();
+		$head = [];
 		foreach ( $headers as $key => $value ) {
 			$tag = explode( ':', $value, 2 );
 			if ( isset( $tag[1] ) ) {

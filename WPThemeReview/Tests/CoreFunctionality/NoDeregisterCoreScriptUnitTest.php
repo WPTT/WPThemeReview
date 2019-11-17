@@ -24,13 +24,13 @@ class NoDeregisterCoreScriptUnitTest extends AbstractSniffUnitTest {
 	 * @return array <int line number> => <int number of errors>
 	 */
 	public function getErrorList() {
-		return array(
+		return [
 			32 => 1,
 			33 => 1,
 			35 => 1,
 			37 => 1,
 			38 => 1,
-		);
+		];
 	}
 
 	/**
@@ -39,13 +39,13 @@ class NoDeregisterCoreScriptUnitTest extends AbstractSniffUnitTest {
 	 * @return array <int line number> => <int number of warnings>
 	 */
 	public function getWarningList() {
-		return array(
+		return [
 			23 => 1,
 			24 => 1,
 			25 => 1,
 			26 => 1,
 			27 => 1,
-		);
+		];
 	}
 
 }

@@ -35,7 +35,7 @@ class AdminBarRemovalSniff extends AbstractFunctionParameterSniff {
 	 *
 	 * @var array
 	 */
-	public $supportedTokenizers = array( 'PHP', 'CSS' );
+	public $supportedTokenizers = [ 'PHP', 'CSS' ];
 
 	/**
 	 * Whether or not the sniff only checks for removal of the admin bar
@@ -58,10 +58,10 @@ class AdminBarRemovalSniff extends AbstractFunctionParameterSniff {
 	 *
 	 * @var array
 	 */
-	protected $target_functions = array(
+	protected $target_functions = [
 		'show_admin_bar' => true,
 		'add_filter'     => true,
-	);
+	];
 
 	/**
 	 * CSS properties this sniff is looking for.
@@ -70,20 +70,20 @@ class AdminBarRemovalSniff extends AbstractFunctionParameterSniff {
 	 *
 	 * @var array
 	 */
-	protected $target_css_properties = array(
-		'visibility' => array(
+	protected $target_css_properties = [
+		'visibility' => [
 			'type'  => '!=',
 			'value' => 'hidden',
-		),
-		'display' => array(
+		],
+		'display' => [
 			'type'  => '!=',
 			'value' => 'none',
-		),
-		'opacity' => array(
+		],
+		'opacity' => [
 			'type'  => '>',
 			'value' => 0.3,
-		),
-	);
+		],
+	];
 
 	/**
 	 * CSS selectors this sniff is looking for.
@@ -92,10 +92,10 @@ class AdminBarRemovalSniff extends AbstractFunctionParameterSniff {
 	 *
 	 * @var array
 	 */
-	protected $target_css_selectors = array(
+	protected $target_css_selectors = [
 		'.show-admin-bar',
 		'#wpadminbar',
-	);
+	];
 
 	/**
 	 * Regex template for use with the CSS selectors in combination with PHP text strings.
@@ -369,7 +369,7 @@ class AdminBarRemovalSniff extends AbstractFunctionParameterSniff {
 
 					if ( true === $this->remove_only ) {
 						// Check the value of the CSS property.
-						$valuePtr = $this->phpcsFile->findNext( array( \T_COLON, \T_WHITESPACE ), ( $stackPtr + 1 ), null, true );
+						$valuePtr = $this->phpcsFile->findNext( [ \T_COLON, \T_WHITESPACE ], ( $stackPtr + 1 ), null, true );
 						$value    = $this->tokens[ $valuePtr ]['content'];
 						$valid    = $this->validate_css_property_value( $value, $css_property['type'], $css_property['value'] );
 						if ( true === $valid ) {

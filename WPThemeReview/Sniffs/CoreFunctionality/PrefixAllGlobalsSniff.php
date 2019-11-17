@@ -130,13 +130,16 @@ class PrefixAllGlobalsSniff extends WPCSPrefixAllGlobalsSniff {
 	 * local to that function.
 	 *
 	 * @since 0.2.0
+	 * @since 0.2.1  Added $in_list parameter as introduced in WPCS 2.2.0.
 	 *
-	 * @param int $stackPtr The position of the current token in the stack.
+	 * @param int  $stackPtr The position of the current token in the stack.
+	 * @param bool $in_list  Whether or not this is a variable in a list assignment.
+	 *                       Defaults to false.
 	 *
 	 * @return int|void Integer stack pointer to skip forward or void to continue
 	 *                  normal file processing.
 	 */
-	protected function process_variable_assignment( $stackPtr ) {
+	protected function process_variable_assignment( $stackPtr, $in_list = false ) {
 
 		// Usage of `strip_quotes` is to ensure `stdin_path` passed by IDEs does not include quotes.
 		$file = $this->strip_quotes( $this->phpcsFile->getFileName() );
@@ -161,7 +164,7 @@ class PrefixAllGlobalsSniff extends WPCSPrefixAllGlobalsSniff {
 		}
 
 		// Not a typical template file name, defer to the prefix checking in the parent sniff.
-		return parent::process_variable_assignment( $stackPtr );
+		return parent::process_variable_assignment( $stackPtr, $in_list );
 	}
 
 	/**

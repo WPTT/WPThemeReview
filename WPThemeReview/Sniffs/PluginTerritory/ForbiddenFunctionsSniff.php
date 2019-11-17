@@ -25,51 +25,51 @@ class ForbiddenFunctionsSniff extends AbstractFunctionRestrictionsSniff {
 	/**
 	 * Groups of functions to restrict.
 	 *
-	 * Example: groups => array(
-	 *  'lambda' => array(
+	 * Example: groups => [
+	 *  'lambda' => [
 	 *      'type'      => 'error' | 'warning',
 	 *      'message'   => 'Use anonymous functions instead please!',
-	 *      'functions' => array( 'file_get_contents', 'create_function' ),
-	 *  )
-	 * )
+	 *      'functions' => [ 'file_get_contents', 'create_function' ],
+	 *  ]
+	 * ]
 	 *
 	 * @return array
 	 */
 	public function getGroups() {
-		return array(
-			'plugin-territory' => array(
+		return [
+			'plugin-territory' => [
 				'type'      => 'error',
 				'message'   => 'Function %s() is not allowed because it is plugin territory.',
-				'functions' => array(
+				'functions' => [
 					'register_post_type',
 					'register_taxonomy',
 					'add_shortcode',
 					'register_taxonomy_for_object_type',
 					'flush_rewrite_rules',
-				),
-			),
+				],
+			],
 
-			'editor-blocks' => array(
+			'editor-blocks' => [
 				'type'      => 'error',
 				'message'   => 'Registering and deregistering editor blocks should be done in a plugin, not in a theme. Found %s().',
-				'functions' => array(
+				'functions' => [
 					'register_block_*',
 					'unregister_block_*',
-				),
-			),
+				],
+			],
 
-			'cron-functionality' => array(
+			'cron-functionality' => [
 				'type'      => 'error',
 				'message'   => 'Themes should not be running regular (Cron) tasks. Found %s().',
-				'functions' => array(
+				'functions' => [
 					'wp_clear_scheduled_hook',
 					'wp_cron',
 					'wp_reschedule_event',
 					'wp_schedule_*',
 					'wp_unschedule_*',
-				),
-			),
-		);
+				],
+			],
+		];
 	}
 
 }

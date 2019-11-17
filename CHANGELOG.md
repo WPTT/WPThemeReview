@@ -8,6 +8,16 @@ This projects adheres to [Semantic Versioning](https://semver.org/) and [Keep a 
 
 _No documentation available about unreleased changes as of yet._
 
+## [0.2.1] - 2019-11-17
+
+### Changed
+
+- Added new `$in_list` parameter to the `PrefixAllGlobalsSniff::process_variable_assignment()` method, so that the method is compatible with the upstream WPCS method (changed in WPCS 2.2.0).
+- Updated the minimum version requirement for the WordPress Coding Standards dependency to version 2.2.0.
+- Replaced the deprecated `WordPress.WP.TimezoneChange` with `WordPress.DateTime.RestrictedFunctions.timezone_change_date_default_timezone_set`
+- Enforce the array short syntax when writing sniffs.
+- Travis: Minor build script tweaks.
+
 ## [0.2.0] - 2019-07-17
 
 ### Added
@@ -99,5 +109,6 @@ _No documentation available about unreleased changes as of yet._
 - `WordPress.WP.TimezoneChange`: themes should never touch the timezone.
 
 [Unreleased]: https://github.com/WPTRT/WPThemeReview/compare/master...HEAD
+[0.2.1]: https://github.com/WPTRT/WPThemeReview/compare/0.2.0...0.2.1
 [0.2.0]: https://github.com/WPTRT/WPThemeReview/compare/0.1.0...0.2.0
 [0.1.0]: https://github.com/WPTRT/WPThemeReview/compare/1dabb9876caf78209849a01381c0b863ce583d07...0.1.0
