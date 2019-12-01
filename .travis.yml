@@ -24,7 +24,7 @@ env:
   # Highest supported PHPCS + WPCS versions.
   - PHPCS_BRANCH="dev-master" WPCS_BRANCH="dev-develop" LINT=1
   # Lowest supported PHPCS + WPCS versions.
-  - PHPCS_BRANCH="3.3.1" WPCS_BRANCH="2.1.0"
+  - PHPCS_BRANCH="3.3.1" WPCS_BRANCH="2.2.0"
 
 stages:
   - sniff
@@ -54,7 +54,7 @@ jobs:
     # Seperate test builds for PHP 7.2 with reversed PHPCS vs WPCS branches.
     - stage: test
       php: 7.2
-      env: PHPCS_BRANCH="dev-master" WPCS_BRANCH="2.1.0" LINT=1
+      env: PHPCS_BRANCH="dev-master" WPCS_BRANCH="2.2.0" LINT=1
     - php: 7.2
       env: PHPCS_BRANCH="3.3.1" WPCS_BRANCH="dev-develop"
 

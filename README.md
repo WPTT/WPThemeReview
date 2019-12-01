@@ -41,7 +41,7 @@ This project attempts to automate the code analysis part of the [Theme Review Pr
 The WPThemeReview Standard requires:
 * PHP 5.4 or higher.
 * [PHP_CodeSniffer](https://github.com/squizlabs/PHP_CodeSniffer) version **3.3.1** or higher.
-* [WordPress Coding Standards](https://github.com/WordPress/WordPress-Coding-Standards) version **2.1.0** or higher.
+* [WordPress Coding Standards](https://github.com/WordPress/WordPress-Coding-Standards) version **2.2.0** or higher.
 * [PHPCompatibilityWP](https://github.com/PHPCompatibility/PHPCompatibilityWP) version **2.0.0** or higher.
 
 
