@@ -8,8 +8,7 @@ cache:
     # Cache directory for more recent Composer versions.
     - $HOME/.cache/composer/files
 
-language:
-  - php
+language: php
 
 php:
   - 5.4
