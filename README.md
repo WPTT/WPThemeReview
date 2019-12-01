@@ -5,7 +5,7 @@
 [![Last Commit to Unstable](https://img.shields.io/github/last-commit/WPTRT/WPThemeReview/develop.svg)](https://github.com/WPTRT/WPThemeReview/commits/develop)
 
 [![Minimum PHP Version](https://img.shields.io/packagist/php-v/wptrt/wpthemereview.svg?maxAge=3600)](https://packagist.org/packages/wptrt/wpthemereview)
-[![Tested on PHP 5.3 to nightly](https://img.shields.io/badge/tested%20on-PHP%205.3%20|%205.4%20|%205.5%20|%205.6%20|%207.0%20|%207.1%20|%207.2%20|%20nightly-green.svg?maxAge=2419200)](https://travis-ci.org/WPTRT/WPThemeReview)
+[![Tested on PHP 5.3 to 7.4](https://img.shields.io/badge/tested%20on-PHP%205.3%20|%205.4%20|%205.5%20|%205.6%20|%207.0%20|%207.1%20|%207.2%20|%207.3%20|%207.4-green.svg?maxAge=2419200)](https://travis-ci.org/WPTRT/WPThemeReview)
 [![License: MIT](https://poser.pugx.org/wptrt/wpthemereview/license)](https://github.com/WPTRT/WPThemeReview/blob/develop/LICENSE)
 [![Number of Contributors](https://img.shields.io/github/contributors/WPTRT/WPThemeReview.svg?maxAge=3600)](https://github.com/WPTRT/WPThemeReview/graphs/contributors)
 
