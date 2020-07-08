@@ -1,12 +1,8 @@
 <?php
 
 // Menu Pages.
-add_menu_page();
 add_object_page();
 add_utility_page();
-
-// SubMenu Pages.
-add_submenu_page();
 
 // WordPress Administration Menus.
 add_dashboard_page();
