@@ -25,10 +25,8 @@ class NoAddAdminPagesUnitTest extends AbstractSniffUnitTest {
 	 */
 	public function getErrorList() {
 		return [
-			4  => 1,
 			5  => 1,
 			6  => 1,
-			9  => 1,
 			12 => 1,
 			13 => 1,
 			14 => 1,
