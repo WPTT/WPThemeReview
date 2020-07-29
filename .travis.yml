@@ -81,8 +81,8 @@ before_install:
   - export XMLLINT_INDENT="	"
   - composer require squizlabs/php_codesniffer:${PHPCS_BRANCH} wp-coding-standards/wpcs:${WPCS_BRANCH} --no-update --no-suggest --no-scripts
 
-  # phpcs is being rewritted to use phpcsutils.
-  - if [[ $PHPCS_BRANCH == "dev-master" ]]; then composer require phpcsstandards/phpcsutils:1.0.0-alpha3@dev --no-update --no-suggest --no-scripts;fi
+  # wpcs is being rewritten to use phpcsutils.
+  - if [[ $WPCS_BRANCH == "dev-master" || $WPCS_BRANCH == "dev-develop" ]]; then composer require phpcsstandards/phpcsutils:1.0.0-alpha3@dev --no-update --no-suggest --no-scripts;fi
 
   - |
     if [[ "${TRAVIS_BUILD_STAGE_NAME^}" == "Sniff" ]]; then
