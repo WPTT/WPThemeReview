@@ -82,7 +82,7 @@ before_install:
   - composer require squizlabs/php_codesniffer:${PHPCS_BRANCH} wp-coding-standards/wpcs:${WPCS_BRANCH} --no-update --no-suggest --no-scripts
 
   # wpcs is being rewritten to use phpcsutils.
-  - if [[ $WPCS_BRANCH == "dev-master" || $WPCS_BRANCH == "dev-develop" ]]; then composer require phpcsstandards/phpcsutils:1.0.0-alpha3@dev --no-update --no-suggest --no-scripts;fi
+  - if [[ $WPCS_BRANCH == "dev-master" || $WPCS_BRANCH == "dev-develop" ]]; then composer require phpcsstandards/phpcsutils:1.0.0-alpha3@dev phpcsstandards/phpcsextra:1.0.0-alpha3@dev --no-update --no-suggest --no-scripts;fi
 
   - |
     if [[ "${TRAVIS_BUILD_STAGE_NAME^}" == "Sniff" ]]; then
