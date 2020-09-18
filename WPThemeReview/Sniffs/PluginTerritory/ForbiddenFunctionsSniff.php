@@ -53,8 +53,10 @@ class ForbiddenFunctionsSniff extends AbstractFunctionRestrictionsSniff {
 				'type'      => 'error',
 				'message'   => 'Registering and deregistering editor blocks should be done in a plugin, not in a theme. Found %s().',
 				'functions' => [
-					'register_block_*',
-					'unregister_block_*',
+					'register_block_core_*',
+					'register_block_type',
+					'register_block_type_from_metadata',
+					'unregister_block_type',
 				],
 			],
 
