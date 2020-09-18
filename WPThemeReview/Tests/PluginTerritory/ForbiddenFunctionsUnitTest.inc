@@ -43,3 +43,7 @@ wp_schedule_single_event( time(), 'my_schedule_hook', $args );
 wp_schedule_update_checks();
 wp_schedule_update_network_counts();
 wp_cron();
+
+register_block_pattern( 'test/test', array() ); // OK.
+register_block_pattern_category( 'test', array() ); // OK.
+register_block_style( 'test/test', array() ); // OK.
