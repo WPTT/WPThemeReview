@@ -1,4 +1,5 @@
-dist: trusty
+os: linux
+dist: xenial
 
 cache:
   apt: true
@@ -11,8 +12,6 @@ cache:
 language: php
 
 php:
-  - 5.4
-  - 5.5
   - 5.6
   - 7.0
   - 7.1
@@ -22,11 +21,9 @@ php:
 
 env:
   # Highest supported PHPCS + WPCS versions.
-  - PHPCS_BRANCH="dev-master" WPCS_BRANCH="dev-develop" LINT=1
+  - PHPCS_BRANCH="dev-master" WPCS_BRANCH="dev-master" LINT=1
   # Lowest supported PHPCS + WPCS versions.
   - PHPCS_BRANCH="3.3.1" WPCS_BRANCH="2.2.0"
-  # Highest supported PHPCS + stable WPCS version.
-  - PHPCS_BRANCH="dev-master" WPCS_BRANCH="dev-master" LINT=1
 
 stages:
   - sniff
@@ -64,12 +61,13 @@ jobs:
       env: PHPCS_BRANCH="dev-master" WPCS_BRANCH="2.2.0" LINT=1
     - php: 7.2
       env: PHPCS_BRANCH="3.3.1" WPCS_BRANCH="dev-master"
+    - php: 7.4
+      env: PHPCS_BRANCH="dev-master" WPCS_BRANCH="dev-develop"
 
   allow_failures:
     # Allow failures for unstable builds.
     - php: "nightly"
-    - env: WPCS_BRANCH="dev-develop"
-
+    - env: PHPCS_BRANCH="dev-master" WPCS_BRANCH="dev-develop"
 
 before_install:
   # Speed up build time by disabling Xdebug.
@@ -78,20 +76,26 @@ before_install:
   # On stable PHPCS versions, allow for PHP deprecation notices.
   # Unit tests don't need to fail on those for stable releases where those issues won't get fixed anymore.
   - |
-    if [[ "${TRAVIS_BUILD_STAGE_NAME^}" != "Sniff" && $PHPCS_BRANCH != "dev-master" && $WPCS_BRANCH != "dev-master" ]]; then
+    if [[ "${TRAVIS_BUILD_STAGE_NAME^}" != "Sniff" && $PHPCS_BRANCH != "dev-master" && $WPCS_BRANCH != "dev-develop" ]]; then
       echo 'error_reporting = E_ALL & ~E_DEPRECATED' >> ~/.phpenv/versions/$(phpenv version-name)/etc/conf.d/travis.ini
     fi
 
   - export XMLLINT_INDENT="	"
-  - composer require squizlabs/php_codesniffer:${PHPCS_BRANCH} wp-coding-standards/wpcs:${WPCS_BRANCH} --no-update --no-suggest --no-scripts
+
+install:
+  - travis_retry composer require squizlabs/php_codesniffer:${PHPCS_BRANCH} wp-coding-standards/wpcs:${WPCS_BRANCH} --no-update --no-suggest --no-scripts
   - |
     if [[ "${TRAVIS_BUILD_STAGE_NAME^}" == "Sniff" ]]; then
-      composer install --dev --no-suggest
+      travis_retry composer install --dev --no-suggest
       # The Composer PHPCS plugin takes care of the installed_paths.
+    elif [[ ${TRAVIS_PHP_VERSION} == "nightly" ]]; then
+      # PHPUnit 7.x does not allow for installation on PHP 8, so ignore platform
+      # requirements to get PHPUnit 7.x to install on nightly.
+      travis_retry composer install --ignore-platform-reqs --no-suggest
     else
       if [[ ${TRAVIS_PHP_VERSION:0:3} > "7.1" ]]; then composer require phpunit/phpunit:^7.0 --no-update --no-suggest --no-scripts;fi
-      composer install --no-dev --no-suggest --no-scripts
-      composer install-standards
+      travis_retry composer install --no-dev --no-suggest --no-scripts
+      travis_retry composer install-standards
     fi
 
 script:
