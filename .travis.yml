@@ -12,6 +12,8 @@ cache:
 language: php
 
 php:
+  - 5.4
+  - 5.5
   - 5.6
   - 7.0
   - 7.1
@@ -64,6 +66,15 @@ jobs:
     - php: 7.4
       env: PHPCS_BRANCH="dev-master" WPCS_BRANCH="dev-develop"
 
+    # Builds which need a different distribution.
+    - php: 5.5
+      dist: trusty
+      env: PHPCS_BRANCH="dev-master" WPCS_BRANCH="2.2.0" LINT=1
+    - php: 5.4
+      dist: trusty
+      env: PHPCS_BRANCH="dev-master" WPCS_BRANCH="2.2.0" LINT=1
+
+
   allow_failures:
     # Allow failures for unstable builds.
     - php: "nightly"
@@ -83,25 +94,8 @@ before_install:
   - export XMLLINT_INDENT="	"
 
 install:
-  - travis_retry composer require squizlabs/php_codesniffer:${PHPCS_BRANCH} wp-coding-standards/wpcs:${WPCS_BRANCH} --no-update --no-suggest --no-scripts
-  - |
-    if [[ "${TRAVIS_BUILD_STAGE_NAME^}" == "Sniff" ]]; then
-      travis_retry composer install --dev --no-suggest
-      # The Composer PHPCS plugin takes care of the installed_paths.
-    else
-      if [[ ${TRAVIS_PHP_VERSION:0:3} > "7.1" ]]; then travis_retry composer require phpunit/phpunit:^7.0 --no-update --no-suggest --no-scripts;fi
-      travis_retry composer install --no-dev --no-suggest --no-scripts
-      travis_retry composer install-standards
-    fi
-  - |
-    if [[ ${TRAVIS_PHP_VERSION} == "nightly" ]]; then
-      # PHPUnit 7.x does not allow for installation on PHP 8, so ignore platform
-      # requirements to get PHPUnit 7.x to install on nightly.
-      travis_retry composer install --ignore-platform-reqs --no-suggest
-    else
-      # Do a normal dev install in all other cases.
-      travis_retry composer install --no-suggest
-    fi
+  - if [[ ${WPCS_BRANCH} == "dev-develop" ]]; then travis_retry composer config minimum-stability dev; fi
+  - travis_retry composer install --dev --no-suggest
 
 script:
   # Lint the PHP files against parse errors.
@@ -112,9 +106,4 @@ script:
   - if [[ "$LINT" == "1" ]]; then composer validate --no-check-all --strict; fi
 
   # Run the unit tests.
-  - |
-    if [[ ${TRAVIS_PHP_VERSION:0:3} > "7.1" ]]; then
-      vendor/bin/phpunit --filter WPThemeReview $(pwd)/vendor/squizlabs/php_codesniffer/tests/AllTests.php
-    else
-      phpunit --filter WPThemeReview $(pwd)/vendor/squizlabs/php_codesniffer/tests/AllTests.php
-    fi
+  - composer run-tests
