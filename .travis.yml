@@ -88,14 +88,19 @@ install:
     if [[ "${TRAVIS_BUILD_STAGE_NAME^}" == "Sniff" ]]; then
       travis_retry composer install --dev --no-suggest
       # The Composer PHPCS plugin takes care of the installed_paths.
-    elif [[ ${TRAVIS_PHP_VERSION} == "nightly" ]]; then
+    else
+      if [[ ${TRAVIS_PHP_VERSION:0:3} > "7.1" ]]; then travis_retry composer require phpunit/phpunit:^7.0 --no-update --no-suggest --no-scripts;fi
+      travis_retry composer install --no-dev --no-suggest --no-scripts
+      travis_retry composer install-standards
+    fi
+  - |
+    if [[ ${TRAVIS_PHP_VERSION} == "nightly" ]]; then
       # PHPUnit 7.x does not allow for installation on PHP 8, so ignore platform
       # requirements to get PHPUnit 7.x to install on nightly.
       travis_retry composer install --ignore-platform-reqs --no-suggest
     else
-      if [[ ${TRAVIS_PHP_VERSION:0:3} > "7.1" ]]; then composer require phpunit/phpunit:^7.0 --no-update --no-suggest --no-scripts;fi
-      travis_retry composer install --no-dev --no-suggest --no-scripts
-      travis_retry composer install-standards
+      # Do a normal dev install in all other cases.
+      travis_retry composer install --no-suggest
     fi
 
 script:
