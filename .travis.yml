@@ -95,7 +95,8 @@ before_install:
 
 install:
   - if [[ ${WPCS_BRANCH} == "dev-develop" ]]; then travis_retry composer config minimum-stability dev; fi
-  - travis_retry composer install --dev --no-suggest
+  - composer require squizlabs/php_codesniffer:${PHPCS_BRANCH} wp-coding-standards/wpcs:${WPCS_BRANCH} --no-update --no-suggest --no-scripts
+  - travis_retry composer install --no-suggest
 
 script:
   # Lint the PHP files against parse errors.
