@@ -34,10 +34,6 @@ use PHP_CodeSniffer\Util\Tokens;
  */
 class CorrectTGMPAVersionSniff extends Sniff {
 
-	const GITHUB_TGMPA_API_URL = 'https://api.github.com/repos/TGMPA/TGM-Plugin-Activation/releases/latest';
-
-	const GITHUB_API_OAUTH_QUERY = '?access_token=%s';
-
 	/**
 	 * TGMPA flavour required.
 	 *
@@ -56,39 +52,11 @@ class CorrectTGMPAVersionSniff extends Sniff {
 	public $required_flavour = '';
 
 	/**
-	 * GitHub oAuth token.
-	 *
-	 * Intended to be set in the ruleset.
-	 *
-	 * This is to prevent issues with rate limiting if a lot of requests are made from the same server.
-	 *
-	 * "Normal" users generaly won't need to set this, but if the sniffs are run for all themes
-	 * uploaded to wordpress.org, that IP address might run into the rate limit of 60 calls per hour.
-	 * Setting a oauth token in the custom ruleset used will prevent this.
-	 *
-	 * Alternatively, the token can also be set via an environment key called `GITHUB_OAUTH_TOKEN`.
-	 *
-	 * @var string
-	 */
-	public $github_oauth_token = '';
-
-	/**
 	 * Fall-back for the latest version number for if the API call fails.
 	 *
 	 * @var string
 	 */
 	private $current_version = '2.6.1';
-
-	/**
-	 * Whether or not a call has been made to the GitHub API to retrieve the current TGMPA version number.
-	 *
-	 * Note: an API call will only be made once per PHPCS run and only when the TGMPA library
-	 * has been positively identified.
-	 * The API call will be skipped when running the unit tests.
-	 *
-	 * @var bool
-	 */
-	private $gh_call_made = false;
 
 	/**
 	 * Classes and functions declared by TGMPA.
@@ -231,11 +199,6 @@ class CorrectTGMPAVersionSniff extends Sniff {
 	 * Check whether the latest version of TGMPA is being used.
 	 */
 	protected function uses_latest_version() {
-		if ( false === $this->gh_call_made ) {
-			// Get the current version number for TGMPA from GitHub.
-			$this->update_current_version();
-			$this->gh_call_made = true;
-		}
 
 		/*
 		 * Walk the doc block comments to find if this is the correct version of TGMPA.
@@ -449,98 +412,6 @@ class CorrectTGMPAVersionSniff extends Sniff {
 		}
 
 		return $tags;
-	}
-
-	/**
-	 * Get the version number (tag_name) of the latest TGMPA release from the GitHub API.
-	 */
-	protected function update_current_version() {
-		if ( defined( 'PHP_CODESNIFFER_IN_TESTS' ) || true === $this->gh_call_made ) {
-			return;
-		}
-
-		$api_url     = self::GITHUB_TGMPA_API_URL;
-		$oauth_token = false;
-		if ( '' !== $this->github_oauth_token && is_string( $this->github_oauth_token ) ) {
-			$oauth_token = $this->github_oauth_token;
-		} elseif ( false !== getenv( 'GITHUB_OAUTH_TOKEN' ) ) {
-			$oauth_token = getenv( 'GITHUB_OAUTH_TOKEN' );
-		}
-
-		if ( false !== $oauth_token ) {
-			$api_url .= sprintf( self::GITHUB_API_OAUTH_QUERY, $oauth_token );
-		}
-
-		$stream_options = [
-			'http' => [
-				'method'           => 'GET',
-				'user_agent'       => 'WordPress-Coding-Standards/Theme-Review-Sniffs',
-				'protocol_version' => 1.1,
-			],
-		];
-		$stream_context = stream_context_create( $stream_options );
-		$response       = file_get_contents( $api_url, false, $stream_context );
-		$headers        = $this->parse_response_headers( $http_response_header );
-
-		// Check for invalid oAuth token response.
-		if ( 401 === $headers['response_code'] && false !== $oauth_token ) {
-			$this->phpcsFile->addWarning(
-				'The GITHUB_OAUTH_TOKEN you provided is invalid. Please update the token in your custom ruleset or environment properties.',
-				0,
-				'githubOauthTokenInvalid'
-			);
-			$this->oauth_error = false;
-			return;
-		}
-
-		// Check for rate limit error response.
-		if ( 403 === $headers['response_code'] && '0' === $headers['X-RateLimit-Remaining'] ) {
-			// @todo Add link to GH wiki page documenting the properties.
-			$this->phpcsFile->addWarning(
-				'You are running PHPCS more than 60 times per hour. You may want to consider setting the `github_oauth_token` property in your custom ruleset for Theme Review. For more information see: ... (GH wiki page).',
-				0,
-				'githubRateLimitReached'
-			);
-			$this->rate_limit_error = false;
-			return;
-		}
-
-		if ( 200 !== $headers['response_code'] ) {
-			// Something unexpected going on, just ignore it.
-			return;
-		}
-
-		// Ok, we have received a valid response.
-		$response = json_decode( $response );
-		if ( ! empty( $response->tag_name ) && ( ! isset( $response->prerelease ) || false === $response->prerelease ) ) {
-			// Should there be a check for `v` at the start of a version number ?
-			$this->current_version = $response->tag_name;
-		}
-	}
-
-	/**
-	 * Parse HTTP response headers array to a more usable format.
-	 *
-	 * Based on http://php.net/manual/en/reserved.variables.httpresponseheader.php#117203
-	 *
-	 * @param array $headers HTTP response headers array.
-	 *
-	 * @return array
-	 */
-	private function parse_response_headers( $headers ) {
-		$head = [];
-		foreach ( $headers as $key => $value ) {
-			$tag = explode( ':', $value, 2 );
-			if ( isset( $tag[1] ) ) {
-				$head[ trim( $tag[0] ) ] = trim( $tag[1] );
-			} else {
-				$head[] = $value;
-				if ( preg_match( '`HTTP/[0-9\.]+\s+([0-9]+)`', $value, $out ) ) {
-					$head['response_code'] = intval( $out[1] );
-				}
-			}
-		}
-		return $head;
 	}
 
 }
