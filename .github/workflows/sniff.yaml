@@ -54,9 +54,7 @@ jobs:
               run: composer check-cs
 
             - name: Validate xml files
-              run: |
-                export XMLLINT_INDENT="	"
-                xmllint --noout --schema ./vendor/squizlabs/php_codesniffer/phpcs.xsd ./*/ruleset.xml
+              run: xmllint --noout --schema ./vendor/squizlabs/php_codesniffer/phpcs.xsd ./*/ruleset.xml
 
             - name: Check the code-style consistency of the xml files.
               run: diff -B --tabsize=4 ./WPThemeReview/ruleset.xml <(xmllint --format "./WPThemeReview/ruleset.xml")
