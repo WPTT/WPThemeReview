@@ -1,0 +1,3 @@
+body {
+    background-image:url('https://www.google-analytics.com/collect?v=1&t=pageview&tid=UA-123456-1&cid=555&dp=%2Fmy%2Fdocument%2Fpath'); // Error.
+}
