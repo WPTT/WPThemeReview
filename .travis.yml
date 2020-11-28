@@ -70,13 +70,13 @@ jobs:
       env: PHPCS_BRANCH="dev-master" WPCS_BRANCH="2.2.0" LINT=1
     - php: 5.5
       dist: trusty
-      env: PHPCS_BRANCH="3.5.0"
+      env: PHPCS_BRANCH="3.3.1" WPCS_BRANCH="dev-master"
     - php: 5.4
       dist: trusty
       env: PHPCS_BRANCH="dev-master" WPCS_BRANCH="2.2.0" LINT=1
     - php: 5.4
       dist: trusty
-      env: PHPCS_BRANCH="3.5.0"
+      env: PHPCS_BRANCH="3.3.1" WPCS_BRANCH="dev-master"
 
   allow_failures:
     # Allow failures for unstable builds.
