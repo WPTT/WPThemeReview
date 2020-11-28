@@ -28,6 +28,9 @@ jobs:
                 php-version: '7.4'
                 tools: composer:v1
 
+            - name: Install xmllint
+              run: sudo apt-get install libxml2-utils
+
             - name: Get composer cache directory
               id: composer-cache
               run: |
