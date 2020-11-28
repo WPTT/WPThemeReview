@@ -1,0 +1,7 @@
+name: Test stage - unit test for sniffs
+
+on:
+    pull_request:
+        branches: [master, develop]
+    push:
+        branches: [master]
