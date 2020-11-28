@@ -1,0 +1,62 @@
+name: Sniff stage - quality control checks
+
+on:
+    pull_request:
+        branches: [master, develop]
+    push:
+        branches: [master]
+
+jobs:
+    qa_checks:
+        name: Quality control checks
+        runs-on: ubuntu-latest
+        env:
+            PHPCS_BRANCH: "dev-master"
+            WPCS_BRANCH: "dev-master"
+        strategy:
+            fail-fast: false
+
+        steps:
+            # Checkout repository
+            - name: Checkout
+              uses: actions/checkout@v2
+
+            # Setup PHP versions, run checks
+            - name: PHP setup
+              uses: shivammathur/setup-php@v2
+              with:
+                php-version: '7.4'
+                tools: composer:v1
+
+            - name: Get composer cache directory
+              id: composer-cache
+              run: |
+                echo "::set-output name=dir::$(composer config cache-files-dir)"
+
+            - name: Cache composer dependencies
+              uses: actions/cache@v1
+              with:
+                path: ${{ steps.composer-cache.outputs.dir }}
+                key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
+                restore-keys: |
+                  ${{ runner.os }}-composer-
+
+            - name: Set the required PHPCS and WPCS versions
+              run: composer require squizlabs/php_codesniffer:${PHPCS_BRANCH} wp-coding-standards/wpcs:${WPCS_BRANCH} --no-update --no-scripts
+
+            - name: Install the rest of the dependencies
+              run: composer install
+
+            - name: Check the code style of the WPThemeReview codebase
+              run: composer check-cs
+
+            - name: Validate xml files
+              run: |
+                export XMLLINT_INDENT="	"
+                xmllint --noout --schema ./vendor/squizlabs/php_codesniffer/phpcs.xsd ./*/ruleset.xml
+
+            - name: Check the code-style consistency of the xml files.
+              run: diff -B --tabsize=4 ./WPThemeReview/ruleset.xml <(xmllint --format "./WPThemeReview/ruleset.xml")
+
+            - name: Check feature completeness of the available sniffs
+              run: composer check-complete
