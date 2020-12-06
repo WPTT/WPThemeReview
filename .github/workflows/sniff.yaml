@@ -9,12 +9,10 @@ on:
 jobs:
     qa_checks:
         name: Quality control checks
-        runs-on: ubuntu-latest
+        runs-on: ubuntu-16.04
         env:
             PHPCS_BRANCH: "dev-master"
             WPCS_BRANCH: "dev-master"
-        strategy:
-            fail-fast: false
 
         steps:
             # Checkout repository
@@ -27,6 +25,8 @@ jobs:
               with:
                 php-version: '7.4'
                 tools: composer:v1
+              env:
+                COMPOSER_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
             - name: Install xmllint
               run: sudo apt-get install libxml2-utils
