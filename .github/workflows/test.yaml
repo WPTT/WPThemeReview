@@ -25,7 +25,22 @@ jobs:
                     wpcs-versions: '2.3.0'
                   - phpcs-versions: 'dev-master'
                     wpcs-versions: 'dev-develop'
-                    php-versions: [ '5.6', '7.0', '7.1', '7.2', '7.3', '8.0' ]
+                    php-versions: '5.6'
+                  - phpcs-versions: 'dev-master'
+                    wpcs-versions: 'dev-develop'
+                    php-versions: '7.0'
+                  - phpcs-versions: 'dev-master'
+                    wpcs-versions: 'dev-develop'
+                    php-versions: '7.1'
+                  - phpcs-versions: 'dev-master'
+                    wpcs-versions: 'dev-develop'
+                    php-versions: '7.2'
+                  - phpcs-versions: 'dev-master'
+                    wpcs-versions: 'dev-develop'
+                    php-versions: '7.3'
+                  - phpcs-versions: 'dev-master'
+                    wpcs-versions: 'dev-develop'
+                    php-versions: '8.0'
 
         steps:
             # Checkout repository
