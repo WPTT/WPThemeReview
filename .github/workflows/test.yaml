@@ -11,12 +11,17 @@ jobs:
         name: Unit tests on PHP ${{ matrix.php-versions }} with PHPCS ${{ matrix.phpcs-versions }} and WPCS ${{ matrix.wpcs-versions }}
         runs-on: ubuntu-latest
         strategy:
+            fail-fast: false
             matrix:
                 php-versions: [ '5.6', '7.0', '7.1', '7.2', '7.3', '7.4', '8.0' ]
                 phpcs-versions: [ '3.5.0', 'dev-master' ]
                 wpcs-versions: [ '2.3.0', 'dev-master', 'dev-develop']
-        env:
-            fail-fast: true
+                exclude:
+                  - phpcs-versions: '3.5.0'
+                    wpcs-versions: 'dev-develop'
+                  - phpcs-versions: 'dev-master'
+                    wpcs-versions: 'dev-develop'
+                    php-versions: [ '5.6', '7.0', '7.1', '7.2', '7.3', '8.0' ]
 
         steps:
             # Checkout repository
