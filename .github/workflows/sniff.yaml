@@ -9,7 +9,7 @@ on:
 jobs:
     qa_checks:
         name: Quality control checks
-        runs-on: ubuntu-16.04
+        runs-on: ubuntu-latest
         env:
             PHPCS_BRANCH: "dev-master"
             WPCS_BRANCH: "dev-master"
@@ -52,6 +52,12 @@ jobs:
 
             - name: Check the code style of the WPThemeReview codebase
               run: composer check-cs
+
+            - name: Lint the PHP files against parse errors
+              run: if find . -path ./vendor -prune -o -name "*.php" -exec php -l {} \; | grep "^[Parse error|Fatal error]"; then exit 1; fi
+
+            - name: Validate the composer.json file.
+              run: composer validate --no-check-all --strict
 
             - name: Validate xml files
               run: xmllint --noout --schema ./vendor/squizlabs/php_codesniffer/phpcs.xsd ./*/ruleset.xml
