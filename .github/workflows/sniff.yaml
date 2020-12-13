@@ -63,7 +63,9 @@ jobs:
               run: xmllint --noout --schema ./vendor/squizlabs/php_codesniffer/phpcs.xsd ./*/ruleset.xml
 
             - name: Check the code-style consistency of the xml files.
-              run: diff -B --tabsize=4 ./WPThemeReview/ruleset.xml <(xmllint --format "./WPThemeReview/ruleset.xml")
+              run: |
+                export XMLLINT_INDENT=$'\t'
+                diff -B --tabsize=4 ./WPThemeReview/ruleset.xml <(xmllint --format "./WPThemeReview/ruleset.xml")
 
             - name: Check feature completeness of the available sniffs
               run: composer check-complete
