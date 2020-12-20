@@ -1,52 +1,45 @@
-name: Tests stage - unit test for sniffs
+name: Test
 
 on:
-    pull_request:
-        branches: [ master, develop ]
-    push:
-        branches: [ master ]
+  # Run on pushes to `master` and on all pull requests.
+  push:
+    branches:
+      - master
+  pull_request:
+    paths-ignore:
+      - '**.md'
 
 jobs:
     tests:
-        name: Unit tests on PHP ${{ matrix.php-versions }} with PHPCS ${{ matrix.phpcs-versions }} and WPCS ${{ matrix.wpcs-versions }}
+        name: PHP ${{ matrix.php }} with PHPCS ${{ matrix.phpcs_branch }}/WPCS ${{ matrix.wpcs_branch }}
         runs-on: ubuntu-latest
         strategy:
             fail-fast: false
             matrix:
-                php-versions: [ '5.4', '5.5', '5.6', '7.0', '7.1', '7.2', '7.3', '7.4', '8.0', '8.1' ]
-                phpcs-versions: [ '3.5.0', 'dev-master' ]
-                wpcs-versions: [ '2.3.0', 'dev-master', 'dev-develop']
+                php: [ '5.4', '5.5', '5.6', '7.0', '7.1', '7.2', '7.3', '7.4', '8.0' ]
+                phpcs_branch: [ '3.5.0', 'dev-master' ]
+                wpcs_branch: [ '2.3.0', 'dev-master' ]
+                allowed_failure: [ false ]
                 exclude:
-                  - phpcs-versions: '3.5.0'
-                    wpcs-versions: 'dev-develop'
-                  - phpcs-versions: '3.5.0'
-                    wpcs-versions: 'dev-master'
-                  - phpcs-versions: 'dev-master'
-                    wpcs-versions: '2.3.0'
-                  - phpcs-versions: 'dev-master'
-                    wpcs-versions: 'dev-develop'
-                    php-versions: '5.4'
-                  - phpcs-versions: 'dev-master'
-                    wpcs-versions: 'dev-develop'
-                    php-versions: '5.5'
-                  - phpcs-versions: 'dev-master'
-                    wpcs-versions: 'dev-develop'
-                    php-versions: '5.6'
-                  - phpcs-versions: 'dev-master'
-                    wpcs-versions: 'dev-develop'
-                    php-versions: '7.0'
-                  - phpcs-versions: 'dev-master'
-                    wpcs-versions: 'dev-develop'
-                    php-versions: '7.1'
-                  - phpcs-versions: 'dev-master'
-                    wpcs-versions: 'dev-develop'
-                    php-versions: '7.2'
-                  - phpcs-versions: 'dev-master'
-                    wpcs-versions: 'dev-develop'
-                    php-versions: '7.3'
-                  - phpcs-versions: 'dev-master'
-                    wpcs-versions: 'dev-develop'
-                    php-versions: '8.0'
+                  - phpcs_branch: 'dev-master'
+                    wpcs_branch: '2.3.0'
+                  - phpcs_branch: '3.5.0'
+                    wpcs_branch: 'dev-master'
+                include:
+                    - php: '7.2'
+                      phpcs_branch: 'dev-master'
+                      wpcs_branch: '2.3.0'
+                      allowed_failure: false
+                    - php: '7.2'
+                      phpcs_branch: '3.5.0'
+                      wpcs_branch: 'dev-develop'
+                      allowed_failure: false
+                    - php: '7.4'
+                      phpcs_branch: 'dev-master'
+                      wpcs_branch: 'dev-develop'
+                      allowed_failure: true
+                    - php: '8.0'
+                      allowed_failure: true
 
         steps:
             # Checkout repository
@@ -57,32 +50,30 @@ jobs:
             - name: Setup PHP
               uses: shivammathur/setup-php@v2
               with:
-                php-version: ${{ matrix.php-versions }}
-                tools: composer:v1
+                php-version: ${{ matrix.php }}
+                coverage: none
               env:
                 COMPOSER_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-            - name: Get composer cache directory
-              id: composer-cache
+            - name: Set the minimum stability requirement for develop branch of WPCS
+              env:
+                PHPCS_BRANCH: ${{ matrix.phpcs_branch }}
+                WPCS_BRANCH: ${{ matrix.wpcs_branch }}
+              if: ${WPCS_BRANCH} == "dev-develop"
               run: |
-                echo "::set-output name=dir::$(composer config cache-files-dir)"
-
-            - name: Cache composer dependencies
-              uses: actions/cache@v1
-              with:
-                path: ${{ steps.composer-cache.outputs.dir }}
-                key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
-                restore-keys: |
-                  ${{ runner.os }}-composer-
+                composer config minimum-stability dev
+                composer require squizlabs/php_codesniffer:${PHPCS_BRANCH} wp-coding-standards/wpcs:${WPCS_BRANCH} --no-update --no-scripts
 
             - name: Set the required PHPCS and WPCS versions
               env:
-                PHPCS_BRANCH: ${{ matrix.phpcs-versions }}
-                WPCS_BRANCH: ${{ matrix.wpcs-versions }}
-              run: |
-                if [[ ${WPCS_BRANCH} == "dev-develop" ]]; then composer config minimum-stability dev; fi
-                composer require squizlabs/php_codesniffer:${PHPCS_BRANCH} wp-coding-standards/wpcs:${WPCS_BRANCH} --no-update --no-suggest --no-scripts
-                composer install --no-suggest
+                PHPCS_BRANCH: ${{ matrix.phpcs_branch }}
+                WPCS_BRANCH: ${{ matrix.wpcs_branch }}
+              run: composer require squizlabs/php_codesniffer:${PHPCS_BRANCH} wp-coding-standards/wpcs:${WPCS_BRANCH} --no-update --no-scripts
+
+            # Install dependencies and handle caching in one go.
+            # @link https://github.com/marketplace/actions/install-composer-dependencies
+            - name: Install Composer dependencies
+              uses: "ramsey/composer-install@v1"
 
             - name: Run tests
               run: composer run-tests
