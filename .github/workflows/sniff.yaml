@@ -1,18 +1,21 @@
-name: Sniff stage - quality control checks
+name: CS
 
 on:
-    pull_request:
-        branches: [master, develop]
-    push:
-        branches: [master]
+  # Run on PRs and pushes, only on significant changes.
+  push:
+    paths-ignore:
+      - '**.md'
+  pull_request:
+    paths-ignore:
+      - '**.md'
+
+env:
+  XMLLINT_INDENT: '	'
 
 jobs:
     qa_checks:
         name: Quality control checks
         runs-on: ubuntu-latest
-        env:
-            PHPCS_BRANCH: "dev-master"
-            WPCS_BRANCH: "dev-master"
 
         steps:
             # Checkout repository
@@ -24,34 +27,30 @@ jobs:
               uses: shivammathur/setup-php@v2
               with:
                 php-version: '7.4'
-                tools: composer:v1
+                coverage: none
               env:
                 COMPOSER_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-            - name: Install xmllint
-              run: sudo apt-get install libxml2-utils
-
-            - name: Get composer cache directory
-              id: composer-cache
-              run: |
-                echo "::set-output name=dir::$(composer config cache-files-dir)"
-
-            - name: Cache composer dependencies
-              uses: actions/cache@v1
-              with:
-                path: ${{ steps.composer-cache.outputs.dir }}
-                key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
-                restore-keys: |
-                  ${{ runner.os }}-composer-
-
             - name: Set the required PHPCS and WPCS versions
-              run: composer require squizlabs/php_codesniffer:${PHPCS_BRANCH} wp-coding-standards/wpcs:${WPCS_BRANCH} --no-update --no-scripts
+              run: composer require squizlabs/php_codesniffer:"dev-master" wp-coding-standards/wpcs:"dev-master" --no-update --no-scripts
 
-            - name: Install the rest of the dependencies
-              run: composer install
+            # Install dependencies and handle caching in one go.
+            # @link https://github.com/marketplace/actions/install-composer-dependencies
+            - name: Install Composer dependencies
+              uses: "ramsey/composer-install@v1"
 
-            - name: Check the code style of the WPThemeReview codebase
-              run: composer check-cs
+            - name: Install xmllint
+              run: sudo apt-get install --no-install-recommends -y libxml2-utils
+
+            # Show XML violations inline in the file diff.
+            # @link https://github.com/marketplace/actions/xmllint-problem-matcher
+            - uses: korelstar/xmllint-problem-matcher@v1
+
+            - name: Validate ruleset against schema
+              run: xmllint --noout --schema ./vendor/squizlabs/php_codesniffer/phpcs.xsd ./*/ruleset.xml
+
+            - name: Check the code-style consistency of the xml files.
+              run: diff -B --tabsize=4 ./WPThemeReview/ruleset.xml <(xmllint --format "./WPThemeReview/ruleset.xml")
 
             - name: Lint the PHP files against parse errors
               run: if find . -path ./vendor -prune -o -name "*.php" -exec php -l {} \; | grep "^[Parse error|Fatal error]"; then exit 1; fi
@@ -59,13 +58,8 @@ jobs:
             - name: Validate the composer.json file.
               run: composer validate --no-check-all --strict
 
-            - name: Validate xml files
-              run: xmllint --noout --schema ./vendor/squizlabs/php_codesniffer/phpcs.xsd ./*/ruleset.xml
-
-            - name: Check the code-style consistency of the xml files.
-              run: |
-                export XMLLINT_INDENT=$'\t'
-                diff -B --tabsize=4 ./WPThemeReview/ruleset.xml <(xmllint --format "./WPThemeReview/ruleset.xml")
+            - name: Check the code style of the WPThemeReview codebase
+              run: composer check-cs
 
             - name: Check feature completeness of the available sniffs
               run: composer check-complete
