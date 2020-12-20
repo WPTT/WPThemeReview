@@ -13,6 +13,7 @@ jobs:
     tests:
         name: PHP ${{ matrix.php }} with PHPCS ${{ matrix.phpcs_branch }}/WPCS ${{ matrix.wpcs_branch }}
         runs-on: ubuntu-latest
+        continue-on-error: ${{ matrix.allowed_failure }}
         strategy:
             fail-fast: false
             matrix:
