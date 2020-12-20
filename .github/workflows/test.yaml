@@ -16,7 +16,7 @@ jobs:
         strategy:
             fail-fast: false
             matrix:
-                php: [ '5.4', '5.5', '5.6', '7.0', '7.1', '7.2', '7.3', '7.4', '8.0' ]
+                php: [ '5.4', '5.5', '5.6', '7.0', '7.1', '7.2', '7.3', '7.4' ]
                 phpcs_branch: [ '3.5.0', 'dev-master' ]
                 wpcs_branch: [ '2.3.0', 'dev-master' ]
                 allowed_failure: [ false ]
@@ -39,6 +39,12 @@ jobs:
                       wpcs_branch: 'dev-develop'
                       allowed_failure: true
                     - php: '8.0'
+                      phpcs_branch: 'dev-master'
+                      wpcs_branch: 'dev-master'
+                      allowed_failure: true
+                    - php: '8.0'
+                      phpcs_branch: '3.5.0'
+                      wpcs_branch: '2.3.0'
                       allowed_failure: true
 
         steps:
