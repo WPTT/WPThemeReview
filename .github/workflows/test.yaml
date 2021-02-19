@@ -71,11 +71,23 @@ jobs:
             - name: Checkout
               uses: actions/checkout@v2
 
+            # On stable PHPCS versions, allow for PHP deprecation notices.
+            # Unit tests don't need to fail on those for stable releases where those issues won't get fixed anymore.
+            - name: Setup ini config
+              id: set_ini
+              run: |
+                if [[ "${{ matrix.phpcs_branch }}" != "dev-master" && "${{ matrix.wpcs_branch }}" != "dev-develop" ]]; then
+                  echo '::set-output name=PHP_INI::error_reporting=E_ALL & ~E_DEPRECATED'
+                else
+                  echo '::set-output name=PHP_INI::error_reporting=E_ALL'
+                fi
+
             # Setup PHP versions, run checks
             - name: Setup PHP
               uses: shivammathur/setup-php@v2
               with:
                 php-version: ${{ matrix.php }}
+                ini-values: ${{ steps.set_ini.outputs.PHP_INI }}
                 coverage: none
 
             - name: Set the minimum stability requirement for develop branch of WPCS
