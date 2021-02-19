@@ -27,6 +27,10 @@ jobs:
                 php-version: '7.4'
                 coverage: none
 
+            # Using PHPCS `master` as an early detection system for bugs upstream.
+            # As WPCS 3.0 is in development, not using WPCS `dev-develop`, though once WPCS 3.0 is in RC
+            # and this repo has been updated for compatibility, using `dev-develop` is probably a good
+            # idea to reenable as early warning system.
             - name: Set the required PHPCS and WPCS versions
               run: composer require squizlabs/php_codesniffer:"dev-master" wp-coding-standards/wpcs:"dev-master" --no-update --no-scripts
 
@@ -57,5 +61,8 @@ jobs:
             - name: Check the code style of the WPThemeReview codebase
               run: composer check-cs
 
+            # Check that the sniffs available are feature complete.
+            # For now, just check that all sniffs have unit tests.
+            # At a later stage the documentation check can be activated.
             - name: Check feature completeness of the available sniffs
               run: composer check-complete
