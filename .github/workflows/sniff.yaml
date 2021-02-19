@@ -52,9 +52,6 @@ jobs:
             - name: Check the code-style consistency of the xml files.
               run: diff -B --tabsize=4 ./WPThemeReview/ruleset.xml <(xmllint --format "./WPThemeReview/ruleset.xml")
 
-            - name: Lint the PHP files against parse errors
-              run: if find . -path ./vendor -prune -o -name "*.php" -exec php -l {} \; | grep "^[Parse error|Fatal error]"; then exit 1; fi
-
             - name: Validate the composer.json file.
               run: composer validate --no-check-all --strict
 

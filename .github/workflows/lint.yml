@@ -1,0 +1,40 @@
+name: Lint
+
+on:
+  # Run on PRs and pushes.
+  push:
+  pull_request:
+  # Allow manually triggering the workflow.
+  workflow_dispatch:
+
+jobs:
+  #### PHP LINT STAGE ####
+  # Linting against high/low of each PHP major should catch everything.
+  # If needs be, we can always add more interim versions at a later point in time.
+  lint:
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        php: ['5.4', '5.6', '7.0', '7.4', '8.0']
+        experimental: [false]
+
+        include:
+          - php: '8.1'
+            experimental: true
+
+    name: "Lint: PHP ${{ matrix.php }}"
+    continue-on-error: ${{ matrix.experimental }}
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Install PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ matrix.php }}
+          coverage: none
+
+      - name: Lint the PHP files against parse errors
+        run: if find . -path ./vendor -prune -o -name "*.php" -exec php -l {} \; | grep "^[Parse error|Fatal error]"; then exit 1; fi
