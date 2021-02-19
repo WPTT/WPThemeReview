@@ -91,13 +91,8 @@ jobs:
                 coverage: none
 
             - name: Set the minimum stability requirement for develop branch of WPCS
-              env:
-                PHPCS_BRANCH: ${{ matrix.phpcs_branch }}
-                WPCS_BRANCH: ${{ matrix.wpcs_branch }}
               if: ${{ matrix.wpcs_branch == 'dev-develop' }}
-              run: |
-                composer config minimum-stability dev
-                composer require squizlabs/php_codesniffer:${PHPCS_BRANCH} wp-coding-standards/wpcs:${WPCS_BRANCH} --no-update --no-scripts
+              run: composer config minimum-stability dev
 
             - name: Set the required PHPCS and WPCS versions
               env:
