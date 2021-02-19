@@ -46,13 +46,21 @@
 		"phpunit/phpunit"                   : "^4.0 || ^5.0 || ^6.0 || ^7.0",
 		"phpcompatibility/php-compatibility": "^9.0",
 		"roave/security-advisories"         : "dev-master",
-		"dealerdirect/phpcodesniffer-composer-installer": "^0.5 || ^0.6",
-		"phpcsstandards/phpcsdevtools"      : "^1.0"
+		"dealerdirect/phpcodesniffer-composer-installer": "^0.7",
+		"phpcsstandards/phpcsdevtools"      : "^1.0",
+		"php-parallel-lint/php-parallel-lint": "^1.0",
+		"php-parallel-lint/php-console-highlighter": "^0.5"
 	},
 	"suggest"    : {
-		"dealerdirect/phpcodesniffer-composer-installer": "^0.6 || This Composer plugin will sort out the PHPCS 'installed_paths' automatically."
+		"dealerdirect/phpcodesniffer-composer-installer": "^0.7 || This Composer plugin will sort out the PHPCS 'installed_paths' automatically."
 	},
 	"scripts"    : {
+		"lint": [
+			"@php ./vendor/php-parallel-lint/php-parallel-lint/parallel-lint . -e php --exclude vendor --exclude .git"
+		],
+		"lint-ci": [
+			"@php ./vendor/php-parallel-lint/php-parallel-lint/parallel-lint . -e php --exclude vendor --exclude .git --checkstyle"
+		],
 		"install-standards": [
 			"@php ./vendor/squizlabs/php_codesniffer/bin/phpcs --config-set installed_paths ../../..,../../wp-coding-standards/wpcs,../../phpcompatibility/phpcompatibility-wp,../../phpcompatibility/phpcompatibility-paragonie"
 		],
