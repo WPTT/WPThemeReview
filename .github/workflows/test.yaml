@@ -59,8 +59,6 @@ jobs:
               with:
                 php-version: ${{ matrix.php }}
                 coverage: none
-              env:
-                COMPOSER_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
             - name: Set the minimum stability requirement for develop branch of WPCS
               env:
