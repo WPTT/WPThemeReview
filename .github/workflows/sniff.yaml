@@ -4,6 +4,8 @@ on:
   # Run on PRs and pushes.
   push:
   pull_request:
+  # Allow manually triggering the workflow.
+  workflow_dispatch:
 
 env:
   XMLLINT_INDENT: '	'
