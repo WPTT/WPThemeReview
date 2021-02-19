@@ -17,35 +17,53 @@ jobs:
         strategy:
             fail-fast: false
             matrix:
-                php: [ '5.4', '5.5', '5.6', '7.0', '7.1', '7.2', '7.3', '7.4' ]
-                phpcs_branch: [ '3.5.0', 'dev-master' ]
-                wpcs_branch: [ '2.3.0', 'dev-master' ]
+                # Builds against PHP 7.2, 7.4 and 8.0 are specified separately in the "include" section below.
+                php: [ '5.4', '5.5', '5.6', '7.0', '7.1', '7.3' ]
+                phpcs_branch: [ '3.3.1', 'dev-master' ]
+                wpcs_branch: [ '2.2.0', 'dev-master' ]
                 allowed_failure: [ false ]
                 exclude:
+                  # Only run low WPCS in combination with low PHPCS and high WPCS with high PHPCS.
                   - phpcs_branch: 'dev-master'
-                    wpcs_branch: '2.3.0'
-                  - phpcs_branch: '3.5.0'
+                    wpcs_branch: '2.2.0'
+                  - phpcs_branch: '3.3.1'
                     wpcs_branch: 'dev-master'
                 include:
-                    - php: '7.2'
-                      phpcs_branch: 'dev-master'
-                      wpcs_branch: '2.3.0'
-                      allowed_failure: false
-                    - php: '7.2'
-                      phpcs_branch: '3.5.0'
-                      wpcs_branch: 'dev-develop'
-                      allowed_failure: false
+                    # Complete the matrix.
+                    # PHPCS 3.5.0 is the lowest PHPCS version (runtime) compatible with PHP 7.4.
+                    # PHPCS 3.5.7 is the lowest PHPCS version (runtime) compatible with PHP 8.0.
                     - php: '7.4'
                       phpcs_branch: 'dev-master'
-                      wpcs_branch: 'dev-develop'
-                      allowed_failure: true
+                      wpcs_branch: 'dev-master'
+                      allowed_failure: false
+                    - php: '7.4'
+                      phpcs_branch: '3.5.0'
+                      wpcs_branch: '2.3.0'
+                      allowed_failure: false
                     - php: '8.0'
                       phpcs_branch: 'dev-master'
                       wpcs_branch: 'dev-master'
-                      allowed_failure: true
+                      allowed_failure: false
                     - php: '8.0'
-                      phpcs_branch: '3.5.0'
+                      phpcs_branch: '3.5.7'
                       wpcs_branch: '2.3.0'
+                      allowed_failure: false
+
+                    # Compliment the matrix with some additional builds.
+                    # Separate test builds for PHP 7.2 with reversed PHPCS vs WPCS branches.
+                    - php: '7.2'
+                      phpcs_branch: 'dev-master'
+                      wpcs_branch: '2.2.0'
+                      allowed_failure: false
+                    - php: '7.2'
+                      phpcs_branch: '3.3.1'
+                      wpcs_branch: 'dev-master'
+                      allowed_failure: false
+
+                    # Experimental build to see how much breaks against WPCS 3.0.
+                    - php: '7.4'
+                      phpcs_branch: 'dev-master'
+                      wpcs_branch: 'dev-develop'
                       allowed_failure: true
 
         steps:
