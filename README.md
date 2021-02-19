@@ -2,8 +2,8 @@
 
 [![Latest Version](https://poser.pugx.org/wptrt/wpthemereview/v/stable)](https://packagist.org/packages/wptrt/wpthemereview)
 [![Last Commit to Unstable](https://img.shields.io/github/last-commit/WPTT/WPThemeReview/develop.svg)](https://github.com/WPTT/WPThemeReview/commits/develop)
-[![CS Build Status](https://github.com/WPTT/WPThemeReview/workflows/CS/badge.svg?branch=develop)](https://github.com/WPTT/WPThemeReview/actions)
-[![Test Build Status](https://github.com/WPTT/WPThemeReview/workflows/Test/badge.svg?branch=develop)](https://github.com/WPTT/WPThemeReview/actions)
+[![CS Build Status](https://github.com/WPTT/WPThemeReview/actions/workflows/sniff.yaml/badge.svg)](https://github.com/WPTT/WPThemeReview/actions/workflows/sniff.yaml)
+[![Test Build Status](https://github.com/WPTT/WPThemeReview/actions/workflows/test.yaml/badge.svg)](https://github.com/WPTT/WPThemeReview/actions/workflows/test.yaml)
 
 [![Minimum PHP Version](https://img.shields.io/packagist/php-v/wptrt/wpthemereview.svg?maxAge=3600)](https://packagist.org/packages/wptrt/wpthemereview)
 [![License: MIT](https://poser.pugx.org/wptrt/wpthemereview/license)](https://github.com/WPTT/WPThemeReview/blob/develop/LICENSE)
