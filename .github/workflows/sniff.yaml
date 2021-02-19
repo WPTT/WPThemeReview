@@ -1,13 +1,9 @@
 name: CS
 
 on:
-  # Run on PRs and pushes, only on significant changes.
+  # Run on PRs and pushes.
   push:
-    paths-ignore:
-      - '**.md'
   pull_request:
-    paths-ignore:
-      - '**.md'
 
 env:
   XMLLINT_INDENT: '	'
