@@ -35,6 +35,16 @@ jobs:
         with:
           php-version: ${{ matrix.php }}
           coverage: none
+          tools: cs2pr
 
-      - name: Lint the PHP files against parse errors
-        run: if find . -path ./vendor -prune -o -name "*.php" -exec php -l {} \; | grep "^[Parse error|Fatal error]"; then exit 1; fi
+      - name: 'Composer: adjust dependencies'
+        # Remove PHPUnit requirement to save some bandwidth.
+        run: composer remove --no-update phpunit/phpunit
+
+      # Install dependencies and handle caching in one go.
+      # @link https://github.com/marketplace/actions/install-composer-dependencies
+      - name: Install Composer dependencies
+        uses: "ramsey/composer-install@v1"
+
+      - name: Lint against parse errors
+        run: composer lint-ci | cs2pr
