@@ -1,0 +1,65 @@
+name: CS
+
+on:
+  # Run on PRs and pushes.
+  push:
+  pull_request:
+  # Allow manually triggering the workflow.
+  workflow_dispatch:
+
+env:
+  XMLLINT_INDENT: '	'
+
+jobs:
+  qa_checks:
+    name: Quality control checks
+    runs-on: ubuntu-latest
+
+    steps:
+      # Checkout repository
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      # Setup PHP versions, run checks
+      - name: PHP setup
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '7.4'
+          coverage: none
+
+      # Using PHPCS `master` as an early detection system for bugs upstream.
+      # As WPCS 3.0 is in development, not using WPCS `dev-develop`, though once WPCS 3.0 is in RC
+      # and this repo has been updated for compatibility, using `dev-develop` is probably a good
+      # idea to reenable as early warning system.
+      - name: Set the required PHPCS and WPCS versions
+        run: composer require squizlabs/php_codesniffer:"dev-master" wp-coding-standards/wpcs:"dev-master" --no-update --no-scripts
+
+      # Install dependencies and handle caching in one go.
+      # @link https://github.com/marketplace/actions/install-composer-dependencies
+      - name: Install Composer dependencies
+        uses: ramsey/composer-install@v1
+
+      - name: Install xmllint
+        run: sudo apt-get install --no-install-recommends -y libxml2-utils
+
+      # Show XML violations inline in the file diff.
+      # @link https://github.com/marketplace/actions/xmllint-problem-matcher
+      - uses: korelstar/xmllint-problem-matcher@v1
+
+      - name: Validate ruleset against schema
+        run: xmllint --noout --schema ./vendor/squizlabs/php_codesniffer/phpcs.xsd ./*/ruleset.xml
+
+      - name: Check the code-style consistency of the xml files.
+        run: diff -B --tabsize=4 ./WPThemeReview/ruleset.xml <(xmllint --format "./WPThemeReview/ruleset.xml")
+
+      - name: Validate the composer.json file.
+        run: composer validate --no-check-all --strict
+
+      - name: Check the code style of the WPThemeReview codebase
+        run: composer check-cs
+
+      # Check that the sniffs available are feature complete.
+      # For now, just check that all sniffs have unit tests.
+      # At a later stage the documentation check can be activated.
+      - name: Check feature completeness of the available sniffs
+        run: composer check-complete

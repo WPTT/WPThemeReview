@@ -1,6 +1,10 @@
-Thank you for your interest in contributing to the WordPress Theme Review Coding Standards! We look forward to working with you.
+Thank you for your interest in contributing to the WordPress Theme Review Coding Standards! We look forward to 
+working with you.
 
-There are plenty of ways in which you can contribute: writing sniffs, or opening issues for sniffs, that don't exists, but which cover some [handbook rules](https://make.wordpress.org/themes/handbook/review/required/). Giving different code examples to [open issues](https://github.com/WPTRT/WPThemeReview/issues) that will reproduce the issue is also an extremely valuable contribution that you can make.
+There are plenty of ways in which you can contribute: writing sniffs, or opening issues for sniffs, that don't exist,
+but which cover some [handbook rules](https://make.wordpress.org/themes/handbook/review/required/). Giving different 
+code examples to [open issues](https://github.com/WPTT/WPThemeReview/issues) that will reproduce the issue is also an 
+extremely valuable contribution that you can make.
 
 # Table of Contents
 
@@ -32,7 +36,8 @@ In case of a false negative, you won't be able to check for a sniff code using t
 
 ## Upstream bugs
 
-If the sniff error code doesn't starts with `WPThemeReview`, but instead it starts with `WordPress`, `PHPCompatibility`, or something else, that means that it is an 'upstream' bug coming from either [`WordPressCS`](https://github.com/WordPress/WordPress-Coding-Standards), [`PHPCompatibility`](https://github.com/PHPCompatibility/PHPCompatibility) or [`PHP_CodeSniffer`](https://github.com/squizlabs/PHP_CodeSniffer).
+If the sniff error code doesn't start with `WPThemeReview`, but instead it starts with `WordPress`, 
+`PHPCompatibility`, or something else, that means that it is an 'upstream' bug coming from either [`WordPressCS`](https://github.com/WordPress/WordPress-Coding-Standards), [`PHPCompatibility`](https://github.com/PHPCompatibility/PHPCompatibility) or [`PHP_CodeSniffer`](https://github.com/squizlabs/PHP_CodeSniffer).
 
 You can report the bug here, but the chances are high that you'll be asked to report it in the correct repository instead.
 
@@ -44,7 +49,8 @@ Ongoing development will be done in the `develop` branch with merges done into `
 
 ## Contributing with code
 
-If you want to contribute to this project, fork the repo, create a new branch for your work and, once finished, open a pull request to the `develop` branch. If you have push access to this repo, you don't need to fork the repo, but can push your feature branch directly to this repo and you can then open an intra-repo PR from that branch to the `develop` branch.
+If you want to contribute to this project, fork the repo, create a new branch for your work and, once finished, open 
+a pull request to the `develop` branch. If you have push access to this repo, you don't need to fork the repo, but can push your feature branch directly to this repo, and you can then open an intra-repo PR from that branch to the `develop` branch.
 
 ## Picking an open issue
 
@@ -52,12 +58,12 @@ If you start work on an open issue, please mention that in the issue, and it wil
 
 ## Sniff categorization
 
-Every sniff should be categorized. Currently sniffs are placed in the following categories:
+Every sniff should be categorized. Currently, sniffs are placed in the following categories:
 
 * __`CoreFunctionality`__ - sniffs checking whether a theme uses WordPress core functionality (correctly)
 * __`Plugins`__ - sniff that checks if the correct version of TGMPA is included in the theme (if included)
 * __`PluginTerritory`__ - sniffs related to how themes interact with plugins and how plugins are recommended
-* __`ThouShallNotUse`__ - sniffs that check for code that shoulnd't be used in a theme
+* __`ThouShallNotUse`__ - sniffs that check for code that shouldn't be used in a theme
 
 If you think a new sniff doesn't fall into any of these four categories, suggest a new category. Category names should be descriptive and written in CamelCaps without underscores. The proposed category should be somewhat connected to the requirements in the theme review handbook.
 
@@ -68,7 +74,9 @@ Only make a property `public` if that is the intended behaviour.
 
 ## Code Standards for this project
 
-The WPTRTCS sniffs and test files (excluding test _case_ files) are written in a way that they pass the rules set by the custom ruleset found in [`/.phpcs.xml.dist`](https://github.com/WPTRT/WPThemeReview/blob/develop/.phpcs.xml.dist). They should pass most of the `WordPress-Extra` standards and the `WordPress-Docs` code standards.
+The WPTTCS sniffs and test files (excluding test _case_ files) are written in a way that they pass the rules set by 
+the custom ruleset found in [`/.phpcs.xml.dist`](https://github.com/WPTT/WPThemeReview/blob/develop/.phpcs.xml.dist). 
+They should pass most of the `WordPress-Extra` standards and the `WordPress-Docs` code standards.
 
 You can check whether your code complies with the coding standard using the `composer check-cs` command from the project root.
 
@@ -94,7 +102,8 @@ from the root of the cloned repository, will install `PHP_CodeSniffer`, `WordPre
 
 ### Other setups
 
-If you have PHP_CodeSniffer (PHPCS) and/or WordPress Coding Standards (WordPressCS) already installed, for instance as git clones, because you either contribute to these libraries as well or you want to develop for or test WPThemeReview with bleeding edge versions of either PHP_CodeSniffer or WordPress Coding Standards, you need to take some additional steps to make it all work.
+If you have PHP_CodeSniffer (PHPCS) and/or WordPress Coding Standards (WordPressCS) already installed, for instance 
+as git clones, because you either contribute to these libraries as well, or you want to develop for or test WPThemeReview with bleeding edge versions of either PHP_CodeSniffer or WordPress Coding Standards, you need to take some additional steps to make it all work.
 
 First, make sure you also have PHPCompatibility installed and make sure the `installed_paths` for PHP_CodeSniffer is set up correctly.
 
@@ -106,7 +115,7 @@ There are two ways to do this:
 1. You can copy the `phpunit.xml.dist` file, rename it to `phpunit.xml` and adjust the bootstrap line to point to where PHPCS is installed on your system.
 2. Alternatively, you can add `--bootstrap="/path/to/PHPCS/tests/bootstrap.php"` to the phpunit command when you invoke it on the command line.
 
-Once you've done that, both running the sniffs as well as the unit tests should work correctly.
+Once you've done that, both running the sniffs, and the unit tests should work correctly.
 
 ## Writing and running unit tests
 
@@ -131,7 +140,8 @@ Time: 13.15 seconds, Memory: 66.00 MB
 OK (16 tests, 0 assertions)
 ```
 
-If you didn't install PHPCS/WPCS/PHPUnit using Composer, you will need to type the above command in to run the unit tests. Make sure you replace the path to PHPUnit and the path to PHPCS when you do and, if you didn't setup your own `phpunit.xml` file, add `--bootstrap="/path/to/PHPCS/tests/bootstrap.php"`.
+If you didn't install PHPCS/WPCS/PHPUnit using Composer, you will need to type the above command in to run the unit 
+tests. Make sure you replace the path to PHPUnit and the path to PHPCS when you do and, if you didn't set up your own `phpunit.xml` file, add `--bootstrap="/path/to/PHPCS/tests/bootstrap.php"`.
 
 ## Unit testing conventions
 
@@ -139,7 +149,7 @@ If you didn't install PHPCS/WPCS/PHPUnit using Composer, you will need to type t
 
 The tests folder located inside the `WPThemeReview/Tests` folder correspond to the `WPThemeReview/Sniffs` folder. For example the `WPThemeReview/Sniffs/CoreFunctionality/FileIncludeSniff.php` sniff has the unit test class defined in `WPThemeReview/Tests/CoreFunctionality/FileIncludeSniff.php` which checks the `WPThemeReview/Tests/CoreFunctionality/FileIncludeSniff.inc` test case file.
 
-Lets take a look at what's inside `FileIncludeSniff.php`:  
+Let's take a look at what's inside `FileIncludeSniff.php`:  
 
 <details>
   <summary>View `FileIncludeSniff.php`</summary>
@@ -149,8 +159,8 @@ Lets take a look at what's inside `FileIncludeSniff.php`:
   /**
    * Unit test class for WPThemeReview Coding Standard.
    *
-   * @package WPTRT\WPThemeReview
-   * @link    https://github.com/WPTRT/WPThemeReview
+   * @package WPTT\WPThemeReview
+   * @link    https://github.com/WPTT/WPThemeReview
    * @license https://opensource.org/licenses/MIT MIT
    */
 
@@ -195,7 +205,8 @@ Lets take a look at what's inside `FileIncludeSniff.php`:
   
 </details><br>  
 
-Also note the class and function name conventions. The methods `getErrorList()` and `getWarningList()` MUST return either an empty array (no errors/warnings) or an array of line numbers indicating errors/warnings (when running `phpcs`) found in the test case file for the sniff.
+Also note the class and function name conventions. The methods `getErrorList()` and `getWarningList()` MUST return 
+either an empty array (no errors/warnings), or an array of line numbers indicating errors/warnings (when running `phpcs`) found in the test case file for the sniff.
 If you run:
 
 ```bash
