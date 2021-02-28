@@ -26,6 +26,7 @@ jobs:
         with:
           php-version: '7.4'
           coverage: none
+          tools: cs2pr
 
       # Using PHPCS `master` as an early detection system for bugs upstream.
       # As WPCS 3.0 is in development, not using WPCS `dev-develop`, though once WPCS 3.0 is in RC
@@ -56,7 +57,11 @@ jobs:
         run: composer validate --no-check-all --strict
 
       - name: Check the code style of the WPThemeReview codebase
-        run: composer check-cs
+        continue-on-error: true
+        run: composer check-cs -- --report-full --report-checkstyle=./phpcs-report.xml
+
+      - name: Show PHPCS results in PR
+        run: cs2pr ./phpcs-report.xml
 
       # Check that the sniffs available are feature complete.
       # For now, just check that all sniffs have unit tests.
