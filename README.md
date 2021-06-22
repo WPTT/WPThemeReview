@@ -68,7 +68,7 @@ If you use Composer to manage dependencies from your project anyway or are consi
 From the command-line, run the following command from the root directory of your project:
 
 ```bash
-$ php composer.phar require --dev wptrt/wpthemereview:* dealerdirect/phpcodesniffer-composer-installer:^0.6
+$ php composer.phar require --dev wptrt/wpthemereview:* dealerdirect/phpcodesniffer-composer-installer:^0.7
 ```
 
 > Note:
