@@ -199,7 +199,6 @@ class CorrectTGMPAVersionSniff extends Sniff {
 	 * Check whether the latest version of TGMPA is being used.
 	 */
 	protected function uses_latest_version() {
-
 		/*
 		 * Walk the doc block comments to find if this is the correct version of TGMPA.
 		 * Normally this will be in the first doc block encountered, so this is not as 'heavy' as it looks.
