@@ -40,12 +40,8 @@ class NoAddAdminPagesSniff extends AbstractFunctionRestrictionsSniff {
 				'message'   => 'Themes should use add_theme_page() for adding admin pages. Found %s.',
 				'functions' => [
 					// Menu Pages.
-					'add_menu_page',
 					'add_object_page',
 					'add_utility_page',
-
-					// SubMenu Pages.
-					'add_submenu_page',
 
 					// WordPress Administration Menus.
 					'add_dashboard_page',
