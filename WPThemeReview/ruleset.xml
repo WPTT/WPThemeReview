@@ -168,4 +168,9 @@
 		<type>error</type>
 	</rule>
 
+	<!-- The short ternary operator must not be used. -->
+	<rule ref="WordPress.PHP.DisallowShortTernary"/>
+
+	<!-- Warn when a text string is escaped for output but not translated (in the case where it has to be translated). -->
+	<rule ref="WordPress.CodeAnalysis.EscapedNotTranslated"/>
 </ruleset>
